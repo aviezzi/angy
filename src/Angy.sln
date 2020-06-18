@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Angy.Server", "Angy.Server\Angy.Server.csproj", "{DC0E0306-B826-41AC-8A38-FA1AF1C8B1C9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Angy.Core", "Angy.Core\Angy.Core.csproj", "{461AA469-9B89-4324-AEEF-CF996D877617}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DC0E0306-B826-41AC-8A38-FA1AF1C8B1C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DC0E0306-B826-41AC-8A38-FA1AF1C8B1C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DC0E0306-B826-41AC-8A38-FA1AF1C8B1C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DC0E0306-B826-41AC-8A38-FA1AF1C8B1C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{461AA469-9B89-4324-AEEF-CF996D877617}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{461AA469-9B89-4324-AEEF-CF996D877617}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{461AA469-9B89-4324-AEEF-CF996D877617}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{461AA469-9B89-4324-AEEF-CF996D877617}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

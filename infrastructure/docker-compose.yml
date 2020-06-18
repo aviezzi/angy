@@ -1,0 +1,18 @@
+version: "3.7"
+services:
+  db:
+    container_name: lucifer
+    restart: always
+    image: lucifer
+    build:
+      context: ./postgres
+    environment:
+      POSTGRES_USER: RobotBoy
+      POSTGRES_PASSWORD: RobotBoy  # To be moved to environment file
+      POSTGRES_DATABASE: Lucifer
+    expose:
+      - 5432
+    ports:
+      - 5432:5432
+    volumes:
+      - ./postgres:/var/lib/postgresql
