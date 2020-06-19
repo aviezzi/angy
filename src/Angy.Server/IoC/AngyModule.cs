@@ -12,6 +12,7 @@ namespace Angy.Server.IoC
             builder.RegisterType<Schema>().InstancePerLifetimeScope();
             builder.RegisterType<Query>().InstancePerLifetimeScope();
             builder.RegisterType<ProductType>().InstancePerLifetimeScope();
+            builder.RegisterType<MicroCategoryType>().InstancePerLifetimeScope();
         }
     }
 }
