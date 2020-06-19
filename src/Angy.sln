@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Angy.Server", "Angy.Server\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Angy.Core", "Angy.Core\Angy.Core.csproj", "{461AA469-9B89-4324-AEEF-CF996D877617}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Angy.BackEndClient", "Angy.BackEndClient\Angy.BackEndClient.csproj", "{1C16F69D-B5B0-4DD7-B9F8-3BBEFDC96E26}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{461AA469-9B89-4324-AEEF-CF996D877617}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{461AA469-9B89-4324-AEEF-CF996D877617}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{461AA469-9B89-4324-AEEF-CF996D877617}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C16F69D-B5B0-4DD7-B9F8-3BBEFDC96E26}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C16F69D-B5B0-4DD7-B9F8-3BBEFDC96E26}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C16F69D-B5B0-4DD7-B9F8-3BBEFDC96E26}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C16F69D-B5B0-4DD7-B9F8-3BBEFDC96E26}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
