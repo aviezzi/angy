@@ -1,4 +1,5 @@
 using Angy.Core;
+using Angy.Core.Abstract;
 using Angy.Server.IoC;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
@@ -6,6 +7,7 @@ using GraphQL.Server;
 using GraphQL.Server.Ui.Altair;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -26,9 +28,9 @@ namespace Angy.Server
                 .Build();
         }
 
-        private IConfiguration Configuration { get; }
+        public IConfiguration Configuration { get; }
         private IWebHostEnvironment Environment { get; }
-        private ILifetimeScope AutofacContainer { get; set; }
+        public ILifetimeScope AutofacContainer { get; set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -41,14 +43,18 @@ namespace Angy.Server
                 .AddSystemTextJson()
                 .AddWebSockets()
                 .AddDataLoader();
+
+            services.AddDbContext<ILuciferContext, LuciferContext>(options =>
+                    options.UseNpgsql(Configuration.GetConnectionString("Lucifer")),
+                ServiceLifetime.Transient);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app)
         {
-            app.UseGraphQL<Schema>();
             app.UseWebSockets();
             app.UseGraphQLWebSockets<Schema>();
+            app.UseGraphQL<Schema>();
 
             if (Environment.IsDevelopment() || Environment.IsStaging())
             {

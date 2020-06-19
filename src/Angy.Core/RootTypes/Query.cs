@@ -1,24 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using Angy.Core.Model;
+﻿using Angy.Core.Abstract;
+using Angy.Core.Extensions;
+using Angy.Core.Specifications;
 using Angy.Core.Types;
+using GraphQL;
 using GraphQL.Types;
+using Microsoft.EntityFrameworkCore;
 
 namespace Angy.Core.RootTypes
 {
     public class Query : ObjectGraphType<object>
     {
-        private static readonly IEnumerable<Product> Products = new List<Product>
-        {
-            new Product {Id = Guid.NewGuid(), Name = "Strawberry", Description = "Red Fire", Enabled = true},
-            new Product {Id = Guid.NewGuid(), Name = "Watermelon", Description = "Green Leaf", Enabled = true}
-        };
+        private readonly ILuciferContext _lucifer;
 
-        public Query()
+        public Query(ILuciferContext lucifer)
         {
             Name = "Query";
 
-            Field<ListGraphType<ProductType>>("products", resolve: context => Products);
+            _lucifer = lucifer;
+
+            ProductQueries();
+        }
+
+        private void ProductQueries()
+        {
+            FieldAsync<ProductType>(
+                "product",
+                "A single product of the company.",
+                new QueryArguments(new QueryArgument<StringGraphType> {Name = "Name", Description = "name of the product"}),
+                async context => await _lucifer.Products.Specify(new ProductNameSpecification(context.GetArgument<string>("name"))).FirstOrDefaultAsync());
+
+            FieldAsync<ListGraphType<ProductType>>("products", "The list of the company products", resolve: async context => await _lucifer.Products.ToListAsync());
         }
     }
 }
