@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Angy.Core.Model
+namespace Angy.Shared.Model
 {
     public class Product
     {

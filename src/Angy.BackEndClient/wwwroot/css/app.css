@@ -181,3 +181,12 @@ app {
         display: block;
     }
 }
+
+textarea {
+    overflow-y: scroll;
+    resize: none;
+}
+
+.card{
+    margin-bottom: 5px;
+}

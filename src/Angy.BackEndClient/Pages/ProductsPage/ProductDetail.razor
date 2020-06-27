@@ -1,0 +1,23 @@
+﻿@page "/product/{ProductId:guid}"
+
+@inherits ProductDetailComponent
+
+<EditForm Model="@Product" OnValidSubmit="HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label for="name">Nome</label>
+        <InputText id="name" class="form-control" aria-describedby="nameHelp" placeholder="Inserire il nome del prodotto" @bind-Value="Product.Name"/>
+        <small id="nameHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+    </div>
+    
+    <div class="form-group">
+        <label for="description">Descritzione</label>
+        <InputTextArea id="description" class="form-control" aria-describedby="descriptionHelp" placeholder="Inserire la descrizione del prodotto" @bind-Value="Product.Description" rows="5"/>
+        <small id="descriptionHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+    </div>
+
+    <button type="submit" class="btn btn-outline-success w-25 float-right">Submit</button>
+</EditForm>
+

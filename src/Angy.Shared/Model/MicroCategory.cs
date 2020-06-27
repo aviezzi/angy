@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Angy.Core.Model
+namespace Angy.Shared.Model
 {
     public class MicroCategory
     {

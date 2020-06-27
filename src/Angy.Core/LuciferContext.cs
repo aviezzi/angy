@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Angy.Core.Abstract;
-using Angy.Core.Model;
+using Angy.Shared.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 

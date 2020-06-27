@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Angy.Core.Abstract;
-using Angy.Core.Model;
+using Angy.Shared.Model;
 using GraphQL.DataLoader;
 using GraphQL.Types;
 using Microsoft.EntityFrameworkCore;
@@ -25,7 +25,7 @@ namespace Angy.Core.Types
                 ),
                 async context =>
                 {
-                    var loader = dataLoader.Context.GetOrAddCollectionBatchLoader<Guid, MicroCategory>("GetProductByMicroCategoryIds", async id =>
+                    var loader = dataLoader.Context.GetOrAddCollectionBatchLoader<Guid, MicroCategory>("GetProductsByMicroCategoryId", async id =>
                         (await lucifer.MicroCategories.Where(m => id.Contains(m.Id)).ToListAsync()).ToLookup(s => s.Id));
 
                     return (await loader.LoadAsync(context.Source.Id)).FirstOrDefault();

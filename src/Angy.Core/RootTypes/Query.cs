@@ -1,4 +1,5 @@
-﻿using Angy.Core.Abstract;
+﻿using System;
+using Angy.Core.Abstract;
 using Angy.Core.Extensions;
 using Angy.Core.Specifications;
 using Angy.Core.Types;
@@ -19,6 +20,7 @@ namespace Angy.Core.RootTypes
             _lucifer = lucifer;
 
             ProductQueries();
+            MicroCategoriesQueries();
         }
 
         private void ProductQueries()
@@ -26,10 +28,15 @@ namespace Angy.Core.RootTypes
             FieldAsync<ProductType>(
                 "product",
                 "A single product of the company.",
-                new QueryArguments(new QueryArgument<StringGraphType> {Name = "Name", Description = "name of the product"}),
-                async context => await _lucifer.Products.Specify(new ProductNameSpecification(context.GetArgument<string>("name"))).FirstOrDefaultAsync());
+                new QueryArguments(new QueryArgument<StringGraphType> {Name = "Id", Description = "Product Id"}),
+                async context => await _lucifer.Products.Specify(new ProductIdSpecification(context.GetArgument<Guid>("id"))).FirstOrDefaultAsync());
 
             FieldAsync<ListGraphType<ProductType>>("products", "The list of the company products", resolve: async context => await _lucifer.Products.ToListAsync());
+        }
+        
+        private void MicroCategoriesQueries()
+        {
+            FieldAsync<ListGraphType<MicroCategoryType>>("microcategories", "The list of the microcategories", resolve: async context => await _lucifer.MicroCategories.ToListAsync());
         }
     }
 }

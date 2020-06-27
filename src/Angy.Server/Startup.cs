@@ -35,10 +35,19 @@ namespace Angy.Server
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: "AlbyPolicy",
+                    builder =>
+                    {
+                        builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+                    });
+            });
+            
             services.AddGraphQL(options =>
                 {
-                    options.EnableMetrics = Environment.IsDevelopment() || Environment.IsStaging();
-                    options.ExposeExceptions = Environment.IsDevelopment() || Environment.IsStaging();
+                    options.EnableMetrics = false;// Environment.IsDevelopment() || Environment.IsStaging();
+                    options.ExposeExceptions = false; //Environment.IsDevelopment() || Environment.IsStaging();
                 })
                 .AddSystemTextJson()
                 .AddWebSockets()
@@ -52,6 +61,8 @@ namespace Angy.Server
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app)
         {
+            app.UseCors("AlbyPolicy");
+            
             app.UseWebSockets();
             app.UseGraphQLWebSockets<Schema>();
             app.UseGraphQL<Schema>();
