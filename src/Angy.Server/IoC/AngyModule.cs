@@ -9,10 +9,10 @@ namespace Angy.Server.IoC
     {
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<Schema>().InstancePerLifetimeScope();
-            builder.RegisterType<Query>().InstancePerLifetimeScope();
-            builder.RegisterType<ProductType>().InstancePerLifetimeScope();
-            builder.RegisterType<MicroCategoryType>().InstancePerLifetimeScope();
+            builder.RegisterType<Schema>().SingleInstance();
+            builder.RegisterType<Query>().SingleInstance();
+            builder.RegisterType<ProductType>().SingleInstance();
+            builder.RegisterType<MicroCategoryType>().SingleInstance();
         }
     }
 }
