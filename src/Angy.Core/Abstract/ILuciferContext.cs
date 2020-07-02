@@ -9,8 +9,8 @@ namespace Angy.Core.Abstract
         DbSet<Product> Products { get; set; }
         DbSet<MicroCategory> MicroCategories { get; set; }
 
-        Task BeginTransaction();
-        Task Commit();
-        Task Rollback();
+        Task BeginTransactionAsync();
+        Task CommitAsync();
+        Task RollbackAsync();
     }
 }

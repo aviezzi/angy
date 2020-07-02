@@ -9,6 +9,7 @@ namespace Angy.Core
         public Schema(IServiceProvider services) : base(services)
         {
             Query = services.GetRequiredService<Query>();
+            Mutation = services.GetRequiredService<Mutation>();
         }
     }
 }

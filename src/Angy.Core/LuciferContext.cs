@@ -18,9 +18,9 @@ namespace Angy.Core
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<MicroCategory> MicroCategories { get; set; }
 
-        public async Task BeginTransaction() => _transaction = await Database.BeginTransactionAsync();
+        public async Task BeginTransactionAsync() => _transaction = await Database.BeginTransactionAsync();
 
-        public async Task Commit()
+        public async Task CommitAsync()
         {
             try
             {
@@ -33,7 +33,7 @@ namespace Angy.Core
             }
         }
 
-        public async Task Rollback()
+        public async Task RollbackAsync()
         {
             await _transaction.RollbackAsync();
             await _transaction.DisposeAsync();
