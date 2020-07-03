@@ -4,13 +4,13 @@ using Angy.Core.Abstract;
 using Angy.Shared.Model;
 using GraphQL.DataLoader;
 using GraphQL.Types;
-using Microsoft.EntityFrameworkCore;
+using GraphQL.Utilities;
 
 namespace Angy.Core.Types
 {
     public sealed class ProductType : ObjectGraphType<Product>
     {
-        public ProductType(ILuciferContext lucifer, IDataLoaderContextAccessor dataLoader)
+        public ProductType(IServiceProvider provider, IDataLoaderContextAccessor dataLoader)
         {
             Name = "Product";
             Description = "A products sold by the company.";
@@ -25,8 +25,11 @@ namespace Angy.Core.Types
                 ),
                 async context =>
                 {
-                    var loader = dataLoader.Context.GetOrAddCollectionBatchLoader<Guid, MicroCategory>("GetProductsByMicroCategoryId", async id =>
-                        (await lucifer.MicroCategories.Where(m => id.Contains(m.Id)).ToListAsync()).ToLookup(s => s.Id));
+                    var loader = dataLoader.Context.GetOrAddCollectionBatchLoader<Guid, MicroCategory>("GetProductByMicroCategoryIds", async id =>
+                    {
+                        var microCategories = await provider.GetRequiredService<IRepository<MicroCategory>>().GetAll();
+                        return microCategories.Where(m => id.Contains(m.Id)).ToLookup(s => s.Id);
+                    });
 
                     return (await loader.LoadAsync(context.Source.Id)).FirstOrDefault();
                 });

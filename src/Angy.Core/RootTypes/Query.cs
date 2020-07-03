@@ -1,12 +1,10 @@
 ﻿using System;
 using Angy.Core.Abstract;
-using Angy.Core.Extensions;
-using Angy.Core.Specifications;
 using Angy.Core.Types;
+using Angy.Shared.Model;
 using GraphQL;
 using GraphQL.Types;
 using GraphQL.Utilities;
-using Microsoft.EntityFrameworkCore;
 
 namespace Angy.Core.RootTypes
 {
@@ -30,14 +28,16 @@ namespace Angy.Core.RootTypes
                 "product",
                 "A single product of the company.",
                 new QueryArguments(new QueryArgument<StringGraphType> {Name = "Id", Description = "Product Id"}),
-                async context => await _provider.GetRequiredService<ILuciferContext>().Products.Specify(new ProductIdSpecification(context.GetArgument<Guid>("id"))).FirstOrDefaultAsync());
+                async context => await _provider.GetRequiredService<IRepository<Product>>().GetOne(context.GetArgument<Guid>("id")));
 
-            FieldAsync<ListGraphType<ProductType>>("products", "The list of the company products", resolve: async context => await _provider.GetRequiredService<ILuciferContext>().Products.ToListAsync());
+            FieldAsync<ListGraphType<ProductType>>("products", "The list of the company products", resolve: async context =>
+                await _provider.GetRequiredService<IRepository<Product>>().GetAll());
         }
 
         private void MicroCategoriesQueries()
         {
-            FieldAsync<ListGraphType<MicroCategoryType>>("microCategories", "The list of the micro categories", resolve: async context => await _provider.GetRequiredService<ILuciferContext>().MicroCategories.ToListAsync());
+            FieldAsync<ListGraphType<MicroCategoryType>>("microcategories", "The list of the micro categories", resolve: async context =>
+                await _provider.GetRequiredService<IRepository<MicroCategory>>().GetAll());
         }
     }
 }

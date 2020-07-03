@@ -1,5 +1,4 @@
 using Angy.Core;
-using Angy.Core.Abstract;
 using Angy.Server.IoC;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
@@ -37,32 +36,28 @@ namespace Angy.Server
         {
             services.AddCors(options =>
             {
-                options.AddPolicy(name: "AlbyPolicy",
-                    builder =>
-                    {
-                        builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
-                    });
+                options.AddPolicy("AlbyPolicy",
+                    builder => { builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader(); });
             });
-            
+
             services.AddGraphQL(options =>
                 {
-                    options.EnableMetrics = false;// Environment.IsDevelopment() || Environment.IsStaging();
-                    options.ExposeExceptions = false; //Environment.IsDevelopment() || Environment.IsStaging();
+                    options.EnableMetrics = Environment.IsDevelopment() || Environment.IsStaging();
+                    options.ExposeExceptions = Environment.IsDevelopment() || Environment.IsStaging();
                 })
                 .AddSystemTextJson()
                 .AddWebSockets()
                 .AddDataLoader();
 
-            services.AddDbContext<ILuciferContext, LuciferContext>(options =>
-                    options.UseNpgsql(Configuration.GetConnectionString("Lucifer")),
-                ServiceLifetime.Transient);
+            services.AddDbContext<LuciferContext>(options =>
+                options.UseNpgsql(Configuration.GetConnectionString("Lucifer")), ServiceLifetime.Transient);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app)
         {
             app.UseCors("AlbyPolicy");
-            
+
             app.UseWebSockets();
             app.UseGraphQLWebSockets<Schema>();
             app.UseGraphQL<Schema>();

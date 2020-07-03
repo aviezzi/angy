@@ -1,14 +1,11 @@
 ﻿using System;
 using Angy.Core.Abstract;
-using Angy.Core.Extensions;
 using Angy.Core.Inputs;
-using Angy.Core.Specifications;
 using Angy.Core.Types;
 using Angy.Shared.Model;
 using GraphQL;
 using GraphQL.Types;
 using GraphQL.Utilities;
-using Microsoft.EntityFrameworkCore;
 
 namespace Angy.Core.RootTypes
 {
@@ -34,15 +31,13 @@ namespace Angy.Core.RootTypes
                 ),
                 resolve: async context =>
                 {
-                    var lucifer = _provider.GetRequiredService<ILuciferContext>();
+                    var repository = _provider.GetRequiredService<IRepository<Product>>();
 
                     var product = context.GetArgument<Product>("product");
 
-                    await lucifer.BeginTransactionAsync();
-                    await lucifer.Products.AddAsync(product);
-                    await lucifer.CommitAsync();
+                    var created = await repository.Create(product);
 
-                    return product;
+                    return created;
                 });
 
             FieldAsync<ProductType>(
@@ -53,18 +48,14 @@ namespace Angy.Core.RootTypes
                 ),
                 resolve: async context =>
                 {
-                    var lucifer = _provider.GetRequiredService<ILuciferContext>();
+                    var repository = _provider.GetRequiredService<IRepository<Product>>();
 
                     var id = context.GetArgument<Guid>("id");
                     var product = context.GetArgument<Product>("product");
 
-                    var entity = await lucifer.Products.Specify(new ProductIdSpecification(id)).FirstOrDefaultAsync();
-                    entity.Name = product.Name;
-                    entity.Description = product.Description;
+                    var updated = await repository.Update(id, product);
 
-                    await lucifer.CommitAsync();
-
-                    return entity;
+                    return updated;
                 });
         }
     }
