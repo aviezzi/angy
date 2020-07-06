@@ -31,7 +31,7 @@ namespace Angy.Core.Types
                         return microCategories.Where(m => id.Contains(m.Id)).ToLookup(s => s.Id);
                     });
 
-                    return (await loader.LoadAsync(context.Source.Id)).FirstOrDefault();
+                    return (await loader.LoadAsync(context.Source.MicroCategory.Id)).FirstOrDefault();
                 });
         }
     }

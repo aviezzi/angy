@@ -6,15 +6,20 @@ namespace Angy.BackEndClient.Pages.ProductsPage
 {
     public class ProductDetailViewModel
     {
-        public ProductDetailViewModel() : this(new Product
+        public ProductDetailViewModel() : this(new List<MicroCategory>())
         {
+        }
+
+        public ProductDetailViewModel(IEnumerable<MicroCategory> microCategories) : this(new Product
+        {
+            Id = default,
             Name = string.Empty,
-            Description = string.Empty, 
+            Description = string.Empty,
             MicroCategory = new MicroCategory
             {
                 Description = string.Empty
             }
-        }, new List<MicroCategory>())
+        }, microCategories)
         {
         }
 
@@ -24,25 +29,25 @@ namespace Angy.BackEndClient.Pages.ProductsPage
             MicroCategories = microCategories;
         }
 
-        public Product Product { get; }
+        public Product Product { get; set; }
         public IEnumerable<MicroCategory> MicroCategories { get; }
 
         public string Name
         {
             get => Product.Name;
-            set => Product.Description = value;
+            set => Product.Name = value;
         }
 
         public string Description
         {
-            get => Product.Name;
+            get => Product.Description;
             set => Product.Description = value;
         }
 
-        public Guid MicroId
+        public string MicroCategoryId
         {
-            get => Product.MicroCategory.Id;
-            set => Product.MicroCategory.Id = value;
+            get => Product.MicroCategory.Id.ToString();
+            set => Product.MicroCategory.Id = Guid.Parse(value);
         }
     }
 }

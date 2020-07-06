@@ -17,7 +17,7 @@ namespace Angy.BackEndClient.Pages
         {
             var query = new GraphQLRequest
             {
-                Query = @"{ products { id, name, description } }"
+                Query = @"{ products { id, name, description, microcategory { description } } }"
             };
 
             using var client = new GraphQLHttpClient("http://localhost:5000/graphql", new NewtonsoftJsonSerializer());

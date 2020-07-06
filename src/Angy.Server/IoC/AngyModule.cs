@@ -20,10 +20,11 @@ namespace Angy.Server.IoC
             builder.RegisterType<ProductType>().SingleInstance();
             builder.RegisterType<ProductInputType>().SingleInstance();
 
+            builder.RegisterType<MicroCategoryType>().SingleInstance();
+            builder.RegisterType<MicroCategoryInputType>().SingleInstance();
+
             builder.RegisterType<ProductRepository>().As<IRepository<Product>>().InstancePerDependency();
             builder.RegisterType<MicroCategoryRepository>().As<IRepository<MicroCategory>>().InstancePerDependency();
-
-            builder.RegisterType<MicroCategoryType>().SingleInstance();
         }
     }
 }

@@ -8,8 +8,10 @@ namespace Angy.Core.Inputs
         public ProductInputType()
         {
             Name = "ProductInput";
+
             Field(x => x.Name);
-            Field(x => x.Description, true);
+            Field(x => x.Description);
+            Field<MicroCategoryInputType>("microcategory");
         }
     }
 }

@@ -5,6 +5,7 @@ using GraphQL;
 using GraphQL.Client.Http;
 using GraphQL.Client.Serializer.Newtonsoft;
 using Microsoft.AspNetCore.Components;
+using Newtonsoft.Json;
 
 namespace Angy.BackEndClient.Pages.ProductsPage
 {
@@ -16,29 +17,89 @@ namespace Angy.BackEndClient.Pages.ProductsPage
 
         protected override async Task OnInitializedAsync()
         {
-            var query = new GraphQLRequest
+            using var client = new GraphQLHttpClient("http://localhost:5000/graphql", new NewtonsoftJsonSerializer());
+
+            if (ProductId == Guid.Empty)
             {
-                Query = @"query GetProductById($id: String) { product(id: $id) {name, description, microcategory {id, description} } microCategories { id, description}}",
-                OperationName = "GetProductById",
-                Variables = new
+                var query = new GraphQLRequest
                 {
-                    id = ProductId
-                }
-            };
+                    Query = "{ microcategories { id, description } }"
+                };
+
+                var response = await client.SendQueryAsync<ProductDetailResponse>(query);
+
+                var microCategories = response.Data.MicroCategories;
+
+                ViewModel = new ProductDetailViewModel(microCategories);
+            }
+            else
+            {
+                var query = new GraphQLRequest
+                {
+                    Query = @"query GetProductById($id: String) { product(id: $id) {id, name, description, microcategory {id, description} } microcategories { id, description}}",
+                    OperationName = "GetProductById",
+                    Variables = new
+                    {
+                        id = ProductId
+                    }
+                };
+
+                var response = await client.SendQueryAsync<ProductDetailResponse>(query);
+
+                var product = response.Data.Product;
+                var microCategories = response.Data.MicroCategories;
+
+                ViewModel = new ProductDetailViewModel(product, microCategories);
+            }
+        }
+
+        protected async Task HandleValidSubmit()
+        {
+            Console.WriteLine($"Product: {JsonConvert.SerializeObject(ViewModel.Product)}");
 
             using var client = new GraphQLHttpClient("http://localhost:5000/graphql", new NewtonsoftJsonSerializer());
 
-            var response = await client.SendQueryAsync<ProductDetailResponse>(query);
+            var createQuery = new GraphQLRequest
+            {
+                Query = @"mutation CreateProduct($product: ProductInput!) { createProduct(product: $product) { name , description } }",
+                OperationName = "CreateProduct",
+                Variables = new
+                {
+                    product = new
+                    {
+                        name = ViewModel.Product.Name,
+                        description = ViewModel.Product.Description,
+                        microcategory = new
+                        {
+                            id = ViewModel.Product.MicroCategory.Id
+                        }
+                    }
+                }
+            };
 
-            var product = response.Data.Product;
-            var microCategories = response.Data.MicroCategories;
+            var updateQuery = new GraphQLRequest
+            {
+                Query = @"mutation UpdateProduct($id: String!, $product: ProductInput!) { updateProduct(id: $id, product: $product) { id } }",
+                OperationName = "UpdateProduct",
+                Variables = new
+                {
+                    product = new
+                    {
+                        name = ViewModel.Product.Name,
+                        description = ViewModel.Product.Description
+                        // microcategory = new
+                        // {
 
-            ViewModel = new ProductDetailViewModel(product, microCategories);
-        }
+                        //     id = ViewModel.Product.MicroCategory.Id
+                        // }
+                    },
+                    id = ViewModel.Product.Id
+                }
+            };
 
-        protected void HandleValidSubmit()
-        {
-            Console.WriteLine("OnValidSubmit");
+            var query = ViewModel.Product.Id == Guid.Empty ? createQuery : updateQuery;
+
+            await client.SendQueryAsync<ProductDetailResponse>(query);
         }
     }
 }

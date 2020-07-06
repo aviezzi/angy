@@ -19,12 +19,23 @@ namespace Angy.Core.Repositories
         }
 
 
-        public async Task<IEnumerable<Product>> GetAll() => await _context.Products.ToListAsync();
+        public async Task<IEnumerable<Product>> GetAll()
+        {
+            var result = await _context.Products.Include(p => p.MicroCategory).ToListAsync();
 
-        public async Task<Product> GetOne(Guid id) => await _context.Products.Specify(new ProductIdSpecification(id)).SingleOrDefaultAsync();
+            return result;
+        }
+
+        public async Task<Product> GetOne(Guid id)
+        {
+            var result = await _context.Products.Specify(new ProductIdSpecification(id)).SingleOrDefaultAsync();
+
+            return result;
+        }
 
         public async Task<Product> Create(Product product)
         {
+            _context.Entry(product).State = EntityState.Modified;
             await _context.Products.AddAsync(product);
             await _context.SaveChangesAsync();
 
@@ -35,13 +46,13 @@ namespace Angy.Core.Repositories
         {
             var entity = await _context.Products.Specify(new ProductIdSpecification(id)).FirstOrDefaultAsync();
 
-            entity.Name = product.Name ?? entity.Name;
-            entity.Description = product.Description ?? entity.Description;
-            entity.MicroCategory.Id = product.MicroCategory.Id == Guid.Empty ? entity.MicroCategory.Id : product.MicroCategory.Id;
+            entity.Name = product.Name;
+            entity.Description = product.Description;
+            if (product.MicroCategory != null) entity.MicroCategory.Id = product.MicroCategory.Id;
 
             await _context.SaveChangesAsync();
 
-            return entity;
+            return product;
         }
 
         public Task<Product> Delete(Guid id) => throw new NotImplementedException();
