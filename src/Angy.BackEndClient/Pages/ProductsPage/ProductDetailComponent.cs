@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Angy.Shared.Responses;
 using GraphQL;
 using GraphQL.Client.Http;
-using GraphQL.Client.Serializer.Newtonsoft;
 using Microsoft.AspNetCore.Components;
 using Newtonsoft.Json;
 
@@ -11,14 +10,13 @@ namespace Angy.BackEndClient.Pages.ProductsPage
 {
     public class ProductDetailComponent : ComponentBase
     {
+        [Inject] public GraphQLHttpClient HttpClient { get; set; }
         [Parameter] public Guid ProductId { get; set; }
 
         protected ProductDetailViewModel ViewModel { get; private set; } = new ProductDetailViewModel();
 
         protected override async Task OnInitializedAsync()
         {
-            using var client = new GraphQLHttpClient("http://localhost:5000/graphql", new NewtonsoftJsonSerializer());
-
             if (ProductId == Guid.Empty)
             {
                 var query = new GraphQLRequest
@@ -26,7 +24,7 @@ namespace Angy.BackEndClient.Pages.ProductsPage
                     Query = "{ microcategories { id, description } }"
                 };
 
-                var response = await client.SendQueryAsync<ProductDetailResponse>(query);
+                var response = await HttpClient.SendQueryAsync<ProductDetailResponse>(query);
 
                 var microCategories = response.Data.MicroCategories;
 
@@ -44,7 +42,7 @@ namespace Angy.BackEndClient.Pages.ProductsPage
                     }
                 };
 
-                var response = await client.SendQueryAsync<ProductDetailResponse>(query);
+                var response = await HttpClient.SendQueryAsync<ProductDetailResponse>(query);
 
                 var product = response.Data.Product;
                 var microCategories = response.Data.MicroCategories;
@@ -56,8 +54,6 @@ namespace Angy.BackEndClient.Pages.ProductsPage
         protected async Task HandleValidSubmit()
         {
             Console.WriteLine($"Product: {JsonConvert.SerializeObject(ViewModel.Product)}");
-
-            using var client = new GraphQLHttpClient("http://localhost:5000/graphql", new NewtonsoftJsonSerializer());
 
             var createQuery = new GraphQLRequest
             {
@@ -86,12 +82,12 @@ namespace Angy.BackEndClient.Pages.ProductsPage
                     product = new
                     {
                         name = ViewModel.Product.Name,
-                        description = ViewModel.Product.Description
-                        // microcategory = new
-                        // {
+                        description = ViewModel.Product.Description,
+                        microcategory = new
+                        {
 
-                        //     id = ViewModel.Product.MicroCategory.Id
-                        // }
+                            id = ViewModel.Product.MicroCategory.Id
+                        }
                     },
                     id = ViewModel.Product.Id
                 }
@@ -99,7 +95,7 @@ namespace Angy.BackEndClient.Pages.ProductsPage
 
             var query = ViewModel.Product.Id == Guid.Empty ? createQuery : updateQuery;
 
-            await client.SendQueryAsync<ProductDetailResponse>(query);
+            await HttpClient.SendQueryAsync<ProductDetailResponse>(query);
         }
     }
 }
