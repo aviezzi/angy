@@ -19,19 +19,9 @@ namespace Angy.Core.Repositories
         }
 
 
-        public async Task<IEnumerable<Product>> GetAll()
-        {
-            var result = await _context.Products.Include(p => p.MicroCategory).ToListAsync();
+        public async Task<IEnumerable<Product>> GetAll() => await _context.Products.Include(p => p.MicroCategory).ToListAsync();
 
-            return result;
-        }
-
-        public async Task<Product> GetOne(Guid id)
-        {
-            var result = await _context.Products.Specify(new ProductIdSpecification(id)).SingleOrDefaultAsync();
-
-            return result;
-        }
+        public async Task<Product> GetOne(Guid id) => await _context.Products.Specify(new ProductIdSpecification(id)).SingleOrDefaultAsync();
 
         public async Task<Product> Create(Product product)
         {
