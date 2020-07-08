@@ -4,7 +4,6 @@ using Angy.Shared.Responses;
 using GraphQL;
 using GraphQL.Client.Http;
 using Microsoft.AspNetCore.Components;
-using Newtonsoft.Json;
 
 namespace Angy.BackEndClient.Pages.ProductsPage
 {
@@ -53,41 +52,23 @@ namespace Angy.BackEndClient.Pages.ProductsPage
 
         protected async Task HandleValidSubmit()
         {
-            Console.WriteLine($"Product: {JsonConvert.SerializeObject(ViewModel.Product)}");
-
             var createQuery = new GraphQLRequest
             {
-                Query = @"mutation CreateProduct($product: ProductInput!) { createProduct(product: $product) { name , description } }",
+                Query = @"mutation CreateProduct($product: ProductInput!) { createProduct(product: $product) { id, name, description, microcategory { id, description} } }",
                 OperationName = "CreateProduct",
                 Variables = new
                 {
-                    product = new
-                    {
-                        name = ViewModel.Product.Name,
-                        description = ViewModel.Product.Description,
-                        microcategory = new
-                        {
-                            id = ViewModel.Product.MicroCategory.Id
-                        }
-                    }
+                    product = ViewModel.Product
                 }
             };
 
             var updateQuery = new GraphQLRequest
             {
-                Query = @"mutation UpdateProduct($id: String!, $product: ProductInput!) { updateProduct(id: $id, product: $product) { id } }",
+                Query = @"mutation UpdateProduct($id: String!, $product: ProductInput!) { updateProduct(id: $id, product: $product) { id, name, description, microcategory { id, description} } }",
                 OperationName = "UpdateProduct",
                 Variables = new
                 {
-                    product = new
-                    {
-                        name = ViewModel.Product.Name,
-                        description = ViewModel.Product.Description,
-                        microcategory = new
-                        {
-                            id = ViewModel.Product.MicroCategory.Id
-                        }
-                    },
+                    product = ViewModel.Product,
                     id = ViewModel.Product.Id
                 }
             };

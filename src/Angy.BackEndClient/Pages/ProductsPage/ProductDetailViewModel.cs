@@ -29,8 +29,7 @@ namespace Angy.BackEndClient.Pages.ProductsPage
             MicroCategories = microCategories;
         }
 
-        public Product Product { get; set; }
-        public IEnumerable<MicroCategory> MicroCategories { get; }
+        public Product Product { get; }
 
         public string Name
         {
@@ -49,5 +48,7 @@ namespace Angy.BackEndClient.Pages.ProductsPage
             get => Product.MicroCategory.Id.ToString();
             set => Product.MicroCategory.Id = Guid.Parse(value);
         }
+
+        public IEnumerable<MicroCategory> MicroCategories { get; }
     }
 }
