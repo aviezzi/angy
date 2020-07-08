@@ -85,7 +85,6 @@ namespace Angy.BackEndClient.Pages.ProductsPage
                         description = ViewModel.Product.Description,
                         microcategory = new
                         {
-
                             id = ViewModel.Product.MicroCategory.Id
                         }
                     },

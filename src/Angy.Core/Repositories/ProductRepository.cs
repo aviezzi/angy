@@ -32,13 +32,14 @@ namespace Angy.Core.Repositories
             return product;
         }
 
-        public async Task<Product> Update(Guid id, Product product)
+        public async Task<Product> Update(Guid id, Product entity)
         {
-            var entity = await _context.Products.Specify(new ProductIdSpecification(id)).FirstOrDefaultAsync();
+            var product = await _context.Products.Specify(new ProductIdSpecification(id)).FirstOrDefaultAsync();
+            var micro = await _context.MicroCategories.FirstOrDefaultAsync(m => m.Id == entity.MicroCategory.Id);
 
-            entity.Name = product.Name;
-            entity.Description = product.Description;
-            if (product.MicroCategory != null) entity.MicroCategory.Id = product.MicroCategory.Id;
+            product.Name = entity.Name;
+            product.Description = entity.Description;
+            product.MicroCategory = micro;
 
             await _context.SaveChangesAsync();
 
