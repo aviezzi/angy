@@ -1,16 +1,19 @@
-﻿using System;
-using System.Threading.Tasks;
-using Angy.Shared.Responses;
-using GraphQL;
-using GraphQL.Client.Http;
-using Microsoft.AspNetCore.Components;
-
-namespace Angy.BackEndClient.Pages.ProductsPage
+﻿namespace Angy.BackEndClient.Pages.ProductsPage
 {
+    using System;
+    using System.Threading.Tasks;
+    using Angy.Shared.Responses;
+    using GraphQL;
+    using GraphQL.Client.Http;
+    using Microsoft.AspNetCore.Components;
+
     public class ProductDetailComponent : ComponentBase
     {
-        [Inject] public GraphQLHttpClient HttpClient { get; set; }
-        [Parameter] public Guid ProductId { get; set; }
+        [Inject]
+        public GraphQLHttpClient HttpClient { get; set; }
+
+        [Parameter]
+        public Guid ProductId { get; set; }
 
         protected ProductDetailViewModel ViewModel { get; private set; } = new ProductDetailViewModel();
 

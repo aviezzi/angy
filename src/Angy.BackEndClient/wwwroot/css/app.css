@@ -190,3 +190,11 @@ textarea {
 .card{
     margin-bottom: 5px;
 }
+
+.validation-message {
+    width: 100%;
+    margin-top: .25rem;
+    font-size: 80%;
+    color: #721c24;;
+}  
+

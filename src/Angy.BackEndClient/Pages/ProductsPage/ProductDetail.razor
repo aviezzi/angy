@@ -3,36 +3,37 @@
 
 @inherits ProductDetailComponent
 
-<EditForm Model="@ViewModel.Product" OnValidSubmit="HandleValidSubmit">
-    <DataAnnotationsValidator/>
-    <ValidationSummary/>
+<EditForm Model="@ViewModel" OnValidSubmit="HandleValidSubmit">
+
+    <DataAnnotationsValidator />
 
     <div class="form-group">
         <label for="name">Nome</label>
         <InputText id="name" class="form-control" aria-describedby="nameHelp" placeholder="Inserire il nome del prodotto" @bind-Value="@ViewModel.Name"/>
-        <small id="nameHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+        <ValidationMessage For="@(() => ViewModel.Name)" />  
+
     </div>
 
     <div class="form-group">
         <label for="description">Descritzione</label>
         <InputTextArea id="description" class="form-control" aria-describedby="descriptionHelp" placeholder="Inserire la descrizione del prodotto" @bind-Value="@ViewModel.Description" rows="5"/>
-        <small id="descriptionHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+        <ValidationMessage For="@(() => ViewModel.Description)" />  
     </div>
 
     <div>
         <label for="description">Categoria</label>
         <InputSelect id="micro-category" class="form-control" aria-describedby="microCategoryHelp" placeholder="Selezionare la categoria del prodotto" @bind-Value="@ViewModel.MicroCategoryId">
 
-            <option value="@Guid.Empty"> --- </option>
+            <option value="@string.Empty"> --- </option>
 
             @foreach (var micro in ViewModel.MicroCategories)
             {
                 <option value="@micro.Id">@micro.Description</option>
             }
-
         </InputSelect>
-        <small id="microCategoryHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+        <ValidationMessage For="@(() => ViewModel.MicroCategoryId)" />  
+
     </div>
 
-    <button type="submit" class="btn btn-outline-success w-25 float-right">Submit</button>
+    <button type="submit" class="btn btn-outline-success w-25 float-right mt-2">Submit</button>
 </EditForm>
