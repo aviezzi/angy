@@ -9,7 +9,7 @@
       <PackageReference Include="GraphQL.Server.Transports.AspNetCore.SystemTextJson" Version="3.5.0-alpha0046" />
       <PackageReference Include="GraphQL.Server.Transports.WebSockets" Version="3.5.0-alpha0046" />
       <PackageReference Include="GraphQL.Server.Ui.Altair" Version="3.5.0-alpha0046" />
-      <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.0-preview5" />
+      <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.0-preview.6.20312.4" />
     </ItemGroup>
 
     <ItemGroup>
