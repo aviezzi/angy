@@ -17,7 +17,13 @@ namespace Angy.Core
         {
             var productBuilder = modelBuilder.Entity<Product>();
 
-            productBuilder.HasKey(p => p.Id);
+            productBuilder
+                .HasKey(p => p.Id);
+
+            productBuilder
+                .HasIndex(p => p.Name)
+                .IsUnique();
+
             productBuilder
                 .HasOne(p => p.MicroCategory)
                 .WithMany(m => m.Products)
@@ -26,7 +32,12 @@ namespace Angy.Core
 
             var microCategoryBuilder = modelBuilder.Entity<MicroCategory>();
 
-            microCategoryBuilder.HasKey(m => m.Id);
+            microCategoryBuilder
+                .HasKey(m => m.Id);
+
+            microCategoryBuilder
+                .HasIndex(u => u.Name)
+                .IsUnique();
         }
     }
 }
