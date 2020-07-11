@@ -3,15 +3,17 @@ using System;
 using Angy.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Angy.Core.Migrations
 {
     [DbContext(typeof(LuciferContext))]
-    partial class LuciferContextModelSnapshot : ModelSnapshot
+    [Migration("20200711161446_AddColumnNameToMicro")]
+    partial class AddColumnNameToMicro
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
