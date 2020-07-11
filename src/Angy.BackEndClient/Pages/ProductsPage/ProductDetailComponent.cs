@@ -1,21 +1,25 @@
-﻿namespace Angy.BackEndClient.Pages.ProductsPage
-{
-    using System;
-    using System.Threading.Tasks;
-    using Angy.Shared.Responses;
-    using GraphQL;
-    using GraphQL.Client.Http;
-    using Microsoft.AspNetCore.Components;
+﻿using System;
+using System.Threading.Tasks;
+using Angy.Shared.Responses;
+using Angy.Shared.ViewModels;
+using GraphQL;
+using GraphQL.Client.Http;
+using Microsoft.AspNetCore.Components;
 
+namespace Angy.BackEndClient.Pages.ProductsPage
+{
     public class ProductDetailComponent : ComponentBase
     {
         [Inject]
         public GraphQLHttpClient HttpClient { get; set; }
 
+        [Inject]
+        public NavigationManager NavigationManager { get; set; }
+
         [Parameter]
         public Guid ProductId { get; set; }
 
-        protected ProductDetailViewModel ViewModel { get; private set; } = new ProductDetailViewModel();
+        protected ProductViewModel ViewModel { get; private set; } = new ProductViewModel();
 
         protected override async Task OnInitializedAsync()
         {
@@ -26,11 +30,11 @@
                     Query = "{ microcategories { id, description } }"
                 };
 
-                var response = await HttpClient.SendQueryAsync<ProductDetailResponse>(query);
+                var response = await HttpClient.SendQueryAsync<ProductResponse>(query);
 
                 var microCategories = response.Data.MicroCategories;
 
-                ViewModel = new ProductDetailViewModel(microCategories);
+                ViewModel = new ProductViewModel(microCategories);
             }
             else
             {
@@ -44,12 +48,12 @@
                     }
                 };
 
-                var response = await HttpClient.SendQueryAsync<ProductDetailResponse>(query);
+                var response = await HttpClient.SendQueryAsync<ProductResponse>(query);
 
                 var product = response.Data.Product;
                 var microCategories = response.Data.MicroCategories;
 
-                ViewModel = new ProductDetailViewModel(product, microCategories);
+                ViewModel = new ProductViewModel(product, microCategories);
             }
         }
 
@@ -78,7 +82,9 @@
 
             var query = ViewModel.Product.Id == Guid.Empty ? createQuery : updateQuery;
 
-            await HttpClient.SendQueryAsync<ProductDetailResponse>(query);
+            await HttpClient.SendQueryAsync<ProductResponse>(query);
+
+            NavigationManager.NavigateTo("products");
         }
     }
 }

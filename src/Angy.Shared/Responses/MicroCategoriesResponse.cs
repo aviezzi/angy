@@ -3,9 +3,8 @@ using Angy.Shared.Model;
 
 namespace Angy.Shared.Responses
 {
-    public class ProductDetailResponse
+    public class MicroCategoriesResponse
     {
-        public Product Product { get; set; }
         public IEnumerable<MicroCategory> MicroCategories { get; set; }
     }
 }
