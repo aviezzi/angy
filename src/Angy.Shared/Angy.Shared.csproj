@@ -13,4 +13,8 @@
       </Reference>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\Angy.Model\Angy.Model.csproj" />
+    </ItemGroup>
+
 </Project>

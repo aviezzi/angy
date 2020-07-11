@@ -1,4 +1,4 @@
-﻿using Angy.Shared.Model;
+﻿using Angy.Model.Model;
 using Microsoft.Build.Framework;
 
 namespace Angy.Shared.ViewModels

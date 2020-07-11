@@ -4,7 +4,7 @@ using Angy.Core.Inputs;
 using Angy.Core.Repositories;
 using Angy.Core.RootTypes;
 using Angy.Core.Types;
-using Angy.Shared.Model;
+using Angy.Model.Model;
 using Autofac;
 
 namespace Angy.Server.IoC

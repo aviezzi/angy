@@ -1,7 +1,7 @@
 ﻿using System;
 using Angy.Core.Abstract;
 using Angy.Core.Types;
-using Angy.Shared.Model;
+using Angy.Model.Model;
 using GraphQL;
 using GraphQL.Types;
 using GraphQL.Utilities;

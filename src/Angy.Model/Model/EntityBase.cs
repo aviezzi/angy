@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Angy.Shared.Model
+namespace Angy.Model.Model
 {
     public abstract class EntityBase
     {

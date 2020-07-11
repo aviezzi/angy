@@ -4,20 +4,19 @@ using System.Threading.Tasks;
 using Angy.Core.Abstract;
 using Angy.Core.Extensions;
 using Angy.Core.Specifications;
-using Angy.Shared.Model;
+using Angy.Model.Model;
 using Microsoft.EntityFrameworkCore;
 
 namespace Angy.Core.Repositories
 {
     public class ProductRepository : IRepository<Product>
     {
-        private readonly LuciferContext _context;
+        readonly LuciferContext _context;
 
         public ProductRepository(LuciferContext context)
         {
             _context = context;
         }
-
 
         public async Task<IEnumerable<Product>> GetAll() => await _context.Products.Include(p => p.MicroCategory).ToListAsync();
 

@@ -12,6 +12,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Angy.Model\Angy.Model.csproj" />
       <ProjectReference Include="..\Angy.Shared\Angy.Shared.csproj" />
     </ItemGroup>
 

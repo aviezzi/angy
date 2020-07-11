@@ -4,9 +4,8 @@ using System.Threading.Tasks;
 using Angy.Core.Abstract;
 using Angy.Core.Extensions;
 using Angy.Core.Specifications;
-using Angy.Shared.Model;
+using Angy.Model.Model;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Angy.Core.Repositories
 {
@@ -28,7 +27,7 @@ namespace Angy.Core.Repositories
             _context.Entry(micro).State = EntityState.Modified;
             await _context.MicroCategories.AddAsync(micro);
             await _context.SaveChangesAsync();
-            
+
             //TODO: Return null
 
             return micro;

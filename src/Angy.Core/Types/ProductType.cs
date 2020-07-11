@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Angy.Core.Abstract;
-using Angy.Shared.Model;
+using Angy.Model.Model;
 using GraphQL.DataLoader;
 using GraphQL.Types;
 using GraphQL.Utilities;
@@ -17,11 +17,11 @@ namespace Angy.Core.Types
 
             Field(d => d.Id).Description("The id of the product.");
             Field(d => d.Name).Description("The name of the product.");
-            Field(d => d.Description, true).Description("The description of the product.");
+            Field(d => d.Description, nullable: true).Description("The description of the product.");
 
             FieldAsync<MicroCategoryType>("microcategory", "The micro category of the product.",
                 new QueryArguments(
-                    new QueryArgument<StringGraphType> {Name = "id", Description = "id of the product"}
+                    new QueryArgument<StringGraphType> { Name = "id", Description = "id of the product" }
                 ),
                 async context =>
                 {

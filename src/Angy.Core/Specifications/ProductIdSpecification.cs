@@ -1,5 +1,5 @@
 ﻿using System;
-using Angy.Shared.Model;
+using Angy.Model.Model;
 
 namespace Angy.Core.Specifications
 {

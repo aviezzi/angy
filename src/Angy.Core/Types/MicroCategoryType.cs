@@ -1,4 +1,4 @@
-﻿using Angy.Shared.Model;
+﻿using Angy.Model.Model;
 using GraphQL.Types;
 
 namespace Angy.Core.Types

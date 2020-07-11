@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Angy.Shared.Model;
+using Angy.Model.Model;
 using Angy.Shared.Responses;
 using GraphQL;
 using GraphQL.Client.Http;
