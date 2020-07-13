@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Angy.Shared.Gateways;
 using GraphQL.Client.Http;
 using GraphQL.Client.Serializer.Newtonsoft;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -15,6 +16,7 @@ namespace Angy.BackEndClient
             builder.RootComponents.Add<App>("app");
 
             builder.Services.AddScoped(sp => new GraphQLHttpClient("http://localhost:5000/graphql", new NewtonsoftJsonSerializer()));
+            builder.Services.AddScoped<ProductGateway>();
 
             var host = builder.Build();
             await host.RunAsync();

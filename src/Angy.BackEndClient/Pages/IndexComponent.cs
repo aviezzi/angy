@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Angy.Model;
 using Angy.Model.Model;
-using Angy.Shared.Responses;
-using GraphQL;
-using GraphQL.Client.Http;
+using Angy.Shared.Gateways;
 using Microsoft.AspNetCore.Components;
 
 namespace Angy.BackEndClient.Pages
@@ -11,20 +10,18 @@ namespace Angy.BackEndClient.Pages
     public class IndexComponent : ComponentBase
     {
         [Inject]
-        public GraphQLHttpClient HttpClient { get; set; }
+        public ProductGateway ProductGateway { get; set; }
 
         protected IEnumerable<Product> Products { get; private set; } = new List<Product>();
 
         protected override async Task OnInitializedAsync()
         {
-            var query = new GraphQLRequest
+            var result = await Result.Try(ProductGateway.GetProducts);
+
+            if (result.IsValid)
             {
-                Query = @"{ products { id, name, description, microcategory { name } } }"
-            };
-
-            var response = await HttpClient.SendQueryAsync<ProductsResponse>(query);
-
-            Products = response.Data.Products;
+                Products = result.Success.Products;
+            }
         }
     }
 }

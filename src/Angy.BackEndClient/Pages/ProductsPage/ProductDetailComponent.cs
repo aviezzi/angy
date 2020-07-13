@@ -40,7 +40,7 @@ namespace Angy.BackEndClient.Pages.ProductsPage
             {
                 var query = new GraphQLRequest
                 {
-                    Query = @"query GetProductById($id: String) { product(id: $id) {id, name, description, microcategory { id, name } } microcategories { id, description}}",
+                    Query = @"query GetProductById($id: String) { product(id: $id) {id, name, description, microcategory { id, name } } microcategories { id, name}}",
                     OperationName = "GetProductById",
                     Variables = new
                     {

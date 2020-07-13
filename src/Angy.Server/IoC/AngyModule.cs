@@ -5,6 +5,7 @@ using Angy.Core.Repositories;
 using Angy.Core.RootTypes;
 using Angy.Core.Types;
 using Angy.Model.Model;
+using Angy.Shared.Gateways;
 using Autofac;
 
 namespace Angy.Server.IoC
