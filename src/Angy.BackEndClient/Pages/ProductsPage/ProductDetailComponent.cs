@@ -27,7 +27,7 @@ namespace Angy.BackEndClient.Pages.ProductsPage
             {
                 var query = new GraphQLRequest
                 {
-                    Query = "{ microcategories { id, description } }"
+                    Query = "{ microcategories { id, name } }"
                 };
 
                 var response = await HttpClient.SendQueryAsync<ProductResponse>(query);
@@ -40,7 +40,7 @@ namespace Angy.BackEndClient.Pages.ProductsPage
             {
                 var query = new GraphQLRequest
                 {
-                    Query = @"query GetProductById($id: String) { product(id: $id) {id, name, description, microcategory {id, description} } microcategories { id, description}}",
+                    Query = @"query GetProductById($id: String) { product(id: $id) {id, name, description, microcategory { id, name } } microcategories { id, description}}",
                     OperationName = "GetProductById",
                     Variables = new
                     {
@@ -59,13 +59,23 @@ namespace Angy.BackEndClient.Pages.ProductsPage
 
         protected async Task HandleValidSubmit()
         {
+            var product = new
+            {
+                name = ViewModel.Name,
+                description = ViewModel.Description,
+                microcategory = new
+                {
+                    id = ViewModel.MicroCategoryId
+                }
+            };
+            
             var createQuery = new GraphQLRequest
             {
                 Query = @"mutation CreateProduct($product: ProductInput!) { createProduct(product: $product) { id, name, description, microcategory { id, description} } }",
                 OperationName = "CreateProduct",
                 Variables = new
                 {
-                    product = ViewModel.Product
+                    product
                 }
             };
 
@@ -75,7 +85,7 @@ namespace Angy.BackEndClient.Pages.ProductsPage
                 OperationName = "UpdateProduct",
                 Variables = new
                 {
-                    product = ViewModel.Product,
+                    product,
                     id = ViewModel.Product.Id
                 }
             };

@@ -19,7 +19,7 @@ namespace Angy.BackEndClient.Pages
         {
             var query = new GraphQLRequest
             {
-                Query = @"{ products { id, name, description, microcategory { description } } }"
+                Query = @"{ products { id, name, description, microcategory { name } } }"
             };
 
             var response = await HttpClient.SendQueryAsync<ProductsResponse>(query);

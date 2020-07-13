@@ -1,5 +1,5 @@
-﻿using Angy.Model.Model;
-using Microsoft.Build.Framework;
+﻿using System.ComponentModel.DataAnnotations;
+using Angy.Model.Model;
 
 namespace Angy.Shared.ViewModels
 {

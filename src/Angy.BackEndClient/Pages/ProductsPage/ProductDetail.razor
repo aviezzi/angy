@@ -23,13 +23,12 @@
     <div>
         <label for="description">Categoria</label>
         <InputSelect id="micro-category" class="form-control" aria-describedby="microCategoryHelp" placeholder="Selezionare la categoria del prodotto" @bind-Value="@ViewModel.MicroCategoryId">
-
-            <option value="@string.Empty"> --- </option>
-
+            
             @foreach (var micro in ViewModel.MicroCategories)
             {
-                <option value="@micro.Id">@micro.Description</option>
+                <option value="@micro.Id">@micro.Name</option>
             }
+        
         </InputSelect>
         <ValidationMessage For="@(() => ViewModel.MicroCategoryId)" />  
 

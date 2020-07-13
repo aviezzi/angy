@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using Angy.Model.Model;
 using Angy.Shared.FormValidators;
-using Microsoft.Build.Framework;
+using System.ComponentModel.DataAnnotations;
+
 
 namespace Angy.Shared.ViewModels
 {

@@ -9,9 +9,9 @@ namespace Angy.Core.Inputs
         {
             Name = "MicroCategoryInput";
 
-            // Field(x => x.Id);
-            Field(x => x.Name);
-            Field(x => x.Description);
+            Field(x => x.Id, nullable: true);
+            Field(x => x.Name, nullable: true);
+            Field(x => x.Description, nullable: true);
         }
     }
 }
