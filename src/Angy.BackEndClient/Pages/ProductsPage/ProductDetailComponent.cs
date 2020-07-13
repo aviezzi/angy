@@ -1,98 +1,51 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Angy.Shared.Responses;
+using Angy.Model;
+using Angy.Shared.Gateways;
 using Angy.Shared.ViewModels;
-using GraphQL;
-using GraphQL.Client.Http;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 
 namespace Angy.BackEndClient.Pages.ProductsPage
 {
     public class ProductDetailComponent : ComponentBase
     {
-        [Inject]
-        public GraphQLHttpClient HttpClient { get; set; }
+        [Parameter] public Guid ProductId { get; set; }
 
-        [Inject]
-        public NavigationManager NavigationManager { get; set; }
+        [Inject] public ProductGateway ProductGateway { get; set; } = null!;
+        [Inject] public MicroCategoryGateway MicroCategoriesGateway { get; set; } = null!;
+        [Inject] public NavigationManager NavigationManager { get; set; } = null!;
 
-        [Parameter]
-        public Guid ProductId { get; set; }
-
+        protected EditContext EditContext = new EditContext(new ProductViewModel());
         protected ProductViewModel ViewModel { get; private set; } = new ProductViewModel();
 
         protected override async Task OnInitializedAsync()
         {
             if (ProductId == Guid.Empty)
             {
-                var query = new GraphQLRequest
-                {
-                    Query = "{ microcategories { id, name } }"
-                };
+                var result = await Result.Try(MicroCategoriesGateway.GetMicroCategoriesWithIdAndName);
 
-                var response = await HttpClient.SendQueryAsync<ProductResponse>(query);
-
-                var microCategories = response.Data.MicroCategories;
-
-                ViewModel = new ProductViewModel(microCategories);
+                ViewModel = new ProductViewModel(result.Success);
             }
             else
             {
-                var query = new GraphQLRequest
-                {
-                    Query = @"query GetProductById($id: String) { product(id: $id) {id, name, description, microcategory { id, name } } microcategories { id, name}}",
-                    OperationName = "GetProductById",
-                    Variables = new
-                    {
-                        id = ProductId
-                    }
-                };
+                var result = await Result.Try(() => ProductGateway.GetProductByIdWithMicroCategories(ProductId));
+                var (product, micros) = result.Success;
 
-                var response = await HttpClient.SendQueryAsync<ProductResponse>(query);
-
-                var product = response.Data.Product;
-                var microCategories = response.Data.MicroCategories;
-
-                ViewModel = new ProductViewModel(product, microCategories);
+                ViewModel = new ProductViewModel(product, micros);
             }
+
+            EditContext = new EditContext(ViewModel);
         }
 
-        protected async Task HandleValidSubmit()
+        protected async Task HandleSubmit()
         {
-            var product = new
-            {
-                name = ViewModel.Name,
-                description = ViewModel.Description,
-                microcategory = new
-                {
-                    id = ViewModel.MicroCategoryId
-                }
-            };
-            
-            var createQuery = new GraphQLRequest
-            {
-                Query = @"mutation CreateProduct($product: ProductInput!) { createProduct(product: $product) { id, name, description, microcategory { id, description} } }",
-                OperationName = "CreateProduct",
-                Variables = new
-                {
-                    product
-                }
-            };
+            if (!EditContext.Validate()) return;
 
-            var updateQuery = new GraphQLRequest
-            {
-                Query = @"mutation UpdateProduct($id: String!, $product: ProductInput!) { updateProduct(id: $id, product: $product) { id, name, description, microcategory { id, description} } }",
-                OperationName = "UpdateProduct",
-                Variables = new
-                {
-                    product,
-                    id = ViewModel.Product.Id
-                }
-            };
-
-            var query = ViewModel.Product.Id == Guid.Empty ? createQuery : updateQuery;
-
-            await HttpClient.SendQueryAsync<ProductResponse>(query);
+            if (ViewModel.Product.Id == Guid.Empty)
+                await Result.Try(() => ProductGateway.CreateProduct(ViewModel.Product));
+            else
+                await Result.Try(() => ProductGateway.UpdateProduct(ProductId, ViewModel.Product));
 
             NavigationManager.NavigateTo("products");
         }

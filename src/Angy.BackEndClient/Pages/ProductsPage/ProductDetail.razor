@@ -3,36 +3,36 @@
 
 @inherits ProductDetailComponent
 
-<EditForm Model="@ViewModel" OnValidSubmit="HandleValidSubmit">
+<EditForm EditContext="@EditContext" OnSubmit="HandleSubmit">
 
-    <DataAnnotationsValidator />
+    <dataannotationsvalidator/>
 
     <div class="form-group">
         <label for="name">Nome</label>
         <InputText id="name" class="form-control" aria-describedby="nameHelp" placeholder="Inserire il nome del prodotto" @bind-Value="@ViewModel.Name"/>
-        <ValidationMessage For="@(() => ViewModel.Name)" />  
+        <ValidationMessage For="@() => ViewModel.Name"/>
 
     </div>
 
     <div class="form-group">
         <label for="description">Descrizione</label>
         <InputTextArea id="description" class="form-control" aria-describedby="descriptionHelp" placeholder="Inserire la descrizione del prodotto" @bind-Value="@ViewModel.Description" rows="5"/>
-        <ValidationMessage For="@(() => ViewModel.Description)" />  
+        <ValidationMessage For="@() => ViewModel.Description"/>
     </div>
 
     <div>
         <label for="description">Categoria</label>
         <InputSelect id="micro-category" class="form-control" aria-describedby="microCategoryHelp" placeholder="Selezionare la categoria del prodotto" @bind-Value="@ViewModel.MicroCategoryId">
-            
+
             @foreach (var micro in ViewModel.MicroCategories)
             {
                 <option value="@micro.Id">@micro.Name</option>
             }
-        
+
         </InputSelect>
-        <ValidationMessage For="@(() => ViewModel.MicroCategoryId)" />  
+        <ValidationMessage For="@() => ViewModel.MicroCategoryId"/>
 
     </div>
 
-    <button type="submit" class="btn btn-outline-success w-25 float-right mt-2">Submit</button>
-</EditForm>
+    <button type="submit" class="btn btn-outline-success w-25 float-right mt-2" disabled="@(!EditContext.IsModified())">Submit</button>
+</editform>

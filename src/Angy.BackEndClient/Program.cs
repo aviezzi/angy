@@ -16,7 +16,9 @@ namespace Angy.BackEndClient
             builder.RootComponents.Add<App>("app");
 
             builder.Services.AddScoped(sp => new GraphQLHttpClient("http://localhost:5000/graphql", new NewtonsoftJsonSerializer()));
+
             builder.Services.AddScoped<ProductGateway>();
+            builder.Services.AddScoped<MicroCategoryGateway>();
 
             var host = builder.Build();
             await host.RunAsync();
