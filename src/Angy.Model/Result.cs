@@ -7,8 +7,8 @@ namespace Angy.Model
     {
         public bool IsValid { get; }
 
-        public TSuccess Success { get; set; }
-        public TError Error { get; set; }
+        public TSuccess Success { get; }
+        public TError Error { get; }
 
         public Result(TSuccess success)
         {
@@ -26,6 +26,7 @@ namespace Angy.Model
     public static class Result<T>
     {
         public static Result<TSuccess, T> Success<TSuccess>(TSuccess success) => new Result<TSuccess, T>(success);
+
         public static Result<T, TError> Error<TError>(TError error) => new Result<T, TError>(error);
     }
 

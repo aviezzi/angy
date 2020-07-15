@@ -1,66 +1,71 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Angy.Model;
 using Angy.Model.Model;
+using Angy.Shared.Abstract;
+using Angy.Shared.Adapters;
 using Angy.Shared.Responses;
-using GraphQL;
-using GraphQL.Client.Abstractions;
 
 namespace Angy.Shared.Gateways
 {
-    public class MicroCategoryGateway : GatewayBase
+    public class MicroCategoryGateway
     {
-        protected MicroCategoryGateway(IGraphQLClient client) : base(client)
+        readonly IClientAdapter _client;
+
+        public MicroCategoryGateway(IClientAdapter client)
         {
+            _client = client;
         }
 
-        public async Task<IEnumerable<MicroCategory>> GetMicroCategoriesWithIdAndName()
+        public Task<Result<IEnumerable<MicroCategory>, Error.ExceptionalError>> GetMicroCategoriesWithIdNameAndDescription()
         {
-            var query = new GraphQLRequest
-            {
-                Query = "{ microcategories { id, name } }"
-            };
+            var query = RequestAdapter<MicroCategoriesResponse, IEnumerable<MicroCategory>>.Build("{ microcategories { id, name, description } }", response => response.MicroCategories);
 
-            return (await SendQueryAsync<MicroCategoriesResponse>(query)).MicroCategories;
+            return _client.SendQueryAsync(query);
         }
 
-        public async Task<MicroCategory> GetMicroCategoryById(Guid id)
+        public Task<Result<IEnumerable<MicroCategory>, Error.ExceptionalError>> GetMicroCategoriesWithIdAndName()
         {
-            var query = new GraphQLRequest
-            {
-                Query = @"query GetMicroCategoryById($id: String) { microcategory(id: $id) {id, name, description } }",
-                OperationName = "GetMicroCategoryById",
-                Variables = new
-                {
-                    id
-                }
-            };
+            var query = RequestAdapter<MicroCategoriesResponse, IEnumerable<MicroCategory>>.Build("{ microcategories { id, name } }", response => response.MicroCategories);
 
-            return (await SendQueryAsync<MicroCategoryResponse>(query)).MicroCategory;
+            return _client.SendQueryAsync(query);
         }
 
-        public async Task<MicroCategory> CreateMicroCategory(MicroCategory micro)
+        public Task<Result<MicroCategory, Error.ExceptionalError>> GetMicroCategoryById(Guid id)
         {
-            var query = new GraphQLRequest
-            {
-                Query = @"mutation CreateMicroCategory($microcategory: MicroCategoryInput!) { createMicroCategory(microcategory: $microcategory) { id, name, description } }",
-                OperationName = "CreateMicroCategory",
-                Variables = new { microcategory = SerializeMicro(micro) }
-            };
+            var query = RequestAdapter<MicroCategoryResponse, MicroCategory>.Build(
+                "query GetMicroCategoryById($id: String) { microcategory(id: $id) {id, name, description } }",
+                request => request.MicroCategory,
+                new { id },
+                "GetMicroCategoryById"
+            );
 
-            return (await SendQueryAsync<MicroCategoryResponse>(query)).MicroCategory;
+            return _client.SendQueryAsync(query);
         }
 
-        public async Task<MicroCategory> UpdateMicroCategory(Guid id, MicroCategory micro)
+        public Task<Result<MicroCategory, Error.ExceptionalError>> CreateMicroCategory(MicroCategory micro)
         {
-            var query = new GraphQLRequest
-            {
-                Query = @"mutation UpdateMicroCategory($id: String!, $microcategory: MicroCategoryInput!) { updateMicroCategory(id: $id, microcategory: $microcategory) { id, name, description } }",
-                OperationName = "UpdateMicroCategory",
-                Variables = new { microcategory = SerializeMicro(micro), id }
-            };
+            var query = RequestAdapter<MicroCategoryResponse, MicroCategory>.Build(
+                "mutation CreateMicroCategory($microcategory: MicroCategoryInput!) { createMicroCategory(microcategory: $microcategory) { id, name, description } }",
+                response => response.MicroCategory,
+                new { microcategory = SerializeMicro(micro) },
+                "CreateMicroCategory"
+            );
 
-            return (await SendQueryAsync<MicroCategoryResponse>(query)).MicroCategory;
+            return _client.SendQueryAsync(query);
+        }
+
+        public Task<Result<MicroCategory, Error.ExceptionalError>> UpdateMicroCategory(Guid id, MicroCategory micro)
+        {
+            var query = RequestAdapter<MicroCategoryResponse, MicroCategory>.Build(
+                "mutation UpdateMicroCategory($id: String!, $microcategory: MicroCategoryInput!) { updateMicroCategory(id: $id, microcategory: $microcategory) { id, name, description } }",
+                response => response.MicroCategory,
+                new { microcategory = SerializeMicro(micro), id },
+                "UpdateMicroCategory"
+            );
+
+            return _client.SendQueryAsync(query);
         }
 
         static object SerializeMicro(MicroCategory micro) => new

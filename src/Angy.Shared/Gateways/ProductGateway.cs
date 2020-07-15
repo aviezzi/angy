@@ -1,74 +1,67 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Angy.Model;
 using Angy.Model.Model;
+using Angy.Shared.Abstract;
+using Angy.Shared.Adapters;
 using Angy.Shared.Responses;
-using GraphQL;
-using GraphQL.Client.Abstractions;
 
 namespace Angy.Shared.Gateways
 {
-    public class ProductGateway : GatewayBase
+    public class ProductGateway
     {
-        protected ProductGateway(IGraphQLClient client) : base(client)
+        readonly IClientAdapter _client;
+
+        public ProductGateway(IClientAdapter client)
         {
+            _client = client;
         }
 
-        public async Task<IEnumerable<Product>> GetProductsWithIdNameDescriptionAndMicroName()
+        public Task<Result<IEnumerable<Product>, Error.ExceptionalError>> GetProductsWithIdNameDescriptionAndMicroName()
         {
-            var query = new GraphQLRequest
-            {
-                Query = @"{ products { id, name, description, microcategory { name } } }"
-            };
+            var request = RequestAdapter<ProductsResponse, IEnumerable<Product>>.Build(
+                "{ products { id, name, description, microcategory { name } } }",
+                response => response.Products
+            );
 
-            var response = await SendQueryAsync<ProductsResponse>(query);
-
-            return response.Products;
+            return _client.SendQueryAsync(request);
         }
 
-        public async Task<(Product Product, IEnumerable<MicroCategory> MicroCategories)> GetProductByIdWithMicroCategories(Guid productId)
+        public Task<Result<(Product, IEnumerable<MicroCategory>), Error.ExceptionalError>> GetProductByIdWithMicroCategories(Guid id)
         {
-            var query = new GraphQLRequest
-            {
-                Query = @"query GetProductById($id: String) { product(id: $id) {id, name, description, microcategory { id, name } } microcategories { id, name}}",
-                OperationName = "GetProductById",
-                Variables = new
-                {
-                    id = productId
-                }
-            };
+            var request = RequestAdapter<ProductResponse, (Product, IEnumerable<MicroCategory>)>.Build(
+                "query GetProductById($id: String) { product(id: $id) {id, name, description, microcategory { id, name } } microcategories { id, name}}",
+                response => (response.Product, response.MicroCategories),
+                new { id },
+                "GetProductById"
+            );
 
-            var response = await SendQueryAsync<ProductResponse>(query);
-
-            return (response.Product, response.MicroCategories);
+            return _client.SendQueryAsync(request);
         }
 
-        public async Task<Product> CreateProduct(Product product)
+        public Task<Result<Product, Error.ExceptionalError>> CreateProduct(Product product)
         {
-            var query = new GraphQLRequest
-            {
-                Query = @"mutation CreateProduct($product: ProductInput!) { createProduct(product: $product) { id, name, description, microcategory { id, description} } }",
-                OperationName = "CreateProduct",
-                Variables = new { product = SerializeProduct(product) }
-            };
+            var query = RequestAdapter<ProductResponse, Product>.Build(
+                "mutation CreateProduct($product: ProductInput!) { createProduct(product: $product) { id, name, description, microcategory { id, description} } }",
+                response => response.Product,
+                new { product = SerializeProduct(product) },
+                "CreateProduct"
+            );
 
-            var response = await SendQueryAsync<ProductResponse>(query);
-
-            return response.Product;
+            return _client.SendQueryAsync(query);
         }
 
-        public async Task<Product> UpdateProduct(Guid id, Product product)
+        public Task<Result<Product, Error.ExceptionalError>> UpdateProduct(Guid id, Product product)
         {
-            var query = new GraphQLRequest
-            {
-                Query = @"mutation UpdateProduct($id: String!, $product: ProductInput!) { updateProduct(id: $id, product: $product) { id, name, description, microcategory { id, description} } }",
-                OperationName = "UpdateProduct",
-                Variables = new { product = SerializeProduct(product), id }
-            };
+            var query = RequestAdapter<ProductResponse, Product>.Build(
+                "mutation UpdateProduct($id: String!, $product: ProductInput!) { updateProduct(id: $id, product: $product) { id, name, description, microcategory { id, description} } }",
+                response => response.Product,
+                new { product = SerializeProduct(product), id },
+                "UpdateProduct"
+            );
 
-            var response = await SendQueryAsync<ProductResponse>(query);
-
-            return response.Product;
+            return _client.SendQueryAsync(query);
         }
 
         static object SerializeProduct(Product product) => new

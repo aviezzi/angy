@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Angy.Model;
 using Angy.Shared.Gateways;
 using Angy.Shared.ViewModels;
 using Microsoft.AspNetCore.Components;
@@ -23,16 +22,19 @@ namespace Angy.BackEndClient.Pages.ProductsPage
         {
             if (ProductId == Guid.Empty)
             {
-                var result = await Result.Try(MicroCategoriesGateway.GetMicroCategoriesWithIdAndName);
+                var result = await MicroCategoriesGateway.GetMicroCategoriesWithIdAndName();
 
                 ViewModel = new ProductViewModel(result.Success);
             }
             else
             {
-                var result = await Result.Try(() => ProductGateway.GetProductByIdWithMicroCategories(ProductId));
-                var (product, micros) = result.Success;
+                var result = await ProductGateway.GetProductByIdWithMicroCategories(ProductId);
 
-                ViewModel = new ProductViewModel(product, micros);
+                if (!result.IsValid) return;
+
+                var (product, microCategories) = result.Success;
+
+                ViewModel = new ProductViewModel(product, microCategories);
             }
 
             EditContext = new EditContext(ViewModel);
@@ -43,9 +45,9 @@ namespace Angy.BackEndClient.Pages.ProductsPage
             if (!EditContext.Validate()) return;
 
             if (ViewModel.Product.Id == Guid.Empty)
-                await Result.Try(() => ProductGateway.CreateProduct(ViewModel.Product));
+                await ProductGateway.CreateProduct(ViewModel.Product);
             else
-                await Result.Try(() => ProductGateway.UpdateProduct(ProductId, ViewModel.Product));
+                await ProductGateway.UpdateProduct(ProductId, ViewModel.Product);
 
             NavigationManager.NavigateTo("products");
         }

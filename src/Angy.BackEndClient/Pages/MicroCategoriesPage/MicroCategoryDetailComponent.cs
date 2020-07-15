@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Angy.Model;
 using Angy.Shared.Gateways;
 using Angy.Shared.ViewModels;
 using Microsoft.AspNetCore.Components;
@@ -20,7 +19,7 @@ namespace Angy.BackEndClient.Pages.MicroCategoriesPage
         {
             if (MicroId != Guid.Empty)
             {
-                var response = await Result.Try(() => MicroCategoryGateway.GetMicroCategoryById(MicroId));
+                var response = await MicroCategoryGateway.GetMicroCategoryById(MicroId);
 
                 if (response.IsValid) ViewModel = new MicroCategoryViewModel(response.Success);
             }
@@ -29,9 +28,9 @@ namespace Angy.BackEndClient.Pages.MicroCategoriesPage
         protected async Task HandleValidSubmit()
         {
             if (ViewModel.Micro.Id == Guid.Empty)
-                await Result.Try(() => MicroCategoryGateway.CreateMicroCategory(ViewModel.Micro));
+                await MicroCategoryGateway.CreateMicroCategory(ViewModel.Micro);
             else
-                await Result.Try(() => MicroCategoryGateway.UpdateMicroCategory(MicroId, ViewModel.Micro));
+                await MicroCategoryGateway.UpdateMicroCategory(MicroId, ViewModel.Micro);
 
             NavigationManager.NavigateTo("/micro-categories");
         }

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Angy.Model;
 using Angy.Model.Model;
 using Angy.Shared.Gateways;
 using Microsoft.AspNetCore.Components;
@@ -15,7 +14,7 @@ namespace Angy.BackEndClient.Pages.MicroCategoriesPage
 
         protected override async Task OnInitializedAsync()
         {
-            var response = await Result.Try(MicroCategoryGateway.GetMicroCategoriesWithIdAndName);
+            var response = await MicroCategoryGateway.GetMicroCategoriesWithIdNameAndDescription();
 
             if (response.IsValid) MicroCategories = response.Success;
         }
