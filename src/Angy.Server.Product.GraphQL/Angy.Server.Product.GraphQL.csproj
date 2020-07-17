@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.1</TargetFramework>
+        <RootNamespace>Angy.ProductServer.Core</RootNamespace>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="GraphQL" Version="3.0.0-preview-1490" />
+      <PackageReference Include="GraphQL-Parser" Version="5.1.2" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Angy.Server.Data\Angy.Server.Data.csproj" />
+    </ItemGroup>
+    
+</Project>

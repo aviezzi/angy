@@ -1,14 +1,16 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Angy.Server", "Angy.Server\Angy.Server.csproj", "{DC0E0306-B826-41AC-8A38-FA1AF1C8B1C9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Angy.Server.Product", "Angy.Server.Product\Angy.Server.Product.csproj", "{DC0E0306-B826-41AC-8A38-FA1AF1C8B1C9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Angy.Core", "Angy.Core\Angy.Core.csproj", "{461AA469-9B89-4324-AEEF-CF996D877617}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Angy.Server.Product.GraphQL", "Angy.Server.Product.GraphQL\Angy.Server.Product.GraphQL.csproj", "{461AA469-9B89-4324-AEEF-CF996D877617}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Angy.BackEndClient", "Angy.BackEndClient\Angy.BackEndClient.csproj", "{1C16F69D-B5B0-4DD7-B9F8-3BBEFDC96E26}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Angy.Client.ProductDataManager", "Angy.Client.ProductDataManager\Angy.Client.ProductDataManager.csproj", "{1C16F69D-B5B0-4DD7-B9F8-3BBEFDC96E26}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Angy.Shared", "Angy.Shared\Angy.Shared.csproj", "{C83B9806-D86F-47D0-8351-C06E623AE23C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Angy.Clinet.Shared", "Angy.Clinet.Shared\Angy.Clinet.Shared.csproj", "{C83B9806-D86F-47D0-8351-C06E623AE23C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Angy.Model", "Angy.Model\Angy.Model.csproj", "{6E7DCB84-6F28-4C15-9353-36312CE2AADD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Angy.Server.Data", "Angy.Server.Data\Angy.Server.Data.csproj", "{E6D0DA1A-9CB6-45E5-8CA0-2AC0ABF1272D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,5 +38,9 @@ Global
 		{6E7DCB84-6F28-4C15-9353-36312CE2AADD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6E7DCB84-6F28-4C15-9353-36312CE2AADD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6E7DCB84-6F28-4C15-9353-36312CE2AADD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E6D0DA1A-9CB6-45E5-8CA0-2AC0ABF1272D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E6D0DA1A-9CB6-45E5-8CA0-2AC0ABF1272D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E6D0DA1A-9CB6-45E5-8CA0-2AC0ABF1272D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E6D0DA1A-9CB6-45E5-8CA0-2AC0ABF1272D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
