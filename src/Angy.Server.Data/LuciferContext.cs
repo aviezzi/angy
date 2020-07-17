@@ -12,6 +12,8 @@ namespace Angy.Server.Data
 
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<MicroCategory> MicroCategories { get; set; }
+        public virtual DbSet<Attribute> Attributes { get; set; }
+        public virtual DbSet<AttributeDescription> AttributeDescriptions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -19,10 +21,6 @@ namespace Angy.Server.Data
 
             productBuilder
                 .HasKey(p => p.Id);
-
-            productBuilder
-                .HasIndex(p => p.Name)
-                .IsUnique();
 
             productBuilder
                 .HasOne(p => p.MicroCategory)
@@ -35,9 +33,18 @@ namespace Angy.Server.Data
             microCategoryBuilder
                 .HasKey(m => m.Id);
 
-            microCategoryBuilder
-                .HasIndex(u => u.Name)
-                .IsUnique();
+            var attributeBuilder = modelBuilder.Entity<Attribute>();
+
+            attributeBuilder
+                .HasKey(a => a.Id);
+
+            var attributeDescriptionBuilder = modelBuilder.Entity<AttributeDescription>();
+
+            attributeDescriptionBuilder
+                .HasOne(ad => ad.Attribute)
+                .WithMany(ad => ad.Descriptions)
+                .OnDelete(DeleteBehavior.NoAction)
+                .HasForeignKey("AttributeId");
         }
     }
 }

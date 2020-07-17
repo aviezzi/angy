@@ -1,6 +1,6 @@
-﻿Set-Location -Path ..\..\Angy.Core
+﻿Set-Location -Path ..\..\Angy.Server.Data
 
-dotnet ef --startup-project ../angy.Server/ migrations add AddIsUniqueConstraintOnColumnName
-dotnet ef --startup-project ../angy.Server/ database update
+dotnet ef --startup-project ..\angy.Server.Product migrations add AddAttributes
+dotnet ef --startup-project ..\angy.Server.Product database update
 
-Set-Location -Path ..\Angy.Server\Scripts
+Set-Location -Path ..\Angy.Server.Product\Scripts
