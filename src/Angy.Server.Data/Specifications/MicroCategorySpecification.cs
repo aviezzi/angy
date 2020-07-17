@@ -1,5 +1,5 @@
 ﻿using System;
-using Angy.Model.Model;
+using Angy.Model;
 
 namespace Angy.Server.Data.Specifications
 {

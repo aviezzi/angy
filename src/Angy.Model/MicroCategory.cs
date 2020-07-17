@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Angy.Model.Model
+namespace Angy.Model
 {
     public class MicroCategory : EntityBase
     {

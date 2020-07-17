@@ -1,4 +1,4 @@
-﻿namespace Angy.Model.Model
+﻿namespace Angy.Model
 {
     public class Product : EntityBase
     {

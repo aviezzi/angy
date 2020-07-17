@@ -1,4 +1,4 @@
-﻿using Angy.Model.Model;
+﻿using Angy.Model;
 using Angy.ProductServer.Core;
 using Angy.ProductServer.Core.Inputs;
 using Angy.ProductServer.Core.RootTypes;

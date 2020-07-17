@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Angy.Model.Model;
+using Angy.Model;
 using Angy.Server.Data.Abstract;
 using Angy.Server.Data.Extensions;
 using Angy.Server.Data.Specifications;

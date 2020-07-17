@@ -1,4 +1,4 @@
-﻿using Angy.Model.Model;
+﻿using Angy.Model;
 using GraphQL.Types;
 
 namespace Angy.ProductServer.Core.Inputs

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Linq;
-using Angy.Model.Model;
+using Angy.Model;
 using Angy.Server.Data.Abstract;
 using GraphQL.DataLoader;
 using GraphQL.Types;

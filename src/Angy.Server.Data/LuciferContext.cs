@@ -1,4 +1,4 @@
-﻿using Angy.Model.Model;
+﻿using Angy.Model;
 using Microsoft.EntityFrameworkCore;
 
 namespace Angy.Server.Data

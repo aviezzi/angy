@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Angy.Model.Model;
+using Angy.Model;
 
 namespace Angy.Server.Data.Abstract
 {

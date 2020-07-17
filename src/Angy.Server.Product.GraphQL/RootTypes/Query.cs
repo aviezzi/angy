@@ -1,5 +1,5 @@
 ﻿using System;
-using Angy.Model.Model;
+using Angy.Model;
 using Angy.ProductServer.Core.Types;
 using Angy.Server.Data.Abstract;
 using GraphQL;

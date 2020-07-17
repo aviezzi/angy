@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Angy.Model.Model;
+using Angy.Model;
 
 namespace Angy.Shared.Responses
 {

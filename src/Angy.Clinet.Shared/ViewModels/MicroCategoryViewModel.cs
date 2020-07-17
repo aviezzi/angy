@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Angy.Model.Model;
+using Angy.Model;
 
 namespace Angy.Shared.ViewModels
 {

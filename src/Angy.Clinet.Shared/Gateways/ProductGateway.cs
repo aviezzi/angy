@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Angy.Model;
-using Angy.Model.Model;
 using Angy.Shared.Abstract;
 using Angy.Shared.Adapters;
 using Angy.Shared.Responses;
