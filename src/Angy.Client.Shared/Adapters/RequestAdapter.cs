@@ -1,7 +1,7 @@
 ﻿using System;
 using GraphQL;
 
-namespace Angy.Shared.Adapters
+namespace Angy.Client.Shared.Adapters
 {
     public class RequestAdapter<TResponse, TCast>
     {

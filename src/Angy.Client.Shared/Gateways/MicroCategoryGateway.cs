@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Angy.Client.Shared.Abstract;
+using Angy.Client.Shared.Adapters;
+using Angy.Client.Shared.Responses;
 using Angy.Model;
-using Angy.Shared.Abstract;
-using Angy.Shared.Adapters;
-using Angy.Shared.Responses;
 
-namespace Angy.Shared.Gateways
+namespace Angy.Client.Shared.Gateways
 {
     public class MicroCategoryGateway
     {

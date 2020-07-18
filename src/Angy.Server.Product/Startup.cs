@@ -1,6 +1,6 @@
-using Angy.ProductServer.IoC;
 using Angy.Server.Data;
 using Angy.Server.Product.GraphQL;
+using Angy.Server.Product.IoC;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using GraphQL.Server;
@@ -12,7 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace Angy.ProductServer
+namespace Angy.Server.Product
 {
     public class Startup
     {

@@ -1,14 +1,14 @@
 using System.Threading.Tasks;
-using Angy.Shared.Abstract;
-using Angy.Shared.Adapters;
-using Angy.Shared.Gateways;
+using Angy.Client.Shared.Abstract;
+using Angy.Client.Shared.Adapters;
+using Angy.Client.Shared.Gateways;
 using GraphQL.Client.Abstractions;
 using GraphQL.Client.Http;
 using GraphQL.Client.Serializer.Newtonsoft;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Angy.BackEndClient
+namespace Angy.Client.ProductDataManager
 {
     public class Program
     {

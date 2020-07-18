@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Angy.Shared.Gateways;
-using Angy.Shared.ViewModels;
+using Angy.Client.Shared.Gateways;
+using Angy.Client.Shared.ViewModels;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 
-namespace Angy.BackEndClient.Pages.ProductsPage
+namespace Angy.Client.ProductDataManager.Pages.ProductsPage
 {
     public class ProductDetailComponent : ComponentBase
     {

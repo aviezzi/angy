@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Angy.Client.Shared.Gateways;
 using Angy.Model;
-using Angy.Shared.Gateways;
 using Microsoft.AspNetCore.Components;
 
-namespace Angy.BackEndClient.Pages
+namespace Angy.Client.ProductDataManager.Pages
 {
     public class IndexComponent : ComponentBase
     {

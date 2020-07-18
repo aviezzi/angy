@@ -4,7 +4,6 @@
     <TargetFramework>netstandard2.1</TargetFramework>
     <RazorLangVersion>3.0</RazorLangVersion>
     <Nullable>enable</Nullable>
-    <RootNamespace>Angy.BackEndClient</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -24,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Angy.Clinet.Shared\Angy.Clinet.Shared.csproj" />
+    <ProjectReference Include="..\Angy.Client.Shared\Angy.Client.Shared.csproj" />
     <ProjectReference Include="..\Angy.Model\Angy.Model.csproj" />
   </ItemGroup>
 

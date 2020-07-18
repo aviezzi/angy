@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
+using Angy.Client.Shared.Abstract;
 using Angy.Model;
-using Angy.Shared.Abstract;
 using GraphQL.Client.Abstractions;
 
-namespace Angy.Shared.Adapters
+namespace Angy.Client.Shared.Adapters
 {
     public class ClientAdapter : IClientAdapter
     {

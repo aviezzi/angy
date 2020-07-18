@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Angy.Model;
 
-namespace Angy.Shared.ViewModels
+namespace Angy.Client.Shared.ViewModels
 {
     public class MicroCategoryViewModel
     {

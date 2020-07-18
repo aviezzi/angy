@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Angy.Model;
 
-namespace Angy.Shared.Responses
+namespace Angy.Client.Shared.Responses
 {
     public class ProductsResponse
     {

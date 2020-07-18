@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Angy.Shared.Gateways;
-using Angy.Shared.ViewModels;
+using Angy.Client.Shared.Gateways;
+using Angy.Client.Shared.ViewModels;
 using Microsoft.AspNetCore.Components;
 
-namespace Angy.BackEndClient.Pages.MicroCategoriesPage
+namespace Angy.Client.ProductDataManager.Pages.MicroCategoriesPage
 {
     public class MicroCategoryDetailComponent : ComponentBase
     {

@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
+using Angy.Client.Shared.Adapters;
 using Angy.Model;
-using Angy.Shared.Adapters;
 
-namespace Angy.Shared.Abstract
+namespace Angy.Client.Shared.Abstract
 {
     public interface IClientAdapter
     {

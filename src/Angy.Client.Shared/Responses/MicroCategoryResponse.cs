@@ -1,6 +1,6 @@
 ﻿using Angy.Model;
 
-namespace Angy.Shared.Responses
+namespace Angy.Client.Shared.Responses
 {
     public class MicroCategoryResponse
     {

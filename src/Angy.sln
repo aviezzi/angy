@@ -6,7 +6,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Angy.Server.Product.GraphQL
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Angy.Client.ProductDataManager", "Angy.Client.ProductDataManager\Angy.Client.ProductDataManager.csproj", "{1C16F69D-B5B0-4DD7-B9F8-3BBEFDC96E26}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Angy.Clinet.Shared", "Angy.Clinet.Shared\Angy.Clinet.Shared.csproj", "{C83B9806-D86F-47D0-8351-C06E623AE23C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Angy.Client.Shared", "Angy.Client.Shared\Angy.Client.Shared.csproj", "{C83B9806-D86F-47D0-8351-C06E623AE23C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Angy.Model", "Angy.Model\Angy.Model.csproj", "{6E7DCB84-6F28-4C15-9353-36312CE2AADD}"
 EndProject

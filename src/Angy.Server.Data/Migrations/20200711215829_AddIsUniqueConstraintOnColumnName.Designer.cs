@@ -20,7 +20,7 @@ namespace Angy.Server.Data.Migrations
                 .HasAnnotation("ProductVersion", "5.0.0-preview.6.20312.4")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            modelBuilder.Entity("Angy.Clinet.Shared.Model.MicroCategory", b =>
+            modelBuilder.Entity("Angy.Client.Shared.Model.MicroCategory", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -40,7 +40,7 @@ namespace Angy.Server.Data.Migrations
                     b.ToTable("MicroCategories");
                 });
 
-            modelBuilder.Entity("Angy.Clinet.Shared.Model.Product", b =>
+            modelBuilder.Entity("Angy.Client.Shared.Model.Product", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -65,9 +65,9 @@ namespace Angy.Server.Data.Migrations
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("Angy.Clinet.Shared.Model.Product", b =>
+            modelBuilder.Entity("Angy.Client.Shared.Model.Product", b =>
                 {
-                    b.HasOne("Angy.Clinet.Shared.Model.MicroCategory", "MicroCategory")
+                    b.HasOne("Angy.Client.Shared.Model.MicroCategory", "MicroCategory")
                         .WithMany("Products")
                         .HasForeignKey("MicroCategoryId")
                         .OnDelete(DeleteBehavior.NoAction);

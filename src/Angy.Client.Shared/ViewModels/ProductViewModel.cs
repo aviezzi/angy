@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using Angy.Shared.FormValidators;
 using System.ComponentModel.DataAnnotations;
+using Angy.Client.Shared.FormValidators;
 using Angy.Model;
 
-namespace Angy.Shared.ViewModels
+namespace Angy.Client.Shared.ViewModels
 {
     public class ProductViewModel
     {

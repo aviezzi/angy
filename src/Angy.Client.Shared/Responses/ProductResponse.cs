@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using Angy.Model;
 
-namespace Angy.Shared.Responses
+namespace Angy.Client.Shared.Responses
 {
-    public class MicroCategoriesResponse
+    public class ProductResponse
     {
+        public Product? Product { get; set; }
         public IEnumerable<MicroCategory>? MicroCategories { get; set; }
     }
 }

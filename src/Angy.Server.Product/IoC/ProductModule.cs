@@ -7,7 +7,7 @@ using Angy.Server.Product.GraphQL.RootTypes;
 using Angy.Server.Product.GraphQL.Types;
 using Autofac;
 
-namespace Angy.ProductServer.IoC
+namespace Angy.Server.Product.IoC
 {
     public class ProductModule : Module
     {
@@ -26,7 +26,7 @@ namespace Angy.ProductServer.IoC
             builder.RegisterType<AttributeType>().SingleInstance();
             builder.RegisterType<AttributeDescriptionType>().SingleInstance();
 
-            builder.RegisterType<ProductRepository>().As<IRepository<Product>>().InstancePerDependency();
+            builder.RegisterType<ProductRepository>().As<IRepository<Model.Product>>().InstancePerDependency();
             builder.RegisterType<MicroCategoryRepository>().As<IRepository<MicroCategory>>().InstancePerDependency();
             builder.RegisterType<AttributeRepository>().As<IRepository<Attribute>>().InstancePerDependency();
             builder.RegisterType<AttributeDescriptionRepository>().As<IAttributeDescriptionRepository>().InstancePerDependency();

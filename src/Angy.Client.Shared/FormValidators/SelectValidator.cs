@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Angy.Shared.FormValidators
+namespace Angy.Client.Shared.FormValidators
 {
     public class SelectValidator : ValidationAttribute
     {
