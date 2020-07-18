@@ -1,0 +1,22 @@
+﻿@page "/attributes"
+
+@inherits AttributesComponent
+
+<div class="d-flex flex-column">
+    <div class="p-2">
+        <h1>Lista degli Attributi</h1>
+    </div>
+    <div class="p-2">
+        <a href="/product/create" class="btn btn-outline-success w-25 justify-content-end">Crea</a>
+    </div>
+    <div class="p-2">
+        @foreach (var product in Attributes)
+        {
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="inline">@product.Name</h3> <a href="/product/edit/@product.Id" class="btn btn-primary w-25 float-right">Modifica</a>
+                </div>
+            </div>
+        }
+    </div>
+</div>

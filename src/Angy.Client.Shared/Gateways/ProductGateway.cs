@@ -19,9 +19,9 @@ namespace Angy.Client.Shared.Gateways
 
         public Task<Result<IEnumerable<Product>, Error.ExceptionalError>> GetProductsWithIdNameDescriptionAndMicroName()
         {
-            var request = RequestAdapter<ProductsResponse, IEnumerable<Product>>.Build(
+            var request = RequestAdapter<ResponsesAdapter.ProductsResponse, IEnumerable<Product>>.Build(
                 "{ products { id, name, description, microcategory { name } } }",
-                response => response.Products
+                response => response.Products!
             );
 
             return _client.SendQueryAsync(request);
@@ -29,9 +29,9 @@ namespace Angy.Client.Shared.Gateways
 
         public Task<Result<(Product, IEnumerable<MicroCategory>), Error.ExceptionalError>> GetProductByIdWithMicroCategories(Guid id)
         {
-            var request = RequestAdapter<ProductResponse, (Product, IEnumerable<MicroCategory>)>.Build(
+            var request = RequestAdapter<ResponsesAdapter.ProductResponse, (Product, IEnumerable<MicroCategory>)>.Build(
                 "query GetProductById($id: String) { product(id: $id) {id, name, description, microcategory { id, name } } microcategories { id, name}}",
-                response => (response.Product, response.MicroCategories),
+                response => (response.Product!, response.MicroCategories!),
                 new { id },
                 "GetProductById"
             );
@@ -41,9 +41,9 @@ namespace Angy.Client.Shared.Gateways
 
         public Task<Result<Product, Error.ExceptionalError>> CreateProduct(Product product)
         {
-            var query = RequestAdapter<ProductResponse, Product>.Build(
+            var query = RequestAdapter<ResponsesAdapter.ProductResponse, Product>.Build(
                 "mutation CreateProduct($product: ProductInput!) { createProduct(product: $product) { id, name, description, microcategory { id, description} } }",
-                response => response.Product,
+                response => response.Product!,
                 new { product = SerializeProduct(product) },
                 "CreateProduct"
             );
@@ -53,9 +53,9 @@ namespace Angy.Client.Shared.Gateways
 
         public Task<Result<Product, Error.ExceptionalError>> UpdateProduct(Guid id, Product product)
         {
-            var query = RequestAdapter<ProductResponse, Product>.Build(
+            var query = RequestAdapter<ResponsesAdapter.ProductResponse, Product>.Build(
                 "mutation UpdateProduct($id: String!, $product: ProductInput!) { updateProduct(id: $id, product: $product) { id, name, description, microcategory { id, description} } }",
-                response => response.Product,
+                response => response.Product!,
                 new { product = SerializeProduct(product), id },
                 "UpdateProduct"
             );

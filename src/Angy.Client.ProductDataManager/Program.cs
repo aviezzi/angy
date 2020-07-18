@@ -23,6 +23,7 @@ namespace Angy.Client.ProductDataManager
 
             builder.Services.AddSingleton<ProductGateway>();
             builder.Services.AddSingleton<MicroCategoryGateway>();
+            builder.Services.AddSingleton<AttributeGateway>();
 
             var host = builder.Build();
             await host.RunAsync();
