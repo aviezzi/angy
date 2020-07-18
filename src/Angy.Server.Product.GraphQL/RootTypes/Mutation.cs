@@ -1,13 +1,13 @@
 ﻿using System;
 using Angy.Model;
-using Angy.ProductServer.Core.Inputs;
-using Angy.ProductServer.Core.Types;
 using Angy.Server.Data.Abstract;
+using Angy.Server.Product.GraphQL.Inputs;
+using Angy.Server.Product.GraphQL.Types;
 using GraphQL;
 using GraphQL.Types;
 using GraphQL.Utilities;
 
-namespace Angy.ProductServer.Core.RootTypes
+namespace Angy.Server.Product.GraphQL.RootTypes
 {
     public sealed class Mutation : ObjectGraphType<object>
     {
@@ -34,9 +34,9 @@ namespace Angy.ProductServer.Core.RootTypes
                 ),
                 resolve: async context =>
                 {
-                    var repository = _provider.GetRequiredService<IRepository<Product>>();
+                    var repository = _provider.GetRequiredService<IRepository<Model.Product>>();
 
-                    var product = context.GetArgument<Product>(name);
+                    var product = context.GetArgument<Model.Product>(name);
 
                     var created = await repository.Create(product);
 
@@ -51,10 +51,10 @@ namespace Angy.ProductServer.Core.RootTypes
                 ),
                 resolve: async context =>
                 {
-                    var repository = _provider.GetRequiredService<IRepository<Product>>();
+                    var repository = _provider.GetRequiredService<IRepository<Model.Product>>();
 
                     var id = context.GetArgument<Guid>("id");
-                    var product = context.GetArgument<Product>(name);
+                    var product = context.GetArgument<Model.Product>(name);
 
                     var updated = await repository.Update(id, product);
 

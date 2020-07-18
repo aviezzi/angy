@@ -1,10 +1,10 @@
 ﻿using System;
-using Angy.ProductServer.Core.RootTypes;
+using Angy.Server.Product.GraphQL.RootTypes;
 using GraphQL.Utilities;
 
-namespace Angy.ProductServer.Core
+namespace Angy.Server.Product.GraphQL
 {
-    public class Schema : GraphQL.Types.Schema
+    public class Schema : global::GraphQL.Types.Schema
     {
         public Schema(IServiceProvider services) : base(services)
         {

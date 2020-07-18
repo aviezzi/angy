@@ -1,7 +1,7 @@
 ﻿using Angy.Model;
 using GraphQL.Types;
 
-namespace Angy.ProductServer.Core.Types
+namespace Angy.Server.Product.GraphQL.Types
 {
     public sealed class MicroCategoryType : ObjectGraphType<MicroCategory>
     {

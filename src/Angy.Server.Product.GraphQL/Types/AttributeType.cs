@@ -1,10 +1,9 @@
-﻿using System;
-using GraphQL.DataLoader;
+using Angy.Model;
 using GraphQL.Types;
 
-namespace Angy.ProductServer.Core.Types
+namespace Angy.Server.Product.GraphQL.Types
 {
-    public sealed class AttributeType : ObjectGraphType<Model.Attribute>
+    public sealed class AttributeType : ObjectGraphType<Attribute>
     {
         public AttributeType()
         {

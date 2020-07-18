@@ -1,15 +1,15 @@
 ﻿using Angy.Model;
-using Angy.ProductServer.Core;
-using Angy.ProductServer.Core.Inputs;
-using Angy.ProductServer.Core.RootTypes;
-using Angy.ProductServer.Core.Types;
 using Angy.Server.Data.Abstract;
 using Angy.Server.Data.Repositories;
+using Angy.Server.Product.GraphQL;
+using Angy.Server.Product.GraphQL.Inputs;
+using Angy.Server.Product.GraphQL.RootTypes;
+using Angy.Server.Product.GraphQL.Types;
 using Autofac;
 
 namespace Angy.ProductServer.IoC
 {
-    public class AngyModule : Module
+    public class ProductModule : Module
     {
         protected override void Load(ContainerBuilder builder)
         {
@@ -22,11 +22,14 @@ namespace Angy.ProductServer.IoC
 
             builder.RegisterType<MicroCategoryType>().SingleInstance();
             builder.RegisterType<MicroCategoryInputType>().SingleInstance();
+            
+            builder.RegisterType<AttributeType>().SingleInstance();
+            builder.RegisterType<AttributeDescriptionType>().SingleInstance();
 
             builder.RegisterType<ProductRepository>().As<IRepository<Product>>().InstancePerDependency();
             builder.RegisterType<MicroCategoryRepository>().As<IRepository<MicroCategory>>().InstancePerDependency();
             builder.RegisterType<AttributeRepository>().As<IRepository<Attribute>>().InstancePerDependency();
-            builder.RegisterType<MicroCategoryRepository>().As<IAttributeDescriptionRepository>().InstancePerDependency();
+            builder.RegisterType<AttributeDescriptionRepository>().As<IAttributeDescriptionRepository>().InstancePerDependency();
         }
     }
 }

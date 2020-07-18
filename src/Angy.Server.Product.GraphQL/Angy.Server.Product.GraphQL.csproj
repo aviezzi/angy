@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <TargetFramework>netstandard2.1</TargetFramework>
-        <RootNamespace>Angy.ProductServer.Core</RootNamespace>
+        <RootNamespace>Angy.Server.Product.GraphQL</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>

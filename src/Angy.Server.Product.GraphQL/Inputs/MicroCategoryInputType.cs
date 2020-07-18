@@ -1,7 +1,7 @@
 ﻿using Angy.Model;
 using GraphQL.Types;
 
-namespace Angy.ProductServer.Core.Inputs
+namespace Angy.Server.Product.GraphQL.Inputs
 {
     public sealed class MicroCategoryInputType : InputObjectGraphType<MicroCategory>
     {

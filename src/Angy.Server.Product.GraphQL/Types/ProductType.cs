@@ -6,9 +6,9 @@ using GraphQL.DataLoader;
 using GraphQL.Types;
 using GraphQL.Utilities;
 
-namespace Angy.ProductServer.Core.Types
+namespace Angy.Server.Product.GraphQL.Types
 {
-    public sealed class ProductType : ObjectGraphType<Product>
+    public sealed class ProductType : ObjectGraphType<Model.Product>
     {
         public ProductType(IServiceProvider provider, IDataLoaderContextAccessor dataLoader)
         {

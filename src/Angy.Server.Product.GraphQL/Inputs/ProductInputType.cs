@@ -1,9 +1,8 @@
-﻿using Angy.Model;
-using GraphQL.Types;
+﻿using GraphQL.Types;
 
-namespace Angy.ProductServer.Core.Inputs
+namespace Angy.Server.Product.GraphQL.Inputs
 {
-    public sealed class ProductInputType : InputObjectGraphType<Product>
+    public sealed class ProductInputType : InputObjectGraphType<Model.Product>
     {
         public ProductInputType()
         {
