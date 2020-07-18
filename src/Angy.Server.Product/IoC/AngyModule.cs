@@ -25,6 +25,8 @@ namespace Angy.ProductServer.IoC
 
             builder.RegisterType<ProductRepository>().As<IRepository<Product>>().InstancePerDependency();
             builder.RegisterType<MicroCategoryRepository>().As<IRepository<MicroCategory>>().InstancePerDependency();
+            builder.RegisterType<AttributeRepository>().As<IRepository<Attribute>>().InstancePerDependency();
+            builder.RegisterType<MicroCategoryRepository>().As<IAttributeDescriptionRepository>().InstancePerDependency();
         }
     }
 }

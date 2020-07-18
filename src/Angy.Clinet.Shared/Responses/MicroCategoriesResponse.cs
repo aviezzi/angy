@@ -5,6 +5,6 @@ namespace Angy.Shared.Responses
 {
     public class MicroCategoriesResponse
     {
-        public IEnumerable<MicroCategory> MicroCategories { get; set; }
+        public IEnumerable<MicroCategory>? MicroCategories { get; set; }
     }
 }

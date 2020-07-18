@@ -20,6 +20,8 @@ namespace Angy.ProductServer.Core.RootTypes
 
             ProductQueries();
             MicroCategoriesQueries();
+            AttributeQueries();
+            AttributeDescriptionQueries();
         }
 
         void ProductQueries()
@@ -44,6 +46,36 @@ namespace Angy.ProductServer.Core.RootTypes
 
             FieldAsync<ListGraphType<MicroCategoryType>>("microcategories", "The list of the micro categories", resolve: async context =>
                 await _provider.GetRequiredService<IRepository<MicroCategory>>().GetAll());
+        }
+
+        void AttributeQueries()
+        {
+            FieldAsync<AttributeType>(
+                "attribute",
+                "A single attribute of a product.",
+                new QueryArguments(new QueryArgument<StringGraphType> { Name = "Id", Description = "Attribute Id" }),
+                async context => await _provider.GetRequiredService<IRepository<Model.Attribute>>().GetOne(context.GetArgument<Guid>("id")));
+
+            FieldAsync<ListGraphType<MicroCategoryType>>("attributes", "The list of attributes", resolve: async context =>
+                await _provider.GetRequiredService<IRepository<Model.Attribute>>().GetAll());
+        }
+
+        void AttributeDescriptionQueries()
+        {
+            FieldAsync<AttributeDescriptionType>(
+                "attribute description",
+                "A single description of a product.",
+                new QueryArguments(new QueryArgument<StringGraphType> { Name = "Id", Description = "Attribute Id" }),
+                async context => await _provider.GetRequiredService<IAttributeDescriptionRepository>().GetOne(context.GetArgument<Guid>("id")));
+
+            FieldAsync<AttributeDescriptionType>(
+                "attribute description by product id",
+                "The list of attributes description associated to a product.",
+                new QueryArguments(new QueryArgument<StringGraphType> { Name = "productId", Description = "product Id" }),
+                async context => await _provider.GetRequiredService<IAttributeDescriptionRepository>().GetByProductId(context.GetArgument<Guid>("productId")));
+
+            FieldAsync<ListGraphType<MicroCategoryType>>("attributes", "The list of attributes", resolve: async context =>
+                await _provider.GetRequiredService<IAttributeDescriptionRepository>().GetAll());
         }
     }
 }

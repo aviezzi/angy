@@ -20,7 +20,7 @@ namespace Angy.Server.Data.Repositories
 
         public async Task<IEnumerable<MicroCategory>> GetAll() => await _context.MicroCategories.ToListAsync();
 
-        public async Task<MicroCategory> GetOne(Guid id) => await _context.MicroCategories.Specify(new MicroCategorySpecification(id)).SingleOrDefaultAsync();
+        public async Task<MicroCategory> GetOne(Guid id) => await _context.MicroCategories.Specify(new MicroCategoryGetByIdSpecification(id)).SingleOrDefaultAsync();
 
         public async Task<MicroCategory> Create(MicroCategory micro)
         {
@@ -35,7 +35,7 @@ namespace Angy.Server.Data.Repositories
 
         public async Task<MicroCategory> Update(Guid id, MicroCategory entity)
         {
-            var micro = await _context.MicroCategories.Specify(new MicroCategorySpecification(id)).FirstOrDefaultAsync();
+            var micro = await _context.MicroCategories.Specify(new MicroCategoryGetByIdSpecification(id)).FirstOrDefaultAsync();
 
             micro.Name = entity.Name;
             micro.Description = entity.Description;

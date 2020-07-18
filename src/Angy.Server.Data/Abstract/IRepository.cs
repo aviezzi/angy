@@ -18,4 +18,9 @@ namespace Angy.Server.Data.Abstract
 
         Task<T> Delete(Guid id);
     }
+
+    public interface IAttributeDescriptionRepository : IRepository<AttributeDescription>
+    {
+        Task<IEnumerable<AttributeDescription>> GetByProductId(Guid productId);
+    }
 }
