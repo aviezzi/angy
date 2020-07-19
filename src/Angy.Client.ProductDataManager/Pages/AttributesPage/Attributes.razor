@@ -4,25 +4,25 @@
 
 @inherits AttributesComponent
 
-<Loader Result=@IsValid>
+<Loader Result="@IsValid">
 
-<div class="d-flex flex-column">
-    <div class="p-2">
-        <h1>Lista degli Attributi</h1>
-    </div>
-    <div class="p-2">
-        <a href="/attribute/create" class="btn btn-outline-success w-25 justify-content-end">Crea</a>
-    </div>
-    <div class="p-2">
-        @foreach (var attr in Attributes)
-        {
-            <div class="card">
-                <div class="card-header">
-                    <h3 class="inline">@attr.Name</h3><a href="/attribute/edit/@attr.Id" class="btn btn-outline-primary w-25 float-right">Modifica</a>
+    <div class="d-flex flex-column">
+        <div class="p-2">
+            <h1>Lista degli Attributi</h1>
+        </div>
+        <div class="p-2">
+            <a href="/attribute/create" class="btn btn-outline-success w-25 justify-content-end">Crea</a>
+        </div>
+        <div class="p-2">
+            @foreach (var attr in Attributes)
+            {
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="inline">@attr.Name</h3><a href="/attribute/edit/@attr.Id" class="btn btn-outline-primary w-25 float-right">Modifica</a>
+                    </div>
                 </div>
-            </div>
-        }
+            }
+        </div>
     </div>
-</div>
 
 </Loader>

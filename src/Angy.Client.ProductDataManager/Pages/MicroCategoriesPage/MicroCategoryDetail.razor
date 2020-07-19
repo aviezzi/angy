@@ -1,24 +1,29 @@
-﻿@page "/micro-category/edit/{MicroId:guid}"
+﻿@using Angy.Client.ProductDataManager.Pages.LoaderPage
+
+@page "/micro-category/edit/{MicroId:guid}"
 @page "/micro-category/create"
 
 @inherits MicroCategoryDetailComponent
 
-<EditForm Model="@ViewModel" OnValidSubmit="HandleValidSubmit">
-
-    <DataAnnotationsValidator/>
-
-    <div class="form-group">
-        <label for="name">Nome</label>
-        <InputText id="name" class="form-control" aria-describedby="nameHelp" placeholder="Inserire il nome del prodotto" @bind-Value="@ViewModel.Name"/>
-        <ValidationMessage For=@(() => ViewModel.Name) />
-
-    </div>
-
-    <div class="form-group">
-        <label for="description">Descrizione</label>
-        <InputTextArea id="description" class="form-control" aria-describedby="descriptionHelp" placeholder="Inserire la descrizione del prodotto" @bind-Value="@ViewModel.Description" rows="5"/>
-        <ValidationMessage For=@(() => ViewModel.Description) />
-    </div>
-
-    <button type="submit" class="btn btn-outline-success w-25 float-right mt-2">Submit</button>
-</EditForm>
+<Loader Result="@IsValid">
+    <EditForm EditContext="@EditContext" OnValidSubmit="HandleSubmit">
+    
+        <DataAnnotationsValidator/>
+    
+        <div class="form-group">
+            <label for="name">Nome</label>
+            <InputText id="name" class="form-control" aria-describedby="nameHelp" placeholder="Inserire il nome del prodotto" @bind-Value="@Micro.Name"/>
+            <ValidationMessage For="(() => Micro.Name)" />
+    
+        </div>
+    
+        <div class="form-group">
+            <label for="description">Descrizione</label>
+            <InputTextArea id="description" class="form-control" aria-describedby="descriptionHelp" placeholder="Inserire la descrizione del prodotto" @bind-Value="@Micro.Description" rows="5"/>
+            <ValidationMessage For="@(() => Micro.Description)" />
+        </div>
+    
+        <button type="submit" class="btn btn-outline-success w-25 float-right mt-2">Salva</button>
+    
+    </EditForm>
+</Loader>

@@ -3,10 +3,9 @@
 @page "/attribute/edit/{AttributeId:guid}"
 @page "/attribute/create"
 
-
 @inherits AttributeDetailComponent
 
-<Loader Result=@IsValid>
+<Loader Result="@IsValid">
     <EditForm EditContext="@EditContext" OnSubmit="HandleSubmit">
         
         <DataAnnotationsValidator/>

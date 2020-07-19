@@ -25,10 +25,9 @@ namespace Angy.Client.ProductDataManager.Pages.AttributesPage
                 Attribute = new Attribute();
                 EditContext = new EditContext(Attribute);
                 IsValid = true;
+
                 return;
             }
-
-            ;
 
             var result = await AttributeGateway.GetAttribute(AttributeId);
 

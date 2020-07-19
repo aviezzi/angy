@@ -10,13 +10,15 @@ namespace Angy.Client.ProductDataManager.Pages.MicroCategoriesPage
     {
         [Inject] public MicroCategoryGateway MicroCategoryGateway { get; set; } = null!;
 
-        protected IEnumerable<MicroCategory> MicroCategories { get; private set; } = new List<MicroCategory>();
+        protected IEnumerable<MicroCategory> MicroCategories { get; private set; } = null!;
+        protected bool? IsValid { get; private set; }
 
         protected override async Task OnInitializedAsync()
         {
-            var response = await MicroCategoryGateway.GetMicroCategoriesWithIdNameAndDescription();
+            var result = await MicroCategoryGateway.GetMicroCategoriesWithIdNameAndDescription();
 
-            if (response.IsValid == true) MicroCategories = response.Success;
+            IsValid = result.IsValid;
+            if (result.IsValid) MicroCategories = result.Success;
         }
     }
 }
