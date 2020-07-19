@@ -1,30 +1,36 @@
-﻿@page "/"
+﻿@using Angy.Client.ProductDataManager.Pages.LoaderPage
+
+@page "/"
 @page "/products"
 
 @inherits IndexComponent
 
-<div class="d-flex flex-column">
-    <div class="p-2">
-        <h1>Lista dei Prodotti</h1>
-    </div>
-    <div class="p-2">
-        <a href="/product/create" class="btn btn-outline-success w-25 justify-content-end">Crea</a>
-    </div>
-    <div class="p-2">
-        @foreach (var product in Products)
-        {
-            <div class="card">
-                <div class="card-header">
-                    <h3>@product.Name</h3>
+<Loader Result="@IsValid">
+
+    <div class="d-flex flex-column">
+        <div class="p-2">
+            <h1>Lista dei Prodotti</h1>
+        </div>
+        <div class="p-2">
+            <a href="/product/create" class="btn btn-outline-success w-25 justify-content-end">Crea</a>
+        </div>
+        <div class="p-2">
+            @foreach (var product in Products)
+            {
+                <div class="card">
+                    <div class="card-header">
+                        <h3>@product.Name</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>Descrizione: @product.Description</p>
+                        <p>Categoria: @product.MicroCategory.Name</p>
+                    </div>
+                    <div class="card-footer text-muted">
+                        <a href="/product/edit/@product.Id" class="btn btn-primary">Anagrafica</a>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <p>Descrizione: @product.Description</p>
-                    <p>Categoria: @product.MicroCategory.Name</p>
-                </div>
-                <div class="card-footer text-muted">
-                    <a href="/product/edit/@product.Id" class="btn btn-primary">Anagrafica</a>
-                </div>
-            </div>
-        }
+            }
+        </div>
     </div>
-</div>
+
+</Loader>

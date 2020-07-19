@@ -10,13 +10,15 @@ namespace Angy.Client.ProductDataManager.Pages
     {
         [Inject] public ProductGateway ProductGateway { get; set; } = null!;
 
-        protected IEnumerable<Product> Products { get; private set; } = new List<Product>();
+        protected IEnumerable<Product> Products { get; private set; } = null!;
+        protected bool? IsValid { get; private set; }
 
         protected override async Task OnInitializedAsync()
         {
             var result = await ProductGateway.GetProductsWithIdNameDescriptionAndMicroName();
+            IsValid = result.IsValid;
 
-            if (result.IsValid == true) Products = result.Success;
+            if (result.IsValid) Products = result.Success;
         }
     }
 }
