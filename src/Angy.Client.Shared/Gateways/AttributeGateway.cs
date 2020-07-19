@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Angy.Client.Shared.Abstract;
 using Angy.Client.Shared.Adapters;
@@ -16,11 +17,23 @@ namespace Angy.Client.Shared.Gateways
             _client = client;
         }
 
-        public Task<Result<IEnumerable<Attribute>, Error.ExceptionalError>> GetAttributes()
+        public Task<Result<IEnumerable<Model.Attribute>, Error.ExceptionalError>> GetAttributes()
         {
-            var request = RequestAdapter<ResponsesAdapter.AttributesResponse, IEnumerable<Attribute>>.Build(
+            var request = RequestAdapter<ResponsesAdapter.AttributesResponse, IEnumerable<Model.Attribute>>.Build(
                 "{ attributes { id, name } }",
                 response => response.Attributes!
+            );
+
+            return _client.SendQueryAsync(request);
+        }
+
+        public Task<Result<Model.Attribute, Error.ExceptionalError>> GetAttribute(Guid id)
+        {
+            var request = RequestAdapter<ResponsesAdapter.AttributeResponse, Model.Attribute>.Build(
+                "query GetAttributeById($id: String) { attribute(id: $id) { id, name } }",
+                response => response.Attribute!,
+                new { id },
+                "GetAttributeById"
             );
 
             return _client.SendQueryAsync(request);

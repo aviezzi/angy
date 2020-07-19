@@ -30,5 +30,10 @@ namespace Angy.Client.Shared.Responses
         {
             public IEnumerable<Attribute>? Attributes { get; set; }
         }
+        
+        public class AttributeResponse
+        {
+            public Attribute? Attribute { get; set; }
+        }
     }
 }

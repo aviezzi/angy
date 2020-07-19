@@ -16,7 +16,7 @@ namespace Angy.Client.ProductDataManager.Pages
         {
             var result = await ProductGateway.GetProductsWithIdNameDescriptionAndMicroName();
 
-            if (result.IsValid) Products = result.Success;
+            if (result.IsValid == true) Products = result.Success;
         }
     }
 }

@@ -21,7 +21,7 @@ namespace Angy.Client.ProductDataManager.Pages.MicroCategoriesPage
             {
                 var response = await MicroCategoryGateway.GetMicroCategoryById(MicroId);
 
-                if (response.IsValid) ViewModel = new MicroCategoryViewModel(response.Success);
+                if (response.IsValid == true) ViewModel = new MicroCategoryViewModel(response.Success);
             }
         }
 

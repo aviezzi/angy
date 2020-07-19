@@ -30,7 +30,7 @@ namespace Angy.Client.ProductDataManager.Pages.ProductsPage
             {
                 var result = await ProductGateway.GetProductByIdWithMicroCategories(ProductId);
 
-                if (!result.IsValid) return;
+                if (!result.IsValid == true) return;
 
                 var (product, microCategories) = result.Success;
 

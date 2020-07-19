@@ -1,0 +1,22 @@
+@using Angy.Client.ProductDataManager.Pages.LoaderPage
+
+@page "/attribute/edit/{AttributeId:guid}"
+@page "/attribute/create"
+
+
+@inherits AttributeDetailComponent
+
+<Loader Result=@Result?.IsValid>
+    <EditForm EditContext="@EditContext" OnSubmit="HandleSubmit">
+        
+        <DataAnnotationsValidator/>
+        
+        <div class="form-group">
+            <label for="name">Nome</label>
+            <InputText id="name" class="form-control" aria-describedby="nameHelp" placeholder="Inserire il nome del attributo" @bind-Value="@Result!.Success.Name"/>
+            <ValidationMessage For="@(() => Result!.Success.Name)"/>
+        </div>
+        
+        <button type="submit" class="btn btn-outline-success w-25 float-right mt-2" disabled="@(!EditContext.IsModified())">Submit</button>
+    </EditForm>
+</Loader>

@@ -1,0 +1,23 @@
+﻿@using Angy.Client.ProductDataManager.Pages.ErrorPage
+@using Angy.Client.ProductDataManager.Pages.SpinnerPage
+
+@switch (Result)
+{
+    case null:
+        <Spinner />
+        break;
+
+    case true:
+        @ChildContent
+        break;
+
+    default:
+        <Error500 />
+        break;
+}
+
+@code
+{
+    [Parameter] public bool? Result { get; set; }
+    [Parameter] public RenderFragment ChildContent  { get; set; } = null!;
+}

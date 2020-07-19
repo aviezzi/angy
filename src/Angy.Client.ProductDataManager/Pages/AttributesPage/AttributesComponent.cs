@@ -16,7 +16,7 @@ namespace Angy.Client.ProductDataManager.Pages.AttributesPage
         {
             var result = await AttributeGateway.GetAttributes();
 
-            if (result.IsValid) Attributes = result.Success;
+            if (result.IsValid == true) Attributes = result.Success;
         }
     }
 }
