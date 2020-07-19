@@ -24,7 +24,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Angy.Client.Shared\Angy.Client.Shared.csproj" />
-    <ProjectReference Include="..\Angy.Model\Angy.Model.csproj" />
   </ItemGroup>
 
 </Project>
