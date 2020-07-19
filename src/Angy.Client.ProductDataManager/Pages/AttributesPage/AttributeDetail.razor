@@ -6,17 +6,18 @@
 
 @inherits AttributeDetailComponent
 
-<Loader Result=@Result?.IsValid>
+<Loader Result=@IsValid>
     <EditForm EditContext="@EditContext" OnSubmit="HandleSubmit">
         
         <DataAnnotationsValidator/>
         
         <div class="form-group">
             <label for="name">Nome</label>
-            <InputText id="name" class="form-control" aria-describedby="nameHelp" placeholder="Inserire il nome del attributo" @bind-Value="@Result!.Success.Name"/>
-            <ValidationMessage For="@(() => Result!.Success.Name)"/>
+            <InputText id="name" class="form-control" aria-describedby="nameHelp" placeholder="Inserire il nome del attributo" @bind-Value="@Attribute!.Name"/>
+            <ValidationMessage For="@(() => Attribute!.Name)"/>
         </div>
         
-        <button type="submit" class="btn btn-outline-success w-25 float-right mt-2" disabled="@(!EditContext.IsModified())">Submit</button>
+        <button type="submit" class="btn btn-outline-success w-25 float-right mt-2" disabled="@(!EditContext.IsModified())">Salva</button>
+        
     </EditForm>
 </Loader>

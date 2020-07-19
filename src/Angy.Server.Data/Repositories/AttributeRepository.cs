@@ -21,9 +21,23 @@ namespace Angy.Server.Data.Repositories
 
         public async Task<Model.Attribute> GetOne(Guid id) => await _context.Attributes.Specify(new AttributeIdSpecification(id)).SingleOrDefaultAsync();
 
-        public Task<Model.Attribute> Create(Model.Attribute entity) => throw new NotImplementedException();
+        public async Task<Model.Attribute> Create(Model.Attribute attribute)
+        {
+            await _context.Attributes.AddAsync(attribute);
+            await _context.SaveChangesAsync();
 
-        public Task<Model.Attribute> Update(Guid id, Model.Attribute entity) => throw new NotImplementedException();
+            return attribute;
+        }
+
+        public async Task<Model.Attribute> Update(Guid id, Model.Attribute attribute)
+        {
+            var entity = await _context.Attributes.Specify(new AttributeIdSpecification(id)).FirstOrDefaultAsync();
+            entity.Name = attribute.Name;
+
+            await _context.SaveChangesAsync();
+
+            return attribute;
+        }
 
         public Task<Model.Attribute> Delete(Guid id) => throw new NotImplementedException();
     }

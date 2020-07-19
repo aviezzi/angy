@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Angy.Client.Shared.Gateways;
-using Angy.Model;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
+using Attribute = Angy.Model.Attribute; 
 
 namespace Angy.Client.ProductDataManager.Pages.AttributesPage
 {
@@ -12,17 +12,45 @@ namespace Angy.Client.ProductDataManager.Pages.AttributesPage
         [Parameter] public Guid AttributeId { get; set; }
 
         [Inject] public AttributeGateway AttributeGateway { get; set; } = null!;
+        [Inject] public NavigationManager NavigationManager { get; set; } = null!;
 
-        protected EditContext EditContext = new EditContext(new Model.Attribute());
-        protected Result<Model.Attribute, Error.ExceptionalError>? Result { get; private set; } 
+        protected EditContext EditContext { get; private set; } = null!;
+        protected Attribute Attribute { get; private set; } = null!;
+        protected bool? IsValid { get; private set; }
 
         protected override async Task OnInitializedAsync()
         {
-            Result = await AttributeGateway.GetAttribute(AttributeId);
+            if (AttributeId == Guid.Empty)
+            {
+                Attribute = new Attribute();
+                EditContext = new EditContext(Attribute);
+                IsValid = true;
+                return;
+            }
 
-            if (Result.IsValid == true) EditContext = new EditContext(Result.Success);
+            ;
+
+            var result = await AttributeGateway.GetAttribute(AttributeId);
+
+            IsValid = result.IsValid;
+
+            if (result.IsValid)
+            {
+                Attribute = result.Success;
+                EditContext = new EditContext(Attribute);
+            }
         }
 
-        protected Task HandleSubmit() => null;
+        protected async Task HandleSubmit()
+        {
+            if (!EditContext.Validate()) return;
+
+            if (AttributeId == Guid.Empty)
+                await AttributeGateway.CreateAttribute(Attribute!);
+            else
+                await AttributeGateway.UpdateAttribute(AttributeId, Attribute!);
+
+            NavigationManager.NavigateTo("attributes");
+        }
     }
 }

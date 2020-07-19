@@ -21,6 +21,7 @@ namespace Angy.Server.Product.GraphQL.RootTypes
 
             ProductMutation();
             MicroCategoryMutation();
+            AttributeMutation();
         }
 
         void ProductMutation()
@@ -94,6 +95,45 @@ namespace Angy.Server.Product.GraphQL.RootTypes
 
                     var id = context.GetArgument<Guid>("id");
                     var micro = context.GetArgument<MicroCategory>(name);
+
+                    var updated = await repository.Update(id, micro);
+
+                    return updated;
+                });
+        }
+
+        void AttributeMutation()
+        {
+            const string name = "attribute";
+
+            FieldAsync<AttributeType>(
+                "createAttribute",
+                arguments: new QueryArguments(
+                    new QueryArgument<NonNullGraphType<AttributeInputType>> { Name = name }
+                ),
+                resolve: async context =>
+                {
+                    var repository = _provider.GetRequiredService<IRepository<Model.Attribute>>();
+
+                    var attr = context.GetArgument<Model.Attribute>(name);
+
+                    var created = await repository.Create(attr);
+
+                    return created;
+                });
+
+            FieldAsync<AttributeType>(
+                "updateAttribute",
+                arguments: new QueryArguments(
+                    new QueryArgument<StringGraphType> { Name = "id" },
+                    new QueryArgument<NonNullGraphType<AttributeInputType>> { Name = name }
+                ),
+                resolve: async context =>
+                {
+                    var repository = _provider.GetRequiredService<IRepository<Model.Attribute>>();
+
+                    var id = context.GetArgument<Guid>("id");
+                    var micro = context.GetArgument<Model.Attribute>(name);
 
                     var updated = await repository.Update(id, micro);
 

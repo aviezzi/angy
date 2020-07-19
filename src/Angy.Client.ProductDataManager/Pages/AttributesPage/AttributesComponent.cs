@@ -11,12 +11,15 @@ namespace Angy.Client.ProductDataManager.Pages.AttributesPage
         [Inject] public AttributeGateway AttributeGateway { get; set; } = null!;
 
         protected IEnumerable<Attribute> Attributes { get; private set; } = new List<Attribute>();
+        protected bool? IsValid { get; private set; }
 
         protected override async Task OnInitializedAsync()
         {
             var result = await AttributeGateway.GetAttributes();
 
-            if (result.IsValid == true) Attributes = result.Success;
+            IsValid = result.IsValid;
+
+            if (result.IsValid) Attributes = result.Success;
         }
     }
 }
