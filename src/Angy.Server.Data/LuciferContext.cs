@@ -32,6 +32,13 @@ namespace Angy.Server.Data
 
             microCategoryBuilder
                 .HasKey(m => m.Id);
+            
+            microCategoryBuilder
+                .HasOne(c => c.MicroCategoryParent)
+                .WithMany()
+                .IsRequired(required: false)
+                .OnDelete(DeleteBehavior.NoAction)
+                .HasForeignKey("MicroCategoryParentId");
 
             var attributeBuilder = modelBuilder.Entity<Attribute>();
 
