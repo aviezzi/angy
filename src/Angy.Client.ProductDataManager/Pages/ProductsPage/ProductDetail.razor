@@ -16,19 +16,19 @@
     
         </div>
 
-        @*         <div> *@
-        @*             <label for="description">Categoria</label> *@
-        @*             <InputSelect id="micro-category" class="form-control" aria-describedby="microCategoryHelp" placeholder="Selezionare la categoria del prodotto" @bind-Value="@Product.MicroCategory.Id"> *@
-        @*                  *@
-        @*                 @foreach (var micro in MicroCategories) *@
-        @*                 { *@
-        @*                     <option value="@micro.Id">@micro.Name</option> *@
-        @*                 } *@
-        @*              *@
-        @*             </InputSelect> *@
-        @*             <ValidationMessage For="@(() => Product.MicroCategory.Id)" />   *@
-        @*      *@
-        @*         </div> *@
+        <div>
+            <label for="description">Categoria</label>
+            <InputSelectGuid id="micro-category" class="form-control" aria-describedby="microCategoryHelp" placeholder="Selezionare la categoria del prodotto" @bind-Value="@Product.MicroCategory.Id">
+    
+                @foreach (var micro in MicroCategories)
+                {
+                    <option value="@micro.Id">@micro.Name</option>
+                }
+    
+            </InputSelectGuid>
+            <ValidationMessage For="@(() => Product.MicroCategory.Id)" />
+    
+        </div>
     
         <button type="submit" class="btn btn-outline-success w-25 float-right mt-2" disabled="@(!EditContext.IsModified())">Salva</button>
 
