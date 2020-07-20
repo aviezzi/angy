@@ -30,14 +30,14 @@ namespace Angy.Client.ProductDataManager.Pages.MicroCategoriesPage
             }
 
             var result = await MicroCategoryGateway.GetMicroCategoryById(MicroId);
-
-            IsValid = result.IsValid;
-
+            
             if (result.IsValid)
             {
                 Micro = result.Success;
                 EditContext = new EditContext(Micro);
             }
+            
+            IsValid = result.IsValid;
         }
 
         protected async Task HandleSubmit()

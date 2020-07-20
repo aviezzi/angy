@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Angy.Client.Shared.Gateways;
 using Angy.Client.Shared.ViewModels;
+using Angy.Model;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 
@@ -15,36 +17,45 @@ namespace Angy.Client.ProductDataManager.Pages.ProductsPage
         [Inject] public MicroCategoryGateway MicroCategoriesGateway { get; set; } = null!;
         [Inject] public NavigationManager NavigationManager { get; set; } = null!;
 
-        protected EditContext EditContext = new EditContext(new ProductViewModel());
-        protected ProductViewModel ViewModel { get; private set; } = new ProductViewModel();
+        protected EditContext EditContext { get; private set; } = null!;
+        protected ProductViewModel ViewModel { get; private set; } = null!;
+        protected bool? IsValid { get; private set; }
 
         protected override async Task OnInitializedAsync()
         {
             if (ProductId == Guid.Empty)
             {
-                var result = await MicroCategoriesGateway.GetMicroCategoriesWithIdAndName();
+                var microsResult = await MicroCategoriesGateway.GetMicroCategoriesWithIdAndName();
 
-                ViewModel = new ProductViewModel(result.Success);
+                if (microsResult.IsValid)
+                {
+                    ViewModel = new ProductViewModel(microsResult.Success);
+                    EditContext = new EditContext(ViewModel);
+                }
+
+                IsValid = microsResult.IsValid;
+
+                return;
             }
-            else
+
+            var result = await ProductGateway.GetProductByIdWithMicroCategories(ProductId);
+
+            if (result.IsValid)
             {
-                var result = await ProductGateway.GetProductByIdWithMicroCategories(ProductId);
-
-                if (!result.IsValid == true) return;
-
                 var (product, microCategories) = result.Success;
 
                 ViewModel = new ProductViewModel(product, microCategories);
+                EditContext = new EditContext(ViewModel);
             }
 
-            EditContext = new EditContext(ViewModel);
+            IsValid = result.IsValid;
         }
 
         protected async Task HandleSubmit()
         {
             if (!EditContext.Validate()) return;
 
-            if (ViewModel.Product.Id == Guid.Empty)
+            if (ProductId == Guid.Empty)
                 await ProductGateway.CreateProduct(ViewModel.Product);
             else
                 await ProductGateway.UpdateProduct(ProductId, ViewModel.Product);

@@ -17,8 +17,9 @@ namespace Angy.Client.ProductDataManager.Pages.MicroCategoriesPage
         {
             var result = await MicroCategoryGateway.GetMicroCategoriesWithIdNameAndDescription();
 
-            IsValid = result.IsValid;
             if (result.IsValid) MicroCategories = result.Success;
+            
+            IsValid = result.IsValid;
         }
     }
 }

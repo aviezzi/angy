@@ -1,9 +1,13 @@
-﻿namespace Angy.Model
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Angy.Model
 {
     public class Product : EntityBase
     {
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public MicroCategory MicroCategory { get; set; }
+        [Required] public string Name { get; set; } = null!;
+
+        [Required] public string Description { get; set; } = null!;
+
+        public MicroCategory MicroCategory { get; set; } = null!;
     }
 }

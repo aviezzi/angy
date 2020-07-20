@@ -30,14 +30,14 @@ namespace Angy.Client.ProductDataManager.Pages.AttributesPage
             }
 
             var result = await AttributeGateway.GetAttribute(AttributeId);
-
-            IsValid = result.IsValid;
-
+            
             if (result.IsValid)
             {
                 Attribute = result.Success;
                 EditContext = new EditContext(Attribute);
             }
+            
+            IsValid = result.IsValid;
         }
 
         protected async Task HandleSubmit()

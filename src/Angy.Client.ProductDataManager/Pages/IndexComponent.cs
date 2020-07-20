@@ -16,9 +16,10 @@ namespace Angy.Client.ProductDataManager.Pages
         protected override async Task OnInitializedAsync()
         {
             var result = await ProductGateway.GetProductsWithIdNameDescriptionAndMicroName();
-            IsValid = result.IsValid;
 
             if (result.IsValid) Products = result.Success;
+            
+            IsValid = result.IsValid;
         }
     }
 }

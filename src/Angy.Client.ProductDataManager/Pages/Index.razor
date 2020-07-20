@@ -23,10 +23,10 @@
                     </div>
                     <div class="card-body">
                         <p>Descrizione: @product.Description</p>
-                        <p>Categoria: @product.MicroCategory.Name</p>
+                        <p>Categoria: @product.MicroCategory!.Name</p>
                     </div>
                     <div class="card-footer text-muted">
-                        <a href="/product/edit/@product.Id" class="btn btn-primary">Anagrafica</a>
+                        <a href="/product/edit/@product.Id" class="btn btn-outline-primary w-25">Anagrafica</a>
                     </div>
                 </div>
             }

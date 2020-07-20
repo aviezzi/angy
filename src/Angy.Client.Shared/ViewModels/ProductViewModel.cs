@@ -14,16 +14,7 @@ namespace Angy.Client.Shared.ViewModels
         }
 
         public ProductViewModel(IEnumerable<MicroCategory> microCategories)
-            : this(new Product
-            {
-                Id = default,
-                Name = string.Empty,
-                Description = string.Empty,
-                MicroCategory = new MicroCategory
-                {
-                    Description = string.Empty
-                }
-            }, microCategories)
+            : this(new Product { MicroCategory = new MicroCategory() }, microCategories)
         {
         }
 
