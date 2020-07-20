@@ -17,12 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Update="Pages\ProductsPage\ProductDetail.razor">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
+    <ProjectReference Include="..\Angy.Client.Pages\Angy.Client.Pages.csproj" />
     <ProjectReference Include="..\Angy.Client.Shared\Angy.Client.Shared.csproj" />
   </ItemGroup>
 

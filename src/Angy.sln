@@ -12,6 +12,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Angy.Model", "Angy.Model\An
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Angy.Server.Data", "Angy.Server.Data\Angy.Server.Data.csproj", "{E6D0DA1A-9CB6-45E5-8CA0-2AC0ABF1272D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Angy.Client.Pages", "Angy.Client.Pages\Angy.Client.Pages.csproj", "{D1959748-58E4-4617-8B4C-EB9A7218D66B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -42,5 +44,9 @@ Global
 		{E6D0DA1A-9CB6-45E5-8CA0-2AC0ABF1272D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E6D0DA1A-9CB6-45E5-8CA0-2AC0ABF1272D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E6D0DA1A-9CB6-45E5-8CA0-2AC0ABF1272D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1959748-58E4-4617-8B4C-EB9A7218D66B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1959748-58E4-4617-8B4C-EB9A7218D66B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1959748-58E4-4617-8B4C-EB9A7218D66B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1959748-58E4-4617-8B4C-EB9A7218D66B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
