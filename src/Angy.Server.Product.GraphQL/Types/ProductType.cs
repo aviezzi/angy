@@ -17,7 +17,6 @@ namespace Angy.Server.Product.GraphQL.Types
 
             Field(d => d.Id).Description("The id of the product.");
             Field(d => d.Name).Description("The name of the product.");
-            Field(d => d.Description, nullable: true).Description("The description of the product.");
 
             FieldAsync<MicroCategoryType>("microcategory", "The micro category of the product.",
                 new QueryArguments(

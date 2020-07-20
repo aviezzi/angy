@@ -37,7 +37,6 @@ namespace Angy.Server.Data.Repositories
             var micro = await _context.MicroCategories.FirstOrDefaultAsync(m => m.Id == entity.MicroCategory.Id);
 
             product.Name = entity.Name;
-            product.Description = entity.Description;
             product.MicroCategory = micro;
 
             await _context.SaveChangesAsync();

@@ -9,7 +9,6 @@ namespace Angy.Server.Product.GraphQL.Inputs
             Name = "ProductInput";
 
             Field(x => x.Name);
-            Field(x => x.Description);
             Field<MicroCategoryInputType>("microcategory");
         }
     }

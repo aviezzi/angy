@@ -15,26 +15,20 @@
             <ValidationMessage For="@(() => Product.Name)" />  
     
         </div>
-    
-        <div class="form-group">
-            <label for="description">Descrizione</label>
-            <InputTextArea id="description" class="form-control" aria-describedby="descriptionHelp" placeholder="Inserire la descrizione del prodotto" @bind-Value="@Product.Description" rows="5"/>
-            <ValidationMessage For="@(() => Product.Description)" />  
-        </div>
-    
-@*         <div> *@
-@*             <label for="description">Categoria</label> *@
-@*             <InputSelect id="micro-category" class="form-control" aria-describedby="microCategoryHelp" placeholder="Selezionare la categoria del prodotto" @bind-Value="@Product.MicroCategory.Id"> *@
-@*                  *@
-@*                 @foreach (var micro in MicroCategories) *@
-@*                 { *@
-@*                     <option value="@micro.Id">@micro.Name</option> *@
-@*                 } *@
-@*              *@
-@*             </InputSelect> *@
-@*             <ValidationMessage For="@(() => Product.MicroCategory.Id)" />   *@
-@*      *@
-@*         </div> *@
+
+        @*         <div> *@
+        @*             <label for="description">Categoria</label> *@
+        @*             <InputSelect id="micro-category" class="form-control" aria-describedby="microCategoryHelp" placeholder="Selezionare la categoria del prodotto" @bind-Value="@Product.MicroCategory.Id"> *@
+        @*                  *@
+        @*                 @foreach (var micro in MicroCategories) *@
+        @*                 { *@
+        @*                     <option value="@micro.Id">@micro.Name</option> *@
+        @*                 } *@
+        @*              *@
+        @*             </InputSelect> *@
+        @*             <ValidationMessage For="@(() => Product.MicroCategory.Id)" />   *@
+        @*      *@
+        @*         </div> *@
     
         <button type="submit" class="btn btn-outline-success w-25 float-right mt-2" disabled="@(!EditContext.IsModified())">Salva</button>
 

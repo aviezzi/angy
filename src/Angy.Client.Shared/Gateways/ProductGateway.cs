@@ -66,7 +66,6 @@ namespace Angy.Client.Shared.Gateways
         static object SerializeProduct(Product product) => new
         {
             name = product.Name,
-            description = product.Description,
             microcategory = new
             {
                 id = product.MicroCategory.Id
