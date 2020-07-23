@@ -52,6 +52,12 @@ namespace Angy.Server.Data
                 .WithMany(ad => ad.Descriptions)
                 .OnDelete(DeleteBehavior.NoAction)
                 .HasForeignKey("AttributeId");
+
+            attributeDescriptionBuilder
+                .HasOne(a => a.Product)
+                .WithMany(a => a.Descriptions)
+                .OnDelete(DeleteBehavior.NoAction)
+                .HasForeignKey("ProductId");
         }
     }
 }

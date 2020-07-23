@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Angy.Model;
 using Angy.Server.Data.Abstract;
@@ -32,6 +33,21 @@ namespace Angy.Server.Product.GraphQL.Types
 
                     return (await loader.LoadAsync(context.Source.MicroCategory.Id)).FirstOrDefault();
                 });
+            
+            // FieldAsync<AttributeDescriptionType>("descriptions", "The attributes of the product.",
+            //     new QueryArguments(
+            //         new QueryArgument<StringGraphType> { Name = "id", Description = "id of the product" }
+            //     ),
+            //     async context =>
+            //     {
+            //         var loader = dataLoader.Context.GetOrAddCollectionBatchLoader<Guid, IEnumerable<AttributeDescription>>("GetProductsByAttributeId", async id =>
+            //         {
+            //             var descriptions = await provider.GetRequiredService<IAttributeDescriptionRepository>().GetAll();
+            //             return descriptions.Where(m => id.Contains(m.Id)).ToLookup(s => s.Id);
+            //         });
+            //
+            //         return (await loader.LoadAsync(context.Source.Descriptions.Select(d => d.Id))).FirstOrDefault();
+            //     });
         }
     }
 }
