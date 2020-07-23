@@ -19,35 +19,33 @@ namespace Angy.Server.Product.GraphQL.Types
             Field(d => d.Id).Description("The id of the product.");
             Field(d => d.Name).Description("The name of the product.");
 
-            FieldAsync<MicroCategoryType>("microcategory", "The micro category of the product.",
-                new QueryArguments(
-                    new QueryArgument<StringGraphType> { Name = "id", Description = "id of the product" }
-                ),
-                async context =>
+            Field<MicroCategoryType, MicroCategory>()
+                .Name("category")
+                .Description("The micro category of the product.")
+                .ResolveAsync( async context =>
                 {
-                    var loader = dataLoader.Context.GetOrAddCollectionBatchLoader<Guid, MicroCategory>("GetProductByMicroCategoryIds", async id =>
+                    var loader = dataLoader.Context.GetOrAddBatchLoader<Guid, MicroCategory>("GetCategoryByIds", async id =>
                     {
                         var microCategories = await provider.GetRequiredService<IRepository<MicroCategory>>().GetAll();
-                        return microCategories.Where(m => id.Contains(m.Id)).ToLookup(s => s.Id);
+                        return microCategories.Where(m => id.Contains(m.Id)).ToDictionary(s => s.Id);
                     });
 
-                    return (await loader.LoadAsync(context.Source.MicroCategory.Id)).FirstOrDefault();
+                    return (await loader.LoadAsync(context.Source.MicroCategory.Id));
                 });
             
-            // FieldAsync<AttributeDescriptionType>("descriptions", "The attributes of the product.",
-            //     new QueryArguments(
-            //         new QueryArgument<StringGraphType> { Name = "id", Description = "id of the product" }
-            //     ),
-            //     async context =>
-            //     {
-            //         var loader = dataLoader.Context.GetOrAddCollectionBatchLoader<Guid, IEnumerable<AttributeDescription>>("GetProductsByAttributeId", async id =>
-            //         {
-            //             var descriptions = await provider.GetRequiredService<IAttributeDescriptionRepository>().GetAll();
-            //             return descriptions.Where(m => id.Contains(m.Id)).ToLookup(s => s.Id);
-            //         });
-            //
-            //         return (await loader.LoadAsync(context.Source.Descriptions.Select(d => d.Id))).FirstOrDefault();
-            //     });
+            Field<ListGraphType<AttributeDescriptionType>, IEnumerable<AttributeDescription>>()
+                .Name("descriptions")
+                .Description("The attributes of the product.")
+                .ResolveAsync(async context =>
+                {
+                    var loader = dataLoader.Context.GetOrAddCollectionBatchLoader<Guid, AttributeDescription>("GetAttributesByProductId", async id =>
+                    {
+                        var descriptions = await provider.GetRequiredService<IAttributeDescriptionRepository>().GetAll();
+                        return descriptions.Where(m => id.Contains(m.Product.Id)).ToLookup(s => s.Id);
+                    });
+            
+                    return (await loader.LoadAsync(context.Source.Id));
+                });
         }
     }
 }
