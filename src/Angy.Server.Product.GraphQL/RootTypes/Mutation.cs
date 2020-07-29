@@ -1,6 +1,7 @@
 ﻿using System;
 using Angy.Model;
-using Angy.Server.Data.Abstract;
+using Angy.Server.Data;
+using Angy.Server.Data.Extensions;
 using Angy.Server.Product.GraphQL.Inputs;
 using Angy.Server.Product.GraphQL.Types;
 using GraphQL;
@@ -35,11 +36,10 @@ namespace Angy.Server.Product.GraphQL.RootTypes
                 ),
                 resolve: async context =>
                 {
-                    var repository = _provider.GetRequiredService<IRepository<Model.Product>>();
+                    var lucifer = _provider.GetRequiredService<LuciferContext>();
 
                     var product = context.GetArgument<Model.Product>(name);
-
-                    var created = await repository.Create(product);
+                    var created = await lucifer.CreateAsync(product);
 
                     return created;
                 });
@@ -52,12 +52,12 @@ namespace Angy.Server.Product.GraphQL.RootTypes
                 ),
                 resolve: async context =>
                 {
-                    var repository = _provider.GetRequiredService<IRepository<Model.Product>>();
-
                     var id = context.GetArgument<Guid>("id");
                     var product = context.GetArgument<Model.Product>(name);
 
-                    var updated = await repository.Update(id, product);
+                    var lucifer = _provider.GetRequiredService<LuciferContext>();
+
+                    var updated = await lucifer.UpdateAsync(id, product);
 
                     return updated;
                 });
@@ -74,11 +74,10 @@ namespace Angy.Server.Product.GraphQL.RootTypes
                 ),
                 resolve: async context =>
                 {
-                    var repository = _provider.GetRequiredService<IRepository<MicroCategory>>();
+                    var lucifer = _provider.GetRequiredService<LuciferContext>();
 
                     var micro = context.GetArgument<MicroCategory>(name);
-
-                    var created = await repository.Create(micro);
+                    var created = await lucifer.CreateAsync(micro);
 
                     return created;
                 });
@@ -91,12 +90,12 @@ namespace Angy.Server.Product.GraphQL.RootTypes
                 ),
                 resolve: async context =>
                 {
-                    var repository = _provider.GetRequiredService<IRepository<MicroCategory>>();
+                    var lucifer = _provider.GetRequiredService<LuciferContext>();
 
                     var id = context.GetArgument<Guid>("id");
                     var micro = context.GetArgument<MicroCategory>(name);
 
-                    var updated = await repository.Update(id, micro);
+                    var updated = await lucifer.UpdateAsync(id, micro);
 
                     return updated;
                 });
@@ -113,11 +112,10 @@ namespace Angy.Server.Product.GraphQL.RootTypes
                 ),
                 resolve: async context =>
                 {
-                    var repository = _provider.GetRequiredService<IRepository<Model.Attribute>>();
+                    var lucifer = _provider.GetRequiredService<LuciferContext>();
 
                     var attr = context.GetArgument<Model.Attribute>(name);
-
-                    var created = await repository.Create(attr);
+                    var created = await lucifer.CreateAsync(attr);
 
                     return created;
                 });
@@ -130,12 +128,12 @@ namespace Angy.Server.Product.GraphQL.RootTypes
                 ),
                 resolve: async context =>
                 {
-                    var repository = _provider.GetRequiredService<IRepository<Model.Attribute>>();
+                    var lucifer = _provider.GetRequiredService<LuciferContext>();
 
                     var id = context.GetArgument<Guid>("id");
                     var micro = context.GetArgument<Model.Attribute>(name);
 
-                    var updated = await repository.Update(id, micro);
+                    var updated = await lucifer.UpdateAsync(id, micro);
 
                     return updated;
                 });

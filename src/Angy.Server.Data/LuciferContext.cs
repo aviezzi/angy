@@ -5,8 +5,7 @@ namespace Angy.Server.Data
 {
     public class LuciferContext : DbContext
     {
-        public LuciferContext(DbContextOptions<LuciferContext> options)
-            : base(options)
+        public LuciferContext(DbContextOptions<LuciferContext> options) : base(options)
         {
         }
 
@@ -23,16 +22,16 @@ namespace Angy.Server.Data
                 .HasKey(p => p.Id);
 
             productBuilder
-                .HasOne(p => p.MicroCategory)
+                .HasOne(p => p.Category)
                 .WithMany(m => m.Products)
                 .OnDelete(DeleteBehavior.NoAction)
-                .HasForeignKey("MicroCategoryId");
+                .HasForeignKey(f => f.CategoryId);
 
             var microCategoryBuilder = modelBuilder.Entity<MicroCategory>();
 
             microCategoryBuilder
                 .HasKey(m => m.Id);
-            
+
             microCategoryBuilder
                 .HasOne(c => c.MicroCategoryParent)
                 .WithMany()

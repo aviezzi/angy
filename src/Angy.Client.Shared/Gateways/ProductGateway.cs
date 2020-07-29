@@ -20,7 +20,7 @@ namespace Angy.Client.Shared.Gateways
         public Task<Result<IEnumerable<Product>, Error.ExceptionalError>> GetProductsWithIdNameDescriptionAndMicroName()
         {
             var request = RequestAdapter<ResponsesAdapter.ProductsResponse, IEnumerable<Product>>.Build(
-                "{ products { id, name, microcategory { name } } }",
+                "{ products { id, name, category { name } } }",
                 response => response.Products!
             );
 
@@ -30,8 +30,8 @@ namespace Angy.Client.Shared.Gateways
         public Task<Result<(Product, IEnumerable<MicroCategory>), Error.ExceptionalError>> GetProductByIdWithMicroCategories(Guid id)
         {
             var request = RequestAdapter<ResponsesAdapter.ProductResponse, (Product, IEnumerable<MicroCategory>)>.Build(
-                "query GetProductById($id: String) { product(id: $id) {id, name, microcategory { id, name } } microcategories { id, name}}",
-                response => (response.Product!, response.MicroCategories!),
+                "query GetProductById($id: String) { product(id: $id) {id, name, categoryId } categories { id, name}}",
+                response => (response.Product!, response.Categories!),
                 new { id },
                 "GetProductById"
             );
@@ -42,7 +42,7 @@ namespace Angy.Client.Shared.Gateways
         public Task<Result<Product, Error.ExceptionalError>> CreateProduct(Product product)
         {
             var query = RequestAdapter<ResponsesAdapter.ProductResponse, Product>.Build(
-                "mutation CreateProduct($product: ProductInput!) { createProduct(product: $product) { id, name, microcategory { id, description} } }",
+                "mutation CreateProduct($product: ProductInput!) { createProduct(product: $product) { id, name, category { id, description} } }",
                 response => response.Product!,
                 new { product = SerializeProduct(product) },
                 "CreateProduct"
@@ -51,12 +51,12 @@ namespace Angy.Client.Shared.Gateways
             return _client.SendQueryAsync(query);
         }
 
-        public Task<Result<Product, Error.ExceptionalError>> UpdateProduct(Guid id, Product product)
+        public Task<Result<Product, Error.ExceptionalError>> UpdateProduct(Product product, Guid productId)
         {
             var query = RequestAdapter<ResponsesAdapter.ProductResponse, Product>.Build(
-                "mutation UpdateProduct($id: String!, $product: ProductInput!) { updateProduct(id: $id, product: $product) { id, name, microcategory { id, description} } }",
+                "mutation UpdateProduct($id: String!, $product: ProductInput!) { updateProduct(id: $id, product: $product) { id, name, category { id, description} } }",
                 response => response.Product!,
-                new { product = SerializeProduct(product), id },
+                new { product = SerializeProduct(product), id = productId },
                 "UpdateProduct"
             );
 
@@ -65,11 +65,9 @@ namespace Angy.Client.Shared.Gateways
 
         static object SerializeProduct(Product product) => new
         {
+            id = product.Id,
             name = product.Name,
-            microcategory = new
-            {
-                id = product.MicroCategory.Id
-            }
+            categoryId = product.CategoryId
         };
     }
 }

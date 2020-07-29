@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Angy.Model
@@ -9,9 +10,9 @@ namespace Angy.Model
         {
         }
 
-        public Product(string name, MicroCategory? microCategory = default, IEnumerable<AttributeDescription>? descriptions = default) : this(name)
+        public Product(string name, MicroCategory? category = default, IEnumerable<AttributeDescription>? descriptions = default) : this(name)
         {
-            MicroCategory = microCategory;
+            Category = category;
             Descriptions = descriptions;
         }
 
@@ -22,7 +23,8 @@ namespace Angy.Model
 
         [Required] public string Name { get; set; }
 
-        public MicroCategory? MicroCategory { get; set; }
+        public Guid CategoryId { get; set; }
+        public MicroCategory? Category { get; set; }
 
         public IEnumerable<AttributeDescription>? Descriptions { get; set; }
     }

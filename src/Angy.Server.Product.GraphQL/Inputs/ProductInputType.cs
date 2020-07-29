@@ -8,8 +8,9 @@ namespace Angy.Server.Product.GraphQL.Inputs
         {
             Name = "ProductInput";
 
-            Field(x => x.Name);
-            Field<MicroCategoryInputType>("microcategory");
+            Field(product => product.Id);
+            Field(product => product.Name);
+            Field(product => product.CategoryId);
         }
     }
 }

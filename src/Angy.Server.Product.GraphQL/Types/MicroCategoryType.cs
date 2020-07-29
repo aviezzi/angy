@@ -1,11 +1,13 @@
-﻿using Angy.Model;
+﻿using System;
+using Angy.Model;
+using GraphQL.DataLoader;
 using GraphQL.Types;
 
 namespace Angy.Server.Product.GraphQL.Types
 {
     public sealed class MicroCategoryType : ObjectGraphType<MicroCategory>
     {
-        public MicroCategoryType()
+        public MicroCategoryType(IServiceProvider provider, IDataLoaderContextAccessor dataLoader)
         {
             Name = "MicroCategory";
             Description = "A product micro-category";

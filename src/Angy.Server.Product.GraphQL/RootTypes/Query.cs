@@ -1,10 +1,13 @@
 ﻿using System;
 using Angy.Model;
-using Angy.Server.Data.Abstract;
+using Angy.Server.Data;
+using Angy.Server.Data.Extensions;
+using Angy.Server.Data.Specifications;
 using Angy.Server.Product.GraphQL.Types;
 using GraphQL;
 using GraphQL.Types;
 using GraphQL.Utilities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Angy.Server.Product.GraphQL.RootTypes
 {
@@ -30,22 +33,48 @@ namespace Angy.Server.Product.GraphQL.RootTypes
                 "product",
                 "A single product of the company.",
                 new QueryArguments(new QueryArgument<StringGraphType> { Name = "Id", Description = "Product Id" }),
-                async context => await _provider.GetRequiredService<IRepository<Model.Product>>().GetOne(context.GetArgument<Guid>("id")));
+                async context =>
+                {
+                    var products = _provider.GetRequiredService<LuciferContext>().Products;
+                    var id = context.GetArgument<Guid>("id");
 
-            FieldAsync<ListGraphType<ProductType>>("products", "The list of the company products", resolve: async context =>
-                await _provider.GetRequiredService<IRepository<Model.Product>>().GetAll());
+                    return await products.Specify(new ByIdSpecification<Model.Product>(id)).FirstOrDefaultAsync();
+                });
+
+            FieldAsync<ListGraphType<ProductType>>(
+                "products",
+                "The list of the company products",
+                resolve: async context =>
+                {
+                    var products = _provider.GetRequiredService<LuciferContext>().Products;
+
+                    return await products.ToListAsync();
+                });
         }
 
         void MicroCategoriesQueries()
         {
             FieldAsync<MicroCategoryType>(
-                "microcategory",
-                "A single micro category of the company.",
-                new QueryArguments(new QueryArgument<StringGraphType> { Name = "Id", Description = "Micro Category Id" }),
-                async context => await _provider.GetRequiredService<IRepository<MicroCategory>>().GetOne(context.GetArgument<Guid>("id")));
+                "category",
+                "A single category of the company.",
+                new QueryArguments(new QueryArgument<StringGraphType> { Name = "Id", Description = "Category Id" }),
+                async context =>
+                {
+                    var micros = _provider.GetRequiredService<LuciferContext>().MicroCategories;
+                    var id = context.GetArgument<Guid>("id");
 
-            FieldAsync<ListGraphType<MicroCategoryType>>("microcategories", "The list of the micro categories", resolve: async context =>
-                await _provider.GetRequiredService<IRepository<MicroCategory>>().GetAll());
+                    return await micros.Specify(new ByIdSpecification<MicroCategory>(id)).FirstOrDefaultAsync();
+                });
+
+            FieldAsync<ListGraphType<MicroCategoryType>>(
+                "categories",
+                "The list of the categories",
+                resolve: async context =>
+                {
+                    var micros = _provider.GetRequiredService<LuciferContext>().MicroCategories;
+
+                    return await micros.ToListAsync();
+                });
         }
 
         void AttributeQueries()
@@ -54,28 +83,49 @@ namespace Angy.Server.Product.GraphQL.RootTypes
                 "attribute",
                 "A single attribute.",
                 new QueryArguments(new QueryArgument<StringGraphType> { Name = "Id", Description = "Attribute Id" }),
-                async context => await _provider.GetRequiredService<IRepository<Model.Attribute>>().GetOne(context.GetArgument<Guid>("id")));
+                async context =>
+                {
+                    var attributes = _provider.GetRequiredService<LuciferContext>().Attributes;
+                    var id = context.GetArgument<Guid>("id");
 
-            FieldAsync<ListGraphType<AttributeType>>("attributes", "The list of attributes", resolve: async context =>
-                await _provider.GetRequiredService<IRepository<Model.Attribute>>().GetAll());
+                    return await attributes.Specify(new ByIdSpecification<Model.Attribute>(id)).FirstOrDefaultAsync();
+                });
+
+            FieldAsync<ListGraphType<AttributeType>>(
+                "attributes",
+                "The list of attributes", resolve: async context =>
+                {
+                    var attributes = _provider.GetRequiredService<LuciferContext>().Attributes;
+
+                    return await attributes.ToListAsync();
+                });
         }
 
         void AttributeDescriptionQueries()
         {
             FieldAsync<AttributeDescriptionType>(
-                "attributeDescription",
+                "description",
                 "A single attribute description of a product.",
-                new QueryArguments(new QueryArgument<StringGraphType> { Name = "Id", Description = "Attribute Description Id" }),
-                async context => await _provider.GetRequiredService<IAttributeDescriptionRepository>().GetOne(context.GetArgument<Guid>("id")));
-            
-            FieldAsync<AttributeDescriptionType>(
-                "attributeDescriptionByProductId",
-                "The list of attributes description associated to a product.",
-                new QueryArguments(new QueryArgument<StringGraphType> { Name = "productId", Description = "product Id" }),
-                async context => await _provider.GetRequiredService<IAttributeDescriptionRepository>().GetByProductId(context.GetArgument<Guid>("productId")));
-            
-            FieldAsync<ListGraphType<AttributeDescriptionType>>("attributeDescriptions", "The list of attribute descriptions", resolve: async context =>
-                await _provider.GetRequiredService<IAttributeDescriptionRepository>().GetAll());
+                new QueryArguments(
+                    new QueryArgument<StringGraphType> { Name = "Id", Description = "Attribute Description Id" },
+                    new QueryArgument<StringGraphType> { Name = "productId", Description = "product Id" }),
+                async context =>
+                {
+                    var descriptions = _provider.GetRequiredService<LuciferContext>().AttributeDescriptions;
+                    var id = context.GetArgument<Guid>("id");
+
+                    return await descriptions.Specify(new ByIdSpecification<AttributeDescription>(id)).FirstOrDefaultAsync();
+                });
+
+            FieldAsync<ListGraphType<AttributeDescriptionType>>(
+                "descriptions",
+                "The list of attribute descriptions",
+                resolve: async context =>
+                {
+                    var descriptions = _provider.GetRequiredService<LuciferContext>().AttributeDescriptions;
+
+                    return await descriptions.ToListAsync();
+                });
         }
     }
 }

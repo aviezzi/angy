@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using Angy.Model;
-using Angy.Server.Data.Abstract;
+using Angy.Server.Data;
+using Angy.Server.Data.Extensions;
+using Angy.Server.Data.Specifications;
 using GraphQL.DataLoader;
 using GraphQL.Types;
 using GraphQL.Utilities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Angy.Server.Product.GraphQL.Types
 {
@@ -18,21 +21,23 @@ namespace Angy.Server.Product.GraphQL.Types
 
             Field(d => d.Id).Description("The id of the product.");
             Field(d => d.Name).Description("The name of the product.");
+            Field(d => d.CategoryId).Description("The id og the product category.");
 
             Field<MicroCategoryType, MicroCategory>()
                 .Name("category")
                 .Description("The micro category of the product.")
-                .ResolveAsync( async context =>
+                .ResolveAsync(async context =>
                 {
                     var loader = dataLoader.Context.GetOrAddBatchLoader<Guid, MicroCategory>("GetCategoryByIds", async id =>
                     {
-                        var microCategories = await provider.GetRequiredService<IRepository<MicroCategory>>().GetAll();
-                        return microCategories.Where(m => id.Contains(m.Id)).ToDictionary(s => s.Id);
+                        var micros = provider.GetRequiredService<LuciferContext>().MicroCategories;
+
+                        return await micros.Specify(new ByIdsSpecification<MicroCategory>(id)).ToDictionaryAsync(e => e.Id);
                     });
 
-                    return (await loader.LoadAsync(context.Source.MicroCategory.Id));
+                    return await loader.LoadAsync(context.Source.CategoryId);
                 });
-            
+
             Field<ListGraphType<AttributeDescriptionType>, IEnumerable<AttributeDescription>>()
                 .Name("descriptions")
                 .Description("The attributes of the product.")
@@ -40,11 +45,12 @@ namespace Angy.Server.Product.GraphQL.Types
                 {
                     var loader = dataLoader.Context.GetOrAddCollectionBatchLoader<Guid, AttributeDescription>("GetAttributesByProductId", async id =>
                     {
-                        var descriptions = await provider.GetRequiredService<IAttributeDescriptionRepository>().GetAll();
-                        return descriptions.Where(m => id.Contains(m.Product.Id)).ToLookup(s => s.Id);
+                        var descriptions = provider.GetRequiredService<LuciferContext>().AttributeDescriptions;
+
+                        return (await descriptions.Specify(new ByIdsSpecification<AttributeDescription>(id)).ToListAsync()).ToLookup(e => e.Id);
                     });
-            
-                    return (await loader.LoadAsync(context.Source.Id));
+
+                    return await loader.LoadAsync(context.Source.Id);
                 });
         }
     }

@@ -66,7 +66,7 @@ namespace Angy.Client.ProductDataManager.Pages.ProductsPage
             if (ProductId == Guid.Empty)
                 await ProductGateway.CreateProduct(Product);
             else
-                await ProductGateway.UpdateProduct(ProductId, Product);
+                await ProductGateway.UpdateProduct(Product, ProductId);
 
             NavigationManager.NavigateTo("products");
         }

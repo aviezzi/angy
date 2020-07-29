@@ -20,15 +20,15 @@ namespace Angy.Client.Shared.Gateways
         public Task<Result<IEnumerable<MicroCategory>, Error.ExceptionalError>> GetMicroCategoriesWithIdNameAndDescription()
         {
             var query = RequestAdapter<ResponsesAdapter.MicroCategoriesResponse, IEnumerable<MicroCategory>>.Build(
-                "{ microcategories { id, name, description } }",
-                response => response.MicroCategories!);
+                "{ categories { id, name, description } }",
+                response => response.Categories!);
 
             return _client.SendQueryAsync(query);
         }
 
         public Task<Result<IEnumerable<MicroCategory>, Error.ExceptionalError>> GetMicroCategoriesWithIdAndName()
         {
-            var query = RequestAdapter<ResponsesAdapter.MicroCategoriesResponse, IEnumerable<MicroCategory>>.Build("{ microcategories { id, name } }", response => response.MicroCategories);
+            var query = RequestAdapter<ResponsesAdapter.MicroCategoriesResponse, IEnumerable<MicroCategory>>.Build("{ categories { id, name } }", response => response.Categories);
 
             return _client.SendQueryAsync(query);
         }
@@ -36,8 +36,8 @@ namespace Angy.Client.Shared.Gateways
         public Task<Result<MicroCategory, Error.ExceptionalError>> GetMicroCategoryById(Guid id)
         {
             var query = RequestAdapter<ResponsesAdapter.MicroCategoryResponse, MicroCategory>.Build(
-                "query GetMicroCategoryById($id: String) { microcategory(id: $id) {id, name, description } }",
-                request => request.MicroCategory!,
+                "query GetMicroCategoryById($id: String) { category(id: $id) {id, name, description } }",
+                request => request.Category!,
                 new { id },
                 "GetMicroCategoryById"
             );
@@ -48,9 +48,9 @@ namespace Angy.Client.Shared.Gateways
         public Task<Result<MicroCategory, Error.ExceptionalError>> CreateMicroCategory(MicroCategory micro)
         {
             var query = RequestAdapter<ResponsesAdapter.MicroCategoryResponse, MicroCategory>.Build(
-                "mutation CreateMicroCategory($microcategory: MicroCategoryInput!) { createMicroCategory(microcategory: $microcategory) { id, name, description } }",
-                response => response.MicroCategory!,
-                new { microcategory = SerializeMicro(micro) },
+                "mutation CreateMicroCategory($category: MicroCategoryInput!) { createCategory(category: $category) { id, name, description } }",
+                response => response.Category!,
+                new { category = SerializeMicro(micro) },
                 "CreateMicroCategory"
             );
 
@@ -60,10 +60,10 @@ namespace Angy.Client.Shared.Gateways
         public Task<Result<MicroCategory, Error.ExceptionalError>> UpdateMicroCategory(Guid id, MicroCategory micro)
         {
             var query = RequestAdapter<ResponsesAdapter.MicroCategoryResponse, MicroCategory>.Build(
-                "mutation UpdateMicroCategory($id: String!, $microcategory: MicroCategoryInput!) { updateMicroCategory(id: $id, microcategory: $microcategory) { id, name, description } }",
-                response => response.MicroCategory,
-                new { microcategory = SerializeMicro(micro), id },
-                "UpdateMicroCategory"
+                "mutation UpdateCategory($id: String!, $category: MicroCategoryInput!) { updateCategory(id: $id, category: $category) { id, name, description } }",
+                response => response.Category,
+                new { category = SerializeMicro(micro), id },
+                "UpdateCategory"
             );
 
             return _client.SendQueryAsync(query);
