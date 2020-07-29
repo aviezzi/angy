@@ -1,4 +1,6 @@
-﻿namespace Angy.Model
+﻿using System;
+
+namespace Angy.Model
 {
     public class AttributeDescription : EntityBase
     {
@@ -6,7 +8,7 @@
         {
         }
 
-        public AttributeDescription(string description, Product? product = default, Attribute? attribute = default) : this(description)
+        public AttributeDescription(string description, Product product = default, Attribute attribute = default) : this(description)
         {
             Product = product;
             Attribute = attribute;
@@ -18,7 +20,11 @@
         }
 
         public string Description { get; set; }
-        public Product? Product { get; set; }
-        public Attribute? Attribute { get; set; }
+        
+        public Guid ProductId { get; set; }
+        public Product Product { get; set; }
+        
+        public Guid AttributeId { get; set; }
+        public Attribute Attribute { get; set; }
     }
 }

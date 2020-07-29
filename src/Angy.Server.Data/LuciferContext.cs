@@ -16,47 +16,67 @@ namespace Angy.Server.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            OnProductCreating(modelBuilder);
+            OnCategoryCreating(modelBuilder);
+            OnAttributeCreating(modelBuilder);
+            OnDescriptionCreating(modelBuilder);
+        }
+
+        static void OnProductCreating(ModelBuilder modelBuilder)
+        {
             var productBuilder = modelBuilder.Entity<Product>();
 
             productBuilder
-                .HasKey(p => p.Id);
+                .HasKey(product => product.Id);
 
             productBuilder
-                .HasOne(p => p.Category)
-                .WithMany(m => m.Products)
+                .HasOne(product => product.Category)
+                .WithMany(category => category.Products)
+                .IsRequired(required: true)
                 .OnDelete(DeleteBehavior.NoAction)
-                .HasForeignKey(f => f.CategoryId);
-
+                .HasForeignKey(category => category.CategoryId);
+        }
+        
+        static void OnCategoryCreating(ModelBuilder modelBuilder)
+        {
             var categoryBuilder = modelBuilder.Entity<Category>();
 
             categoryBuilder
-                .HasKey(m => m.Id);
+                .HasKey(category => category.Id);
 
             categoryBuilder
-                .HasOne(c => c.ParentCategory)
+                .HasOne(category => category.ParentCategory)
                 .WithMany()
                 .IsRequired(required: false)
                 .OnDelete(DeleteBehavior.NoAction)
-                .HasForeignKey("ParentCategoryId");
-
+                .HasForeignKey(category => category.ParentCategoryId);
+        }
+        
+        static void OnAttributeCreating(ModelBuilder modelBuilder)
+        {
             var attributeBuilder = modelBuilder.Entity<Attribute>();
 
             attributeBuilder
-                .HasKey(a => a.Id);
-
+                .HasKey(attribute => attribute.Id);
+        }
+        
+        static void OnDescriptionCreating(ModelBuilder modelBuilder)
+        {
             var attributeDescriptionBuilder = modelBuilder.Entity<AttributeDescription>();
 
             attributeDescriptionBuilder
-                .HasOne(ad => ad.Attribute)
-                .WithMany(ad => ad.Descriptions)
+                .HasOne(description => description.Attribute)
+                .WithMany(attribute => attribute.Descriptions)
+                .IsRequired(required: true)
                 .OnDelete(DeleteBehavior.NoAction)
-                .HasForeignKey("AttributeId");
+                .HasForeignKey(description => description.AttributeId);
 
             attributeDescriptionBuilder
-                .HasOne(a => a.Product)
-                .WithMany(a => a.Descriptions)
+                .HasOne(description => description.Product)
+                .WithMany(product => product.Descriptions)
+                .IsRequired(required: true)
                 .OnDelete(DeleteBehavior.NoAction)
-                .HasForeignKey("ProductId");
+                .HasForeignKey(description => description.ProductId);
         }
     }
 }

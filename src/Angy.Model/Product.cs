@@ -10,7 +10,7 @@ namespace Angy.Model
         {
         }
 
-        public Product(string name, Category? category = default, IEnumerable<AttributeDescription>? descriptions = default) : this(name)
+        public Product(string name, Category category = default, IEnumerable<AttributeDescription>? descriptions = default) : this(name)
         {
             Category = category;
             Descriptions = descriptions;
@@ -24,7 +24,7 @@ namespace Angy.Model
         [Required] public string Name { get; set; }
 
         public Guid CategoryId { get; set; }
-        public Category? Category { get; set; }
+        public Category Category { get; set; }
 
         public IEnumerable<AttributeDescription>? Descriptions { get; set; }
     }

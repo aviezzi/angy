@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Angy.Model
@@ -24,7 +25,8 @@ namespace Angy.Model
         [Required] public string Name { get; set; }
 
         [Required] public string Description { get; set; }
-
+        
+        public Guid? ParentCategoryId { get; set; }
         public Category? ParentCategory { get; set; }
 
         public IEnumerable<Product>? Products { get; set; }
