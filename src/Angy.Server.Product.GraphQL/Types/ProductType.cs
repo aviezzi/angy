@@ -23,16 +23,16 @@ namespace Angy.Server.Product.GraphQL.Types
             Field(d => d.Name).Description("The name of the product.");
             Field(d => d.CategoryId).Description("The id og the product category.");
 
-            Field<MicroCategoryType, MicroCategory>()
+            Field<CategoryType, Category>()
                 .Name("category")
-                .Description("The micro category of the product.")
+                .Description("The product category.")
                 .ResolveAsync(async context =>
                 {
-                    var loader = dataLoader.Context.GetOrAddBatchLoader<Guid, MicroCategory>("GetCategoryByIds", async id =>
+                    var loader = dataLoader.Context.GetOrAddBatchLoader<Guid, Category>("GetCategoryByIds", async id =>
                     {
-                        var micros = provider.GetRequiredService<LuciferContext>().MicroCategories;
+                        var micros = provider.GetRequiredService<LuciferContext>().Categories;
 
-                        return await micros.Specify(new ByIdsSpecification<MicroCategory>(id)).ToDictionaryAsync(e => e.Id);
+                        return await micros.Specify(new ByIdsSpecification<Category>(id)).ToDictionaryAsync(e => e.Id);
                     });
 
                     return await loader.LoadAsync(context.Source.CategoryId);
@@ -40,7 +40,7 @@ namespace Angy.Server.Product.GraphQL.Types
 
             Field<ListGraphType<AttributeDescriptionType>, IEnumerable<AttributeDescription>>()
                 .Name("descriptions")
-                .Description("The attributes of the product.")
+                .Description("The product attributes.")
                 .ResolveAsync(async context =>
                 {
                     var loader = dataLoader.Context.GetOrAddCollectionBatchLoader<Guid, AttributeDescription>("GetAttributesByProductId", async id =>

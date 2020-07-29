@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿// ReSharper disable ClassNeverInstantiated.Global
+
+using System.Collections.Generic;
 using Angy.Model;
 
 namespace Angy.Client.Shared.Responses
@@ -13,17 +15,17 @@ namespace Angy.Client.Shared.Responses
         public class ProductResponse : ResponsesAdapter
         {
             public Product? Product { get; set; }
-            public IEnumerable<MicroCategory>? Categories { get; set; }
+            public IEnumerable<Category>? Categories { get; set; }
         }
 
-        public class MicroCategoriesResponse
+        public class CategoriesResponse
         {
-            public IEnumerable<MicroCategory>? Categories { get; set; }
+            public IEnumerable<Category>? Categories { get; set; }
         }
 
-        public class MicroCategoryResponse
+        public class CategoryResponse
         {
-            public MicroCategory? Category { get; set; }
+            public Category? Category { get; set; }
         }
 
         public class AttributesResponse

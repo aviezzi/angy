@@ -17,8 +17,8 @@ namespace Angy.Server.Product.IoC
             builder.RegisterType<ProductType>().SingleInstance();
             builder.RegisterType<ProductInputType>().SingleInstance();
 
-            builder.RegisterType<MicroCategoryType>().SingleInstance();
-            builder.RegisterType<MicroCategoryInputType>().SingleInstance();
+            builder.RegisterType<CategoryType>().SingleInstance();
+            builder.RegisterType<CategoryInputType>().SingleInstance();
 
             builder.RegisterType<AttributeType>().SingleInstance();
             builder.RegisterType<AttributeInputType>().SingleInstance();

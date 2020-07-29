@@ -18,11 +18,11 @@
 
         <div>
             <label for="description">Categoria</label>
-            <InputSelectGuid id="micro-category" class="form-control" aria-describedby="microCategoryHelp" placeholder="Selezionare la categoria del prodotto" @bind-Value="@Product.CategoryId">
+            <InputSelectGuid id="category" class="form-control" aria-describedby="categoryHelp" placeholder="Selezionare la categoria del prodotto" @bind-Value="@Product.CategoryId">
     
-                @foreach (var micro in MicroCategories)
+                @foreach (var category in Categories)
                 {
-                    <option value="@micro.Id">@micro.Name</option>
+                    <option value="@category.Id">@category.Name</option>
                 }
     
             </InputSelectGuid>

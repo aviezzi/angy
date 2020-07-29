@@ -13,12 +13,12 @@ namespace Angy.Client.ProductDataManager.Pages.ProductsPage
         [Parameter] public Guid ProductId { get; set; }
 
         [Inject] public ProductGateway ProductGateway { get; set; } = null!;
-        [Inject] public MicroCategoryGateway MicroCategoriesGateway { get; set; } = null!;
+        [Inject] public CategoryGateway CategoriesGateway { get; set; } = null!;
         [Inject] public NavigationManager NavigationManager { get; set; } = null!;
 
         protected EditContext EditContext { get; private set; } = null!;
         protected Product Product { get; private set; } = null!;
-        protected IEnumerable<MicroCategory> MicroCategories { get; private set; } = null!;
+        protected IEnumerable<Category> Categories { get; private set; } = null!;
         protected bool? IsValid { get; private set; }
 
         protected override async Task OnInitializedAsync()
@@ -31,14 +31,14 @@ namespace Angy.Client.ProductDataManager.Pages.ProductsPage
 
         async Task InitializeUpdateAsync()
         {
-            var result = await ProductGateway.GetProductByIdWithMicroCategories(ProductId);
+            var result = await ProductGateway.GetProductByIdWithCategories(ProductId);
 
             if (result.IsValid)
             {
-                var (product, microCategories) = result.Success;
+                var (product, categories) = result.Success;
 
                 Product = product;
-                MicroCategories = microCategories;
+                Categories = categories;
                 EditContext = new EditContext(Product);
             }
 
@@ -47,12 +47,12 @@ namespace Angy.Client.ProductDataManager.Pages.ProductsPage
 
         async Task InitializeCreateAsync()
         {
-            var result = await MicroCategoriesGateway.GetMicroCategoriesWithIdAndName();
+            var result = await CategoriesGateway.GetCategoriesWithIdAndName();
 
             if (result.IsValid)
             {
                 Product = new Product();
-                MicroCategories = result.Success;
+                Categories = result.Success;
                 EditContext = new EditContext(Product);
             }
 

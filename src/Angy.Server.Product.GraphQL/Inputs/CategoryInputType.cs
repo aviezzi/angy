@@ -3,11 +3,11 @@ using GraphQL.Types;
 
 namespace Angy.Server.Product.GraphQL.Inputs
 {
-    public sealed class MicroCategoryInputType : InputObjectGraphType<MicroCategory>
+    public sealed class CategoryInputType : InputObjectGraphType<Category>
     {
-        public MicroCategoryInputType()
+        public CategoryInputType()
         {
-            Name = "MicroCategoryInput";
+            Name = "CategoryInput";
 
             Field(x => x.Id, nullable: true);
             Field(x => x.Name, nullable: true);

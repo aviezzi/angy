@@ -1,6 +1,6 @@
-﻿@page "/micro-categories"
+﻿@page "/categories"
 
-@inherits MicroCategoriesComponent
+@inherits CategoriesComponent
 
 <Loader Result="@IsValid">
 
@@ -9,20 +9,20 @@
             <h1>Lista delle Categorie</h1>
         </div>
         <div class="p-2">
-            <a href="/micro-category/create" class="btn btn-outline-success w-25 justify-content-end">Crea</a>
+            <a href="/category/create" class="btn btn-outline-success w-25 justify-content-end">Crea</a>
         </div>
         <div class="p-2">
-            @foreach (var micro in MicroCategories)
+            @foreach (var category in Categories)
             {
                 <div class="card">
                     <div class="card-header">
-                        <h3>@micro.Name</h3>
+                        <h3>@category.Name</h3>
                     </div>
                     <div class="card-body">
-                        <p>Descrizione: @micro.Description</p>
+                        <p>Descrizione: @category.Description</p>
                     </div>
                     <div class="card-footer text-muted">
-                        <a href="/micro-category/edit/@micro.Id" class="btn btn-outline-primary w-25">Anagrafica</a>
+                        <a href="/category/edit/@category.Id" class="btn btn-outline-primary w-25">Anagrafica</a>
                     </div>
                 </div>
             }

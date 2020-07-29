@@ -22,7 +22,7 @@ namespace Angy.Server.Product.GraphQL.RootTypes
             _provider = provider;
 
             ProductQueries();
-            MicroCategoriesQueries();
+            CategoryQueries();
             AttributeQueries();
             AttributeDescriptionQueries();
         }
@@ -52,26 +52,26 @@ namespace Angy.Server.Product.GraphQL.RootTypes
                 });
         }
 
-        void MicroCategoriesQueries()
+        void CategoryQueries()
         {
-            FieldAsync<MicroCategoryType>(
+            FieldAsync<CategoryType>(
                 "category",
                 "A single category of the company.",
                 new QueryArguments(new QueryArgument<StringGraphType> { Name = "Id", Description = "Category Id" }),
                 async context =>
                 {
-                    var micros = _provider.GetRequiredService<LuciferContext>().MicroCategories;
+                    var micros = _provider.GetRequiredService<LuciferContext>().Categories;
                     var id = context.GetArgument<Guid>("id");
 
-                    return await micros.Specify(new ByIdSpecification<MicroCategory>(id)).FirstOrDefaultAsync();
+                    return await micros.Specify(new ByIdSpecification<Category>(id)).FirstOrDefaultAsync();
                 });
 
-            FieldAsync<ListGraphType<MicroCategoryType>>(
+            FieldAsync<ListGraphType<CategoryType>>(
                 "categories",
                 "The list of the categories",
                 resolve: async context =>
                 {
-                    var micros = _provider.GetRequiredService<LuciferContext>().MicroCategories;
+                    var micros = _provider.GetRequiredService<LuciferContext>().Categories;
 
                     return await micros.ToListAsync();
                 });

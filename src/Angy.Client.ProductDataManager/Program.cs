@@ -22,7 +22,7 @@ namespace Angy.Client.ProductDataManager
             builder.Services.AddSingleton<IClientAdapter, ClientAdapter>();
 
             builder.Services.AddSingleton<ProductGateway>();
-            builder.Services.AddSingleton<MicroCategoryGateway>();
+            builder.Services.AddSingleton<CategoryGateway>();
             builder.Services.AddSingleton<AttributeGateway>();
 
             var host = builder.Build();

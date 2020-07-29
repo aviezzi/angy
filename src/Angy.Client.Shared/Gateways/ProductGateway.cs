@@ -27,9 +27,9 @@ namespace Angy.Client.Shared.Gateways
             return _client.SendQueryAsync(request);
         }
 
-        public Task<Result<(Product, IEnumerable<MicroCategory>), Error.ExceptionalError>> GetProductByIdWithMicroCategories(Guid id)
+        public Task<Result<(Product, IEnumerable<Category>), Error.ExceptionalError>> GetProductByIdWithCategories(Guid id)
         {
-            var request = RequestAdapter<ResponsesAdapter.ProductResponse, (Product, IEnumerable<MicroCategory>)>.Build(
+            var request = RequestAdapter<ResponsesAdapter.ProductResponse, (Product, IEnumerable<Category>)>.Build(
                 "query GetProductById($id: String) { product(id: $id) {id, name, categoryId } categories { id, name}}",
                 response => (response.Product!, response.Categories!),
                 new { id },
@@ -65,7 +65,6 @@ namespace Angy.Client.Shared.Gateways
 
         static object SerializeProduct(Product product) => new
         {
-            id = product.Id,
             name = product.Name,
             categoryId = product.CategoryId
         };

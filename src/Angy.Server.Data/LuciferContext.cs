@@ -10,7 +10,7 @@ namespace Angy.Server.Data
         }
 
         public virtual DbSet<Product> Products { get; set; }
-        public virtual DbSet<MicroCategory> MicroCategories { get; set; }
+        public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<Attribute> Attributes { get; set; }
         public virtual DbSet<AttributeDescription> AttributeDescriptions { get; set; }
 
@@ -27,17 +27,17 @@ namespace Angy.Server.Data
                 .OnDelete(DeleteBehavior.NoAction)
                 .HasForeignKey(f => f.CategoryId);
 
-            var microCategoryBuilder = modelBuilder.Entity<MicroCategory>();
+            var categoryBuilder = modelBuilder.Entity<Category>();
 
-            microCategoryBuilder
+            categoryBuilder
                 .HasKey(m => m.Id);
 
-            microCategoryBuilder
-                .HasOne(c => c.MicroCategoryParent)
+            categoryBuilder
+                .HasOne(c => c.ParentCategory)
                 .WithMany()
                 .IsRequired(required: false)
                 .OnDelete(DeleteBehavior.NoAction)
-                .HasForeignKey("MicroCategoryParentId");
+                .HasForeignKey("ParentCategoryId");
 
             var attributeBuilder = modelBuilder.Entity<Attribute>();
 

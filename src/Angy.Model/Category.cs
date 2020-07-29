@@ -3,19 +3,19 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Angy.Model
 {
-    public class MicroCategory : EntityBase
+    public class Category : EntityBase
     {
-        public MicroCategory() : this(string.Empty, string.Empty)
+        public Category() : this(string.Empty, string.Empty)
         {
         }
 
-        public MicroCategory(string name, string description, MicroCategory? parent = default, IEnumerable<Product>? products = default) : this(name, description)
+        public Category(string name, string description, Category? parent = default, IEnumerable<Product>? products = default) : this(name, description)
         {
-            MicroCategoryParent = parent;
+            ParentCategory = parent;
             Products = products;
         }
 
-        MicroCategory(string name, string description)
+        Category(string name, string description)
         {
             Name = name;
             Description = description;
@@ -25,7 +25,7 @@ namespace Angy.Model
 
         [Required] public string Description { get; set; }
 
-        public MicroCategory? MicroCategoryParent { get; set; }
+        public Category? ParentCategory { get; set; }
 
         public IEnumerable<Product>? Products { get; set; }
     }

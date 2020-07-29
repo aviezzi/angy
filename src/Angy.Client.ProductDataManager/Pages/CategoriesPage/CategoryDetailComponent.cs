@@ -5,38 +5,38 @@ using Angy.Model;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
 
-namespace Angy.Client.ProductDataManager.Pages.MicroCategoriesPage
+namespace Angy.Client.ProductDataManager.Pages.CategoriesPage
 {
-    public class MicroCategoryDetailComponent : ComponentBase
+    public class CategoryDetailComponent : ComponentBase
     {
         [Parameter] public Guid MicroId { get; set; }
 
-        [Inject] public MicroCategoryGateway MicroCategoryGateway { get; set; } = null!;
+        [Inject] public CategoryGateway CategoryGateway { get; set; } = null!;
         [Inject] public NavigationManager NavigationManager { get; set; } = null!;
 
         protected EditContext EditContext { get; private set; } = null!;
-        protected MicroCategory Micro { get; private set; } = null!;
+        protected Category Category { get; private set; } = null!;
         protected bool? IsValid { get; private set; }
 
         protected override async Task OnInitializedAsync()
         {
             if (MicroId == Guid.Empty)
             {
-                Micro = new MicroCategory();
-                EditContext = new EditContext(Micro);
+                Category = new Category();
+                EditContext = new EditContext(Category);
                 IsValid = true;
 
                 return;
             }
 
-            var result = await MicroCategoryGateway.GetMicroCategoryById(MicroId);
-            
+            var result = await CategoryGateway.GetCategoryById(MicroId);
+
             if (result.IsValid)
             {
-                Micro = result.Success;
-                EditContext = new EditContext(Micro);
+                Category = result.Success;
+                EditContext = new EditContext(Category);
             }
-            
+
             IsValid = result.IsValid;
         }
 
@@ -45,11 +45,11 @@ namespace Angy.Client.ProductDataManager.Pages.MicroCategoriesPage
             if (!EditContext.Validate()) return;
 
             if (MicroId == Guid.Empty)
-                await MicroCategoryGateway.CreateMicroCategory(Micro);
+                await CategoryGateway.CreateCategory(Category);
             else
-                await MicroCategoryGateway.UpdateMicroCategory(MicroId, Micro);
+                await CategoryGateway.UpdateCategory(MicroId, Category);
 
-            NavigationManager.NavigateTo("/micro-categories");
+            NavigationManager.NavigateTo("/categories");
         }
     }
 }

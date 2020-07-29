@@ -20,12 +20,12 @@ namespace Angy.Server.Product.GraphQL.RootTypes
 
             _provider = provider;
 
-            ProductMutation();
-            MicroCategoryMutation();
-            AttributeMutation();
+            ProductMutations();
+            CategoryMutations();
+            AttributeMutations();
         }
 
-        void ProductMutation()
+        void ProductMutations()
         {
             const string name = "product";
 
@@ -63,45 +63,45 @@ namespace Angy.Server.Product.GraphQL.RootTypes
                 });
         }
 
-        void MicroCategoryMutation()
+        void CategoryMutations()
         {
-            const string name = "microcategory";
+            const string name = "category";
 
-            FieldAsync<MicroCategoryType>(
-                "createMicroCategory",
+            FieldAsync<CategoryType>(
+                "createCategory",
                 arguments: new QueryArguments(
-                    new QueryArgument<NonNullGraphType<MicroCategoryInputType>> { Name = name }
+                    new QueryArgument<NonNullGraphType<CategoryInputType>> { Name = name }
                 ),
                 resolve: async context =>
                 {
                     var lucifer = _provider.GetRequiredService<LuciferContext>();
 
-                    var micro = context.GetArgument<MicroCategory>(name);
-                    var created = await lucifer.CreateAsync(micro);
+                    var category = context.GetArgument<Category>(name);
+                    var created = await lucifer.CreateAsync(category);
 
                     return created;
                 });
 
-            FieldAsync<MicroCategoryType>(
-                "updateMicroCategory",
+            FieldAsync<CategoryType>(
+                "updateCategory",
                 arguments: new QueryArguments(
                     new QueryArgument<StringGraphType> { Name = "id" },
-                    new QueryArgument<NonNullGraphType<MicroCategoryInputType>> { Name = name }
+                    new QueryArgument<NonNullGraphType<CategoryInputType>> { Name = name }
                 ),
                 resolve: async context =>
                 {
                     var lucifer = _provider.GetRequiredService<LuciferContext>();
 
                     var id = context.GetArgument<Guid>("id");
-                    var micro = context.GetArgument<MicroCategory>(name);
+                    var category = context.GetArgument<Category>(name);
 
-                    var updated = await lucifer.UpdateAsync(id, micro);
+                    var updated = await lucifer.UpdateAsync(id, category);
 
                     return updated;
                 });
         }
 
-        void AttributeMutation()
+        void AttributeMutations()
         {
             const string name = "attribute";
 
@@ -131,9 +131,9 @@ namespace Angy.Server.Product.GraphQL.RootTypes
                     var lucifer = _provider.GetRequiredService<LuciferContext>();
 
                     var id = context.GetArgument<Guid>("id");
-                    var micro = context.GetArgument<Model.Attribute>(name);
+                    var attribute = context.GetArgument<Model.Attribute>(name);
 
-                    var updated = await lucifer.UpdateAsync(id, micro);
+                    var updated = await lucifer.UpdateAsync(id, attribute);
 
                     return updated;
                 });
