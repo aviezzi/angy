@@ -8,9 +8,10 @@ namespace Angy.Server.Product.GraphQL.Inputs
         {
             Name = "ProductInput";
 
-            Field(product => product.Id);
+            Field(product => product.Id, nullable: true);
             Field(product => product.Name);
             Field(product => product.CategoryId);
+            Field<ListGraphType<AttributeDescriptionInputType>>("descriptions");
         }
     }
 }

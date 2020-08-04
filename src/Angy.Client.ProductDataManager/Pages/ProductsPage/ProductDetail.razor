@@ -3,7 +3,6 @@
 
 @inherits ProductDetailComponent
 
-
 <Loader Result="@IsValid">
     <EditForm EditContext="@EditContext" OnSubmit="HandleSubmit">
 
@@ -11,14 +10,14 @@
     
         <div class="form-group">
             <label for="name">Nome</label>
+            
             <InputText id="name" class="form-control" aria-describedby="nameHelp" placeholder="Inserire il nome del prodotto" @bind-Value="@Product.Name"/>
-            <ValidationMessage For="@(() => Product.Name)" />  
-    
+            <ValidationMessage For="@(() => Product.Name)" />
         </div>
 
         <div>
-            <label for="description">Categoria</label>
-            <InputSelectGuid id="category" class="form-control" aria-describedby="categoryHelp" placeholder="Selezionare la categoria del prodotto" @bind-Value="@Product.CategoryId">
+            <label for="categories">Categoria</label>
+            <InputSelectGuid id="categories" class="form-control" aria-describedby="categoryHelp" placeholder="Selezionare la categoria del prodotto" @bind-Value="@Product.CategoryId">
     
                 @foreach (var category in Categories)
                 {
@@ -27,9 +26,52 @@
     
             </InputSelectGuid>
             <ValidationMessage For="@(() => Product.CategoryId)" />
-    
         </div>
-    
+        
+        <div class="mt-2">
+            <label for="attributes">Attributi disponibili</label>
+            
+            @if (Attributes.Any())
+            {
+                <ul id="attributes" class="list-group list-group-flush">
+
+                    @foreach (var attr in Attributes.OrderBy(i => i.Name))
+                    {
+                        <li class="list-group-item insert pointer" @onclick="@(_ => Add(attr))">
+                            @attr.Name <span class="oi oi-plus float-right" data-toggle="tooltip" aria-hidden="true"></span>
+                        </li>
+                    }
+
+                </ul>    
+            }
+            else
+            {
+                <p class="text-secondary">Tutti gli attributi selezionati!</p>
+            }
+            
+        </div>
+        
+        <div class="mt-5">
+            <label for="descriptions">Attributi Selezionati</label>
+            <ul id="descriptions" class="list-group list-group-flush">
+
+                @foreach (var description in Product.Descriptions)
+                {
+                    <li class="list-group-item">
+                        
+                        <div class="card mb-2">
+                            <div class="card-header bg-info remove pointer" @onclick="@(_ => Remove(description))">@description.Attribute.Name <span class="oi oi-x float-right" data-toggle="tooltip" aria-hidden="true"></span></div>
+                            <div class="card-body">
+                                <p class="card-text"><InputTextArea class="form-control" @bind-Value="description.Description"></InputTextArea></p>
+                                <span class="text-secondary">Aggiungi descrizione</span>
+                            </div>
+                        </div>
+                    </li>
+                }
+
+            </ul>
+        </div>
+        
         <button type="submit" class="btn btn-outline-success w-25 float-right mt-2" disabled="@(!EditContext.IsModified())">Salva</button>
 
     </EditForm>

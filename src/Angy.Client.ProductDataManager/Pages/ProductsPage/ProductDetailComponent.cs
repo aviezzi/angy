@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Angy.Client.Shared.Gateways;
 using Angy.Model;
@@ -13,15 +14,18 @@ namespace Angy.Client.ProductDataManager.Pages.ProductsPage
         [Parameter] public Guid ProductId { get; set; }
 
         [Inject] public ProductGateway ProductGateway { get; set; } = null!;
-        [Inject] public CategoryGateway CategoriesGateway { get; set; } = null!;
         [Inject] public NavigationManager NavigationManager { get; set; } = null!;
 
         protected EditContext EditContext { get; private set; } = null!;
         protected Product Product { get; private set; } = null!;
         protected IEnumerable<Category> Categories { get; private set; } = null!;
+        protected ICollection<Model.Attribute> Attributes { get; private set; } = null!;
+        protected Guid SelectedAttribute { get; set; }
+        protected string Filter { get; set; } = string.Empty;
+
         protected bool? IsValid { get; private set; }
 
-        protected override async Task OnInitializedAsync()
+        protected override async Task OnParametersSetAsync()
         {
             if (ProductId == Guid.Empty)
                 await InitializeCreateAsync();
@@ -29,34 +33,16 @@ namespace Angy.Client.ProductDataManager.Pages.ProductsPage
                 await InitializeUpdateAsync();
         }
 
-        async Task InitializeUpdateAsync()
+        protected void Add(Model.Attribute toMove)
         {
-            var result = await ProductGateway.GetProductByIdWithCategories(ProductId);
-
-            if (result.IsValid)
-            {
-                var (product, categories) = result.Success;
-
-                Product = product;
-                Categories = categories;
-                EditContext = new EditContext(Product);
-            }
-
-            IsValid = result.IsValid;
+            Product.Descriptions.Add(new AttributeDescription(string.Empty, attributeId: toMove.Id, attribute: toMove));
+            Attributes.Remove(toMove);
         }
 
-        async Task InitializeCreateAsync()
+        protected void Remove(AttributeDescription toMove)
         {
-            var result = await CategoriesGateway.GetCategoriesWithIdAndName();
-
-            if (result.IsValid)
-            {
-                Product = new Product();
-                Categories = result.Success;
-                EditContext = new EditContext(Product);
-            }
-
-            IsValid = result.IsValid;
+            Attributes.Add(toMove.Attribute);
+            Product.Descriptions.Remove(toMove);
         }
 
         protected async Task HandleSubmit()
@@ -69,6 +55,42 @@ namespace Angy.Client.ProductDataManager.Pages.ProductsPage
                 await ProductGateway.UpdateProduct(Product, ProductId);
 
             NavigationManager.NavigateTo("products");
+        }
+
+        async Task InitializeUpdateAsync()
+        {
+            var result = await ProductGateway.GetProductByIdWithCategoriesAndAttributes(ProductId);
+
+            if (result.IsValid)
+            {
+                var (product, categories, attributes) = result.Success;
+
+                Categories = categories;
+                Attributes = attributes.ToList();
+
+                Product = product;
+                EditContext = new EditContext(Product);
+            }
+
+            IsValid = result.IsValid;
+        }
+
+        async Task InitializeCreateAsync()
+        {
+            var result = await ProductGateway.GetCategoriesAndAttributes();
+
+            if (result.IsValid)
+            {
+                var (categories, attributes) = result.Success;
+
+                Categories = categories;
+                Attributes = attributes.ToList();
+
+                Product = new Product();
+                EditContext = new EditContext(Product);
+            }
+
+            IsValid = result.IsValid;
         }
     }
 }

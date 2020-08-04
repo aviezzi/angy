@@ -12,5 +12,24 @@
         <PackageReference Include="Microsoft.AspNetCore.Components" Version="5.0.0-preview.6.20312.15" />
         <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="5.0.0-preview.6.20312.15" />
     </ItemGroup>
+
+
+    <ItemGroup>
+      <Content Update="wwwroot\css\global.css">
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Update="wwwroot\css\error.css">
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+      <Content Update="wwwroot\css\loader.css">
+        <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
+    </ItemGroup>
     
 </Project>

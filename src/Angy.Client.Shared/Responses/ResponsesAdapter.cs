@@ -16,6 +16,13 @@ namespace Angy.Client.Shared.Responses
         {
             public Product? Product { get; set; }
             public IEnumerable<Category>? Categories { get; set; }
+            public IEnumerable<Attribute>? Attributes { get; set; }
+        }
+
+        public class CategoriesAttributesResponse : ResponsesAdapter
+        {
+            public IEnumerable<Category>? Categories { get; set; }
+            public IEnumerable<Attribute>? Attributes { get; set; }
         }
 
         public class CategoriesResponse

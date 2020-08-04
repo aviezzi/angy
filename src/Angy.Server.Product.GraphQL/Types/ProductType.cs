@@ -45,9 +45,9 @@ namespace Angy.Server.Product.GraphQL.Types
                 {
                     var loader = dataLoader.Context.GetOrAddCollectionBatchLoader<Guid, AttributeDescription>("GetAttributesByProductId", async id =>
                     {
-                        var descriptions = provider.GetRequiredService<LuciferContext>().AttributeDescriptions;
+                        var lucifer = provider.GetRequiredService<LuciferContext>();
 
-                        return (await descriptions.Specify(new ByIdsSpecification<AttributeDescription>(id)).ToListAsync()).ToLookup(e => e.Id);
+                        return (await lucifer.AttributeDescriptions.Specify(new GetAttributeDescriptionsByProductIdSpecification(id)).ToListAsync()).ToLookup(e => e.ProductId);
                     });
 
                     return await loader.LoadAsync(context.Source.Id);

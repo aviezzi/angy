@@ -20,4 +20,12 @@ namespace Angy.Server.Data.Specifications
             Criteria = entity => ids.Contains(entity.Id);
         }
     }
+
+    public class GetAttributeDescriptionsByProductIdSpecification : SpecificationBase<AttributeDescription>
+    {
+        public GetAttributeDescriptionsByProductIdSpecification(IEnumerable<Guid> ids)
+        {
+            Criteria = entity => ids.Contains(entity.ProductId);
+        }
+    }
 }

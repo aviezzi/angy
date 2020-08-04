@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Angy.Client.Shared.Abstract;
 using Angy.Client.Shared.Adapters;
@@ -27,16 +28,25 @@ namespace Angy.Client.Shared.Gateways
             return _client.SendQueryAsync(request);
         }
 
-        public Task<Result<(Product, IEnumerable<Category>), Error.ExceptionalError>> GetProductByIdWithCategories(Guid id)
+        public Task<Result<(Product, IEnumerable<Category>, IEnumerable<Model.Attribute>), Error.ExceptionalError>> GetProductByIdWithCategoriesAndAttributes(Guid id)
         {
-            var request = RequestAdapter<ResponsesAdapter.ProductResponse, (Product, IEnumerable<Category>)>.Build(
-                "query GetProductById($id: String) { product(id: $id) {id, name, categoryId } categories { id, name}}",
-                response => (response.Product!, response.Categories!),
+            var request = RequestAdapter<ResponsesAdapter.ProductResponse, (Product, IEnumerable<Category>, IEnumerable<Model.Attribute>)>.Build(
+                "query GetProductById($id: String) { product(id: $id) {id, name, categoryId, descriptions { id, description, attribute { id, name } } } categories { id, name } attributes { id, name } }",
+                response => (response.Product!, response.Categories!, response.Attributes.Except(response.Product!.Descriptions.Select(desc => desc.Attribute!)!)!),
                 new { id },
                 "GetProductById"
             );
 
             return _client.SendQueryAsync(request);
+        }
+
+        public Task<Result<(IEnumerable<Category>, IEnumerable<Model.Attribute>), Error.ExceptionalError>> GetCategoriesAndAttributes()
+        {
+            var query = RequestAdapter<ResponsesAdapter.CategoriesAttributesResponse, (IEnumerable<Category>, IEnumerable<Model.Attribute>)>.Build(
+                "{ categories { id, name } attributes { id, name} }",
+                response => (response.Categories, response.Attributes));
+
+            return _client.SendQueryAsync(query);
         }
 
         public Task<Result<Product, Error.ExceptionalError>> CreateProduct(Product product)
@@ -66,7 +76,13 @@ namespace Angy.Client.Shared.Gateways
         static object SerializeProduct(Product product) => new
         {
             name = product.Name,
-            categoryId = product.CategoryId
+            categoryId = product.CategoryId,
+            descriptions = product.Descriptions.Select(description => new
+            {
+                description = description.Description,
+                attributeId = description.AttributeId,
+                productId = product.Id
+            })
         };
     }
 }

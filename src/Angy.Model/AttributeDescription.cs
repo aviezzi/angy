@@ -8,9 +8,12 @@ namespace Angy.Model
         {
         }
 
-        public AttributeDescription(string description, Product product = default, Attribute attribute = default) : this(description)
+        public AttributeDescription(string description, Guid productId = default, Product product = default, Guid attributeId = default, Attribute attribute = default) : this(description)
         {
+            ProductId = productId;
             Product = product;
+
+            AttributeId = attributeId;
             Attribute = attribute;
         }
 
@@ -20,11 +23,11 @@ namespace Angy.Model
         }
 
         public string Description { get; set; }
-        
+
         public Guid ProductId { get; set; }
-        public Product Product { get; set; }
-        
+        public Product? Product { get; set; }
+
         public Guid AttributeId { get; set; }
-        public Attribute Attribute { get; set; }
+        public Attribute? Attribute { get; set; }
     }
 }

@@ -24,6 +24,7 @@ namespace Angy.Server.Product.IoC
             builder.RegisterType<AttributeInputType>().SingleInstance();
 
             builder.RegisterType<AttributeDescriptionType>().SingleInstance();
+            builder.RegisterType<AttributeDescriptionInputType>().SingleInstance();
         }
     }
 }

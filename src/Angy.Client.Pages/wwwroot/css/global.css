@@ -1,0 +1,11 @@
+.pointer {
+    cursor: pointer;
+}
+
+.insert:hover {
+    background-color: #90ff8a;
+}
+
+.remove:hover {
+    background-color: #e28e8e;
+}
