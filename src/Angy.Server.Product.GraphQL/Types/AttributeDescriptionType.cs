@@ -19,6 +19,8 @@ namespace Angy.Server.Product.GraphQL.Types
 
             Field(d => d.Id).Description("The id of attribute description.");
             Field(d => d.Description).Description("The description of the associated attribute.");
+            Field(d => d.AttributeId).Description("The id of associate attribute");
+            Field(d => d.ProductId).Description("The id of associate product");
 
             Field<AttributeType, Model.Attribute>()
                 .Name("attribute")

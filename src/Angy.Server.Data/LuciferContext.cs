@@ -1,4 +1,5 @@
-﻿using Angy.Model;
+﻿using System.Diagnostics;
+using Angy.Model;
 using Microsoft.EntityFrameworkCore;
 
 namespace Angy.Server.Data
@@ -21,6 +22,8 @@ namespace Angy.Server.Data
             OnAttributeCreating(modelBuilder);
             OnDescriptionCreating(modelBuilder);
         }
+        
+        internal void Upsert(object entity) => ChangeTracker.TrackGraph(entity, e => e.Entry.State = e.Entry.IsKeySet ? EntityState.Modified : EntityState.Added);
 
         static void OnProductCreating(ModelBuilder modelBuilder)
         {

@@ -31,7 +31,7 @@ namespace Angy.Client.Shared.Gateways
         public Task<Result<(Product, IEnumerable<Category>, IEnumerable<Model.Attribute>), Error.ExceptionalError>> GetProductByIdWithCategoriesAndAttributes(Guid id)
         {
             var request = RequestAdapter<ResponsesAdapter.ProductResponse, (Product, IEnumerable<Category>, IEnumerable<Model.Attribute>)>.Build(
-                "query GetProductById($id: String) { product(id: $id) {id, name, categoryId, descriptions { id, description, attribute { id, name } } } categories { id, name } attributes { id, name } }",
+                "query GetProductById($id: String) { product(id: $id) {id, name, categoryId, descriptions { id, description, attributeId, attribute { id, name } } } categories { id, name } attributes { id, name } }",
                 response => (response.Product!, response.Categories!, response.Attributes.Except(response.Product!.Descriptions.Select(desc => desc.Attribute!)!)!),
                 new { id },
                 "GetProductById"
@@ -70,6 +70,8 @@ namespace Angy.Client.Shared.Gateways
                 "UpdateProduct"
             );
 
+            Console.WriteLine($"AttributeID: {string.Join(',', product.Descriptions.Select(d => $"{d.AttributeId} {d.Attribute?.Name}"))}");
+            
             return _client.SendQueryAsync(query);
         }
 

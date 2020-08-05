@@ -36,9 +36,8 @@ namespace Angy.Server.Data.Extensions
         public static async Task<T> UpdateAsync<T>(this LuciferContext context, Guid id, T entity) where T : EntityBase
         {
             entity.Id = id;
-
-            var old = await context.Set<T>().FindAsync(id);
-            context.Entry(old).CurrentValues.SetValues(entity);
+            
+            context.Upsert(entity);
 
             await context.SaveChangesAsync();
 
