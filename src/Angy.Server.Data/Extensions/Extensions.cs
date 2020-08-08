@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Angy.Model;
 using Angy.Server.Data.Abstract;
@@ -33,10 +32,8 @@ namespace Angy.Server.Data.Extensions
             return created.Entity;
         }
 
-        public static async Task<T> UpdateAsync<T>(this LuciferContext context, Guid id, T entity) where T : EntityBase
+        public static async Task<T> UpdateAsync<T>(this LuciferContext context, T entity) where T : EntityBase
         {
-            entity.Id = id;
-            
             context.Upsert(entity);
 
             await context.SaveChangesAsync();

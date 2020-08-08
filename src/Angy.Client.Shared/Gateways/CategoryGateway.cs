@@ -37,7 +37,7 @@ namespace Angy.Client.Shared.Gateways
         {
             var query = RequestAdapter<ResponsesAdapter.CategoryResponse, Category>.Build(
                 "query GetCategoryById($id: String) { category(id: $id) {id, name, description } }",
-                request => request.Category!,
+                request => request.Category,
                 new { id },
                 "GetCategoryById"
             );
@@ -48,8 +48,8 @@ namespace Angy.Client.Shared.Gateways
         public Task<Result<Category, Error.ExceptionalError>> CreateCategory(Category category)
         {
             var query = RequestAdapter<ResponsesAdapter.CategoryResponse, Category>.Build(
-                "mutation CreateCategory($category: CategoryInput!) { createCategory(category: $category) { id, name, description } }",
-                response => response.Category!,
+                "mutation CreateCategory($category: CategoryInput!) { createCategory(category: $category) { id } }",
+                response => response.Category,
                 new { category = SerializeMicro(category) },
                 "CreateCategory"
             );
@@ -60,9 +60,9 @@ namespace Angy.Client.Shared.Gateways
         public Task<Result<Category, Error.ExceptionalError>> UpdateCategory(Guid id, Category category)
         {
             var query = RequestAdapter<ResponsesAdapter.CategoryResponse, Category>.Build(
-                "mutation UpdateCategory($id: String!, $category: CategoryInput!) { updateCategory(id: $id, category: $category) { id, name, description } }",
+                "mutation UpdateCategory($category: CategoryInput!) { updateCategory(category: $category) { id } }",
                 response => response.Category,
-                new { category = SerializeMicro(category), id },
+                new { category = SerializeMicro(category) },
                 "UpdateCategory"
             );
 
@@ -71,6 +71,7 @@ namespace Angy.Client.Shared.Gateways
 
         static object SerializeMicro(Category category) => new
         {
+            id = category.Id,
             name = category.Name,
             description = category.Description
         };

@@ -9,6 +9,8 @@ namespace Angy.Server.Product.GraphQL.Inputs
         {
             Name = "AttributeDescriptionInput";
 
+            Field(description => description.Id);
+
             Field(description => description.Description);
 
             Field(description => description.ProductId);

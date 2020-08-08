@@ -26,6 +26,6 @@ namespace Angy.Model
         public Guid CategoryId { get; set; }
         public Category Category { get; set; }
 
-        public ICollection<AttributeDescription> Descriptions { get; set; } = new List<AttributeDescription>();
+        [ValidateComplexType, Required] public ICollection<AttributeDescription> Descriptions { get; set; } = new List<AttributeDescription>();
     }
 }

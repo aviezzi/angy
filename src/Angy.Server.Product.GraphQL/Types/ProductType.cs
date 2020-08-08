@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Angy.Model;
 using Angy.Server.Data;
-using Angy.Server.Data.Extensions;
-using Angy.Server.Data.Specifications;
 using GraphQL.DataLoader;
 using GraphQL.Types;
 using GraphQL.Utilities;
@@ -28,12 +26,11 @@ namespace Angy.Server.Product.GraphQL.Types
                 .Description("The product category.")
                 .ResolveAsync(async context =>
                 {
-                    var loader = dataLoader.Context.GetOrAddBatchLoader<Guid, Category>("GetCategoryByIds", async id =>
-                    {
-                        var micros = provider.GetRequiredService<LuciferContext>().Categories;
-
-                        return await micros.Specify(new ByIdsSpecification<Category>(id)).ToDictionaryAsync(e => e.Id);
-                    });
+                    var loader = dataLoader.Context.GetOrAddBatchLoader<Guid, Category>("GetCategoryByIds", async ids =>
+                        await provider.GetRequiredService<LuciferContext>()
+                            .Categories
+                            .Where(micro => ids.Contains(micro.Id))
+                            .ToDictionaryAsync(e => e.Id));
 
                     return await loader.LoadAsync(context.Source.CategoryId);
                 });
@@ -43,12 +40,12 @@ namespace Angy.Server.Product.GraphQL.Types
                 .Description("The product attributes.")
                 .ResolveAsync(async context =>
                 {
-                    var loader = dataLoader.Context.GetOrAddCollectionBatchLoader<Guid, AttributeDescription>("GetAttributesByProductId", async id =>
-                    {
-                        var lucifer = provider.GetRequiredService<LuciferContext>();
-
-                        return (await lucifer.AttributeDescriptions.Specify(new GetAttributeDescriptionsByProductIdSpecification(id)).ToListAsync()).ToLookup(e => e.ProductId);
-                    });
+                    var loader = dataLoader.Context.GetOrAddCollectionBatchLoader<Guid, AttributeDescription>("GetAttributesByProductId", async ids =>
+                        (await provider.GetRequiredService<LuciferContext>()
+                            .AttributeDescriptions
+                            .Where(description => ids.Contains(description.ProductId))
+                            .ToListAsync())
+                        .ToLookup(e => e.ProductId));
 
                     return await loader.LoadAsync(context.Source.Id);
                 });

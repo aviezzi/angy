@@ -1,8 +1,5 @@
 ﻿using System;
-using Angy.Model;
 using Angy.Server.Data;
-using Angy.Server.Data.Extensions;
-using Angy.Server.Data.Specifications;
 using Angy.Server.Product.GraphQL.Types;
 using GraphQL;
 using GraphQL.Types;
@@ -35,21 +32,20 @@ namespace Angy.Server.Product.GraphQL.RootTypes
                 new QueryArguments(new QueryArgument<StringGraphType> { Name = "Id", Description = "Product Id" }),
                 async context =>
                 {
-                    var products = _provider.GetRequiredService<LuciferContext>().Products;
                     var id = context.GetArgument<Guid>("id");
 
-                    return await products.Specify(new ByIdSpecification<Model.Product>(id)).FirstOrDefaultAsync();
+                    return await _provider.GetRequiredService<LuciferContext>()
+                        .Products
+                        .FirstOrDefaultAsync(product => product.Id == id);
                 });
 
             FieldAsync<ListGraphType<ProductType>>(
                 "products",
                 "The list of the company products",
                 resolve: async context =>
-                {
-                    var products = _provider.GetRequiredService<LuciferContext>().Products;
-
-                    return await products.ToListAsync();
-                });
+                    await _provider.GetRequiredService<LuciferContext>()
+                        .Products
+                        .ToListAsync());
         }
 
         void CategoryQueries()
@@ -60,21 +56,20 @@ namespace Angy.Server.Product.GraphQL.RootTypes
                 new QueryArguments(new QueryArgument<StringGraphType> { Name = "Id", Description = "Category Id" }),
                 async context =>
                 {
-                    var micros = _provider.GetRequiredService<LuciferContext>().Categories;
                     var id = context.GetArgument<Guid>("id");
 
-                    return await micros.Specify(new ByIdSpecification<Category>(id)).FirstOrDefaultAsync();
+                    return await _provider.GetRequiredService<LuciferContext>()
+                        .Categories
+                        .FirstOrDefaultAsync(category => category.Id == id);
                 });
 
             FieldAsync<ListGraphType<CategoryType>>(
                 "categories",
                 "The list of the categories",
                 resolve: async context =>
-                {
-                    var micros = _provider.GetRequiredService<LuciferContext>().Categories;
-
-                    return await micros.ToListAsync();
-                });
+                    await _provider.GetRequiredService<LuciferContext>()
+                        .Categories
+                        .ToListAsync());
         }
 
         void AttributeQueries()
@@ -85,20 +80,19 @@ namespace Angy.Server.Product.GraphQL.RootTypes
                 new QueryArguments(new QueryArgument<StringGraphType> { Name = "Id", Description = "Attribute Id" }),
                 async context =>
                 {
-                    var attributes = _provider.GetRequiredService<LuciferContext>().Attributes;
                     var id = context.GetArgument<Guid>("id");
 
-                    return await attributes.Specify(new ByIdSpecification<Model.Attribute>(id)).FirstOrDefaultAsync();
+                    return await _provider.GetRequiredService<LuciferContext>()
+                        .Attributes
+                        .FirstOrDefaultAsync(attribute => attribute.Id == id);
                 });
 
             FieldAsync<ListGraphType<AttributeType>>(
                 "attributes",
                 "The list of attributes", resolve: async context =>
-                {
-                    var attributes = _provider.GetRequiredService<LuciferContext>().Attributes;
-
-                    return await attributes.ToListAsync();
-                });
+                    await _provider.GetRequiredService<LuciferContext>()
+                        .Attributes
+                        .ToListAsync());
         }
 
         void AttributeDescriptionQueries()
@@ -111,21 +105,20 @@ namespace Angy.Server.Product.GraphQL.RootTypes
                     new QueryArgument<StringGraphType> { Name = "productId", Description = "product Id" }),
                 async context =>
                 {
-                    var descriptions = _provider.GetRequiredService<LuciferContext>().AttributeDescriptions;
                     var id = context.GetArgument<Guid>("id");
 
-                    return await descriptions.Specify(new ByIdSpecification<AttributeDescription>(id)).FirstOrDefaultAsync();
+                    return await _provider.GetRequiredService<LuciferContext>()
+                        .AttributeDescriptions
+                        .FirstOrDefaultAsync(description => description.Id == id);
                 });
 
             FieldAsync<ListGraphType<AttributeDescriptionType>>(
                 "descriptions",
                 "The list of attribute descriptions",
                 resolve: async context =>
-                {
-                    var descriptions = _provider.GetRequiredService<LuciferContext>().AttributeDescriptions;
-
-                    return await descriptions.ToListAsync();
-                });
+                    await _provider.GetRequiredService<LuciferContext>()
+                        .AttributeDescriptions
+                        .ToListAsync());
         }
     }
 }

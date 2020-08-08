@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
 using Angy.Model;
 using Angy.Server.Data;
 using Angy.Server.Data.Extensions;
@@ -7,10 +9,11 @@ using Angy.Server.Product.GraphQL.Types;
 using GraphQL;
 using GraphQL.Types;
 using GraphQL.Utilities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Angy.Server.Product.GraphQL.RootTypes
 {
-    public sealed class Mutation : ObjectGraphType<object>
+    public class Mutation : ObjectGraphType<object>
     {
         readonly IServiceProvider _provider;
 
@@ -36,30 +39,22 @@ namespace Angy.Server.Product.GraphQL.RootTypes
                 ),
                 resolve: async context =>
                 {
+                    var product = context.GetArgument<Model.Product>(name);
                     var lucifer = _provider.GetRequiredService<LuciferContext>();
 
-                    var product = context.GetArgument<Model.Product>(name);
-                    var created = await lucifer.CreateAsync(product);
-
-                    return created;
+                    return await lucifer.CreateAsync(product);
                 });
 
             FieldAsync<ProductType>(
                 "updateProduct",
-                arguments: new QueryArguments(
-                    new QueryArgument<StringGraphType> { Name = "id" },
-                    new QueryArgument<NonNullGraphType<ProductInputType>> { Name = name }
-                ),
+                arguments: new QueryArguments(new QueryArgument<NonNullGraphType<ProductInputType>> { Name = name }),
                 resolve: async context =>
                 {
-                    var id = context.GetArgument<Guid>("id");
                     var product = context.GetArgument<Model.Product>(name);
-
                     var lucifer = _provider.GetRequiredService<LuciferContext>();
 
-                    var updated = await lucifer.UpdateAsync(id, product);
-
-                    return updated;
+                    await TrackProductsToBeDelete(lucifer, product);
+                    return await lucifer.UpdateAsync(product);
                 });
         }
 
@@ -74,30 +69,22 @@ namespace Angy.Server.Product.GraphQL.RootTypes
                 ),
                 resolve: async context =>
                 {
+                    var category = context.GetArgument<Category>(name);
                     var lucifer = _provider.GetRequiredService<LuciferContext>();
 
-                    var category = context.GetArgument<Category>(name);
-                    var created = await lucifer.CreateAsync(category);
-
-                    return created;
+                    return await lucifer.CreateAsync(category);
                 });
 
             FieldAsync<CategoryType>(
                 "updateCategory",
-                arguments: new QueryArguments(
-                    new QueryArgument<StringGraphType> { Name = "id" },
-                    new QueryArgument<NonNullGraphType<CategoryInputType>> { Name = name }
+                arguments: new QueryArguments(new QueryArgument<NonNullGraphType<CategoryInputType>> { Name = name }
                 ),
                 resolve: async context =>
                 {
+                    var category = context.GetArgument<Category>(name);
                     var lucifer = _provider.GetRequiredService<LuciferContext>();
 
-                    var id = context.GetArgument<Guid>("id");
-                    var category = context.GetArgument<Category>(name);
-
-                    var updated = await lucifer.UpdateAsync(id, category);
-
-                    return updated;
+                    return await lucifer.UpdateAsync(category);
                 });
         }
 
@@ -112,31 +99,35 @@ namespace Angy.Server.Product.GraphQL.RootTypes
                 ),
                 resolve: async context =>
                 {
+                    var attribute = context.GetArgument<Model.Attribute>(name);
                     var lucifer = _provider.GetRequiredService<LuciferContext>();
 
-                    var attr = context.GetArgument<Model.Attribute>(name);
-                    var created = await lucifer.CreateAsync(attr);
-
-                    return created;
+                    return await lucifer.CreateAsync(attribute);
                 });
 
             FieldAsync<AttributeType>(
                 "updateAttribute",
-                arguments: new QueryArguments(
-                    new QueryArgument<StringGraphType> { Name = "id" },
-                    new QueryArgument<NonNullGraphType<AttributeInputType>> { Name = name }
+                arguments: new QueryArguments(new QueryArgument<NonNullGraphType<AttributeInputType>> { Name = name }
                 ),
                 resolve: async context =>
                 {
+                    var attribute = context.GetArgument<Model.Attribute>(name);
                     var lucifer = _provider.GetRequiredService<LuciferContext>();
 
-                    var id = context.GetArgument<Guid>("id");
-                    var attribute = context.GetArgument<Model.Attribute>(name);
-
-                    var updated = await lucifer.UpdateAsync(id, attribute);
-
-                    return updated;
+                    return await lucifer.UpdateAsync(attribute);
                 });
+        }
+
+        protected virtual async Task TrackProductsToBeDelete(LuciferContext lucifer, Model.Product product)
+        {
+            var descriptions = await lucifer
+                .AttributeDescriptions
+                .AsNoTracking()
+                .Where(description => description.ProductId == product.Id)
+                .ToListAsync();
+
+            var toBeDeleted = descriptions.Except(product.Descriptions);
+            lucifer.AttributeDescriptions.RemoveRange(toBeDeleted);
         }
     }
 }

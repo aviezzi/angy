@@ -1,8 +1,7 @@
 ﻿using System;
+using System.Linq;
 using Angy.Model;
 using Angy.Server.Data;
-using Angy.Server.Data.Extensions;
-using Angy.Server.Data.Specifications;
 using GraphQL.DataLoader;
 using GraphQL.Types;
 using GraphQL.Utilities;
@@ -27,12 +26,11 @@ namespace Angy.Server.Product.GraphQL.Types
                 .Description("The atrribute of the description.")
                 .ResolveAsync(async context =>
                 {
-                    var loader = dataLoader.Context.GetOrAddBatchLoader<Guid, Model.Attribute>("GetAttributesByIds", async id =>
-                    {
-                        var lucifer = provider.GetRequiredService<LuciferContext>();
-
-                        return await lucifer.Attributes.Specify(new ByIdsSpecification<Model.Attribute>(id)).ToDictionaryAsync(e => e.Id);
-                    });
+                    var loader = dataLoader.Context.GetOrAddBatchLoader<Guid, Model.Attribute>("GetAttributesByIds", async ids =>
+                        await provider.GetRequiredService<LuciferContext>()
+                            .Attributes
+                            .Where(attribute => ids.Contains(attribute.Id))
+                            .ToDictionaryAsync(e => e.Id));
 
                     return await loader.LoadAsync(context.Source.AttributeId);
                 });

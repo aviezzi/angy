@@ -5,8 +5,8 @@
 
 <Loader Result="@IsValid">
     <EditForm EditContext="@EditContext" OnSubmit="HandleSubmit">
-
-        <DataAnnotationsValidator />
+        
+        <ObjectGraphDataAnnotationsValidator />
     
         <div class="form-group">
             <label for="name">Nome</label>
@@ -65,6 +65,9 @@
                                 <p class="card-text"><InputTextArea class="form-control" @bind-Value="description.Description"></InputTextArea></p>
                                 <span class="text-secondary">Aggiungi descrizione</span>
                             </div>
+
+                            <ValidationMessage For="@(() => description.Description)" />
+
                         </div>
                     </li>
                 }

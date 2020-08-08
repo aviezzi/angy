@@ -52,7 +52,7 @@ namespace Angy.Client.Shared.Gateways
         public Task<Result<Product, Error.ExceptionalError>> CreateProduct(Product product)
         {
             var query = RequestAdapter<ResponsesAdapter.ProductResponse, Product>.Build(
-                "mutation CreateProduct($product: ProductInput!) { createProduct(product: $product) { id, name, category { id, description} } }",
+                "mutation CreateProduct($product: ProductInput!) { createProduct(product: $product) { id } }",
                 response => response.Product!,
                 new { product = SerializeProduct(product) },
                 "CreateProduct"
@@ -64,23 +64,23 @@ namespace Angy.Client.Shared.Gateways
         public Task<Result<Product, Error.ExceptionalError>> UpdateProduct(Product product, Guid productId)
         {
             var query = RequestAdapter<ResponsesAdapter.ProductResponse, Product>.Build(
-                "mutation UpdateProduct($id: String!, $product: ProductInput!) { updateProduct(id: $id, product: $product) { id, name, category { id, description} } }",
+                "mutation UpdateProduct($product: ProductInput!) { updateProduct(product: $product) { id } }",
                 response => response.Product!,
-                new { product = SerializeProduct(product), id = productId },
+                new { product = SerializeProduct(product) },
                 "UpdateProduct"
             );
 
-            Console.WriteLine($"AttributeID: {string.Join(',', product.Descriptions.Select(d => $"{d.AttributeId} {d.Attribute?.Name}"))}");
-            
             return _client.SendQueryAsync(query);
         }
 
         static object SerializeProduct(Product product) => new
         {
+            id = product.Id,
             name = product.Name,
             categoryId = product.CategoryId,
             descriptions = product.Descriptions.Select(description => new
             {
+                id = description.Id,
                 description = description.Description,
                 attributeId = description.AttributeId,
                 productId = product.Id

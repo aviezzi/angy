@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Angy.Model
 {
@@ -22,7 +23,7 @@ namespace Angy.Model
             Description = description;
         }
 
-        public string Description { get; set; }
+        [Required] public string Description { get; set; }
 
         public Guid ProductId { get; set; }
         public Product? Product { get; set; }

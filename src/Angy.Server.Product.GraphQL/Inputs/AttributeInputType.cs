@@ -9,6 +9,7 @@ namespace Angy.Server.Product.GraphQL.Inputs
         {
             Name = "AttributeInput";
 
+            Field(x => x.Id);
             Field(x => x.Name);
         }
     }

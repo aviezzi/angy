@@ -5,7 +5,6 @@ using Angy.Client.Shared.Abstract;
 using Angy.Client.Shared.Adapters;
 using Angy.Client.Shared.Responses;
 using Angy.Model;
-using Attribute = Angy.Model.Attribute;
 
 namespace Angy.Client.Shared.Gateways
 {
@@ -18,9 +17,9 @@ namespace Angy.Client.Shared.Gateways
             _client = client;
         }
 
-        public Task<Result<IEnumerable<Attribute>, Error.ExceptionalError>> GetAttributes()
+        public Task<Result<IEnumerable<Model.Attribute>, Error.ExceptionalError>> GetAttributes()
         {
-            var request = RequestAdapter<ResponsesAdapter.AttributesResponse, IEnumerable<Attribute>>.Build(
+            var request = RequestAdapter<ResponsesAdapter.AttributesResponse, IEnumerable<Model.Attribute>>.Build(
                 "{ attributes { id, name } }",
                 response => response.Attributes!
             );
@@ -28,9 +27,9 @@ namespace Angy.Client.Shared.Gateways
             return _client.SendQueryAsync(request);
         }
 
-        public Task<Result<Attribute, Error.ExceptionalError>> GetAttribute(Guid id)
+        public Task<Result<Model.Attribute, Error.ExceptionalError>> GetAttribute(Guid id)
         {
-            var request = RequestAdapter<ResponsesAdapter.AttributeResponse, Attribute>.Build(
+            var request = RequestAdapter<ResponsesAdapter.AttributeResponse, Model.Attribute>.Build(
                 "query GetAttributeById($id: String) { attribute(id: $id) { id, name } }",
                 response => response.Attribute!,
                 new { id },
@@ -40,10 +39,10 @@ namespace Angy.Client.Shared.Gateways
             return _client.SendQueryAsync(request);
         }
 
-        public Task<Result<Attribute, Error.ExceptionalError>> CreateAttribute(Attribute attribute)
+        public Task<Result<Model.Attribute, Error.ExceptionalError>> CreateAttribute(Model.Attribute attribute)
         {
-            var request = RequestAdapter<ResponsesAdapter.AttributeResponse, Attribute>.Build(
-                "mutation CreateAttribute($attribute: AttributeInput!) { createAttribute(attribute: $attribute) { id, name } }",
+            var request = RequestAdapter<ResponsesAdapter.AttributeResponse, Model.Attribute>.Build(
+                "mutation CreateAttribute($attribute: AttributeInput!) { createAttribute(attribute: $attribute) { id } }",
                 response => response.Attribute!,
                 new { attribute = SerializeAttribute(attribute) },
                 "CreateAttribute"
@@ -52,18 +51,22 @@ namespace Angy.Client.Shared.Gateways
             return _client.SendQueryAsync(request);
         }
 
-        public Task<Result<Attribute, Error.ExceptionalError>> UpdateAttribute(Guid id, Attribute attribute)
+        public Task<Result<Model.Attribute, Error.ExceptionalError>> UpdateAttribute(Guid id, Model.Attribute attribute)
         {
-            var request = RequestAdapter<ResponsesAdapter.AttributeResponse, Attribute>.Build(
-                "mutation UpdateAttribute($id: String!, $attribute: AttributeInput!) { updateAttribute(id: $id, attribute: $attribute) { id, name } }",
+            var request = RequestAdapter<ResponsesAdapter.AttributeResponse, Model.Attribute>.Build(
+                "mutation UpdateAttribute($attribute: AttributeInput!) { updateAttribute(attribute: $attribute) { id } }",
                 response => response.Attribute!,
-                new { id, attribute = new { name = attribute.Name } },
+                new { attribute = SerializeAttribute(attribute) },
                 "UpdateAttribute"
             );
 
             return _client.SendQueryAsync(request);
         }
 
-        static object SerializeAttribute(Attribute attribute) => new { name = attribute.Name };
+        static object SerializeAttribute(Model.Attribute attribute) => new
+        {
+            id = attribute.Id,
+            name = attribute.Name
+        };
     }
 }

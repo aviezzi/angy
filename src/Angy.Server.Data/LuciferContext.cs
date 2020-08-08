@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using Angy.Model;
+﻿using Angy.Model;
 using Microsoft.EntityFrameworkCore;
 
 namespace Angy.Server.Data
@@ -22,8 +21,8 @@ namespace Angy.Server.Data
             OnAttributeCreating(modelBuilder);
             OnDescriptionCreating(modelBuilder);
         }
-        
-        internal void Upsert(object entity) => ChangeTracker.TrackGraph(entity, e => e.Entry.State = e.Entry.IsKeySet ? EntityState.Modified : EntityState.Added);
+
+        public void Upsert(object entity) => ChangeTracker.TrackGraph(entity, e => e.Entry.State = e.Entry.IsKeySet ? EntityState.Modified : EntityState.Added);
 
         static void OnProductCreating(ModelBuilder modelBuilder)
         {
@@ -39,7 +38,7 @@ namespace Angy.Server.Data
                 .OnDelete(DeleteBehavior.NoAction)
                 .HasForeignKey(category => category.CategoryId);
         }
-        
+
         static void OnCategoryCreating(ModelBuilder modelBuilder)
         {
             var categoryBuilder = modelBuilder.Entity<Category>();
@@ -54,7 +53,7 @@ namespace Angy.Server.Data
                 .OnDelete(DeleteBehavior.NoAction)
                 .HasForeignKey(category => category.ParentCategoryId);
         }
-        
+
         static void OnAttributeCreating(ModelBuilder modelBuilder)
         {
             var attributeBuilder = modelBuilder.Entity<Attribute>();
@@ -62,7 +61,7 @@ namespace Angy.Server.Data
             attributeBuilder
                 .HasKey(attribute => attribute.Id);
         }
-        
+
         static void OnDescriptionCreating(ModelBuilder modelBuilder)
         {
             var attributeDescriptionBuilder = modelBuilder.Entity<AttributeDescription>();
