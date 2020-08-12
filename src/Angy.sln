@@ -1,5 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
+#
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Angy.Server.Product", "Angy.Server.Product\Angy.Server.Product.csproj", "{DC0E0306-B826-41AC-8A38-FA1AF1C8B1C9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Angy.Server.Product.GraphQL", "Angy.Server.Product.GraphQL\Angy.Server.Product.GraphQL.csproj", "{461AA469-9B89-4324-AEEF-CF996D877617}"

@@ -1,6 +1,6 @@
 version: "3.7"
 services:
-  db:
+  lucifer:
     container_name: lucifer
     restart: always
     image: lucifer
@@ -15,4 +15,20 @@ services:
     ports:
       - 5432:5432
     volumes:
-      - ./postgres:/var/lib/postgresql
+      - ./postgres:/var/lib/postgresql/lucifer
+  kharonte:
+    container_name: kharonte
+    restart: always
+    image: kharonte
+    build:
+      context: ./postgres
+    environment:
+      POSTGRES_USER: RobotBoy
+      POSTGRES_PASSWORD: RobotBoy  # To be moved to environment file
+      POSTGRES_DATABASE: Kharonte
+    expose:
+      - 5433
+    ports:
+      - 5433:5432
+    volumes:
+      - ./postgres:/var/lib/postgresql/kharonte
