@@ -4,6 +4,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Angy.Model
 {
+    using Annotations;
+
     public class Product : EntityBase
     {
         public Product() : this(string.Empty)
@@ -26,6 +28,6 @@ namespace Angy.Model
         public Guid CategoryId { get; set; }
         public Category Category { get; set; }
 
-        [ValidateComplexType, Required] public ICollection<AttributeDescription> Descriptions { get; set; } = new List<AttributeDescription>();
+        [ValidateComplexType, NonEmpty(ErrorMessage = "Aggiungi almeno un attributo.")] public ICollection<AttributeDescription> Descriptions { get; set; } = new List<AttributeDescription>();
     }
 }

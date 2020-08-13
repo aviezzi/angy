@@ -37,12 +37,14 @@ namespace Angy.Client.ProductDataManager.Pages.ProductsPage
         {
             Product.Descriptions.Add(new AttributeDescription(string.Empty, attributeId: toMove.Id, attribute: toMove));
             Attributes.Remove(toMove);
+            EditContext.NotifyFieldChanged(FieldIdentifier.Create(() => Product.Descriptions));
         }
 
         protected void Remove(AttributeDescription toMove)
         {
             Attributes.Add(toMove.Attribute);
             Product.Descriptions.Remove(toMove);
+            EditContext.NotifyFieldChanged(FieldIdentifier.Create(() => Product.Descriptions));
         }
 
         protected async Task HandleSubmit()

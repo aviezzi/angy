@@ -53,6 +53,8 @@
         
         <div class="mt-5">
             <label for="descriptions">Attributi Selezionati</label>
+            <ValidationMessage For="@(() => Product.Descriptions)" />
+
             <ul id="descriptions" class="list-group list-group-flush">
 
                 @foreach (var description in Product.Descriptions)
