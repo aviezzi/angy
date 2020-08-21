@@ -1,4 +1,4 @@
-﻿
+﻿﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 #
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Angy.Server.Product", "Angy.Server.Product\Angy.Server.Product.csproj", "{DC0E0306-B826-41AC-8A38-FA1AF1C8B1C9}"
@@ -14,6 +14,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Angy.Server.Data", "Angy.Server.Data\Angy.Server.Data.csproj", "{E6D0DA1A-9CB6-45E5-8CA0-2AC0ABF1272D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Angy.Client.Pages", "Angy.Client.Pages\Angy.Client.Pages.csproj", "{D1959748-58E4-4617-8B4C-EB9A7218D66B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Angy.BackEnd.Kharonte", "Angy.BackEnd.Kharonte\Angy.BackEnd.Kharonte.csproj", "{E255977C-23C0-4FDF-8961-E0E68B2696BC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Angy.BackEnd.Kharonte.Data", "Angy.BackEnd.Kharonte.Data\Angy.BackEnd.Kharonte.Data.csproj", "{5C42C422-DD0E-457C-B1A8-FDE63CC24D78}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -49,5 +53,13 @@ Global
 		{D1959748-58E4-4617-8B4C-EB9A7218D66B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D1959748-58E4-4617-8B4C-EB9A7218D66B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D1959748-58E4-4617-8B4C-EB9A7218D66B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E255977C-23C0-4FDF-8961-E0E68B2696BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E255977C-23C0-4FDF-8961-E0E68B2696BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E255977C-23C0-4FDF-8961-E0E68B2696BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E255977C-23C0-4FDF-8961-E0E68B2696BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5C42C422-DD0E-457C-B1A8-FDE63CC24D78}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5C42C422-DD0E-457C-B1A8-FDE63CC24D78}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5C42C422-DD0E-457C-B1A8-FDE63CC24D78}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5C42C422-DD0E-457C-B1A8-FDE63CC24D78}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+        <UserSecretsId>dotnet-Angy.BackEnd.Kharonte-99CC5106-5AAC-427E-A211-BC4F25550456</UserSecretsId>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Autofac" Version="5.0.0" />
+        <PackageReference Include="Coravel" Version="4.0.1" />
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0-preview.7.20364.11" />
+        <PackageReference Include="Serilog" Version="2.10.0-dev-01240" />
+        <PackageReference Include="Serilog.Extensions.Logging" Version="3.0.2-dev-10281" />
+        <PackageReference Include="Serilog.Sinks.Console" Version="4.0.0-dev-00839" />
+        <PackageReference Include="Serilog.Sinks.Seq" Version="5.0.0-dev-00174" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="5.0.0-preview.7.20365.15" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Angy.BackEnd.Kharonte.Data\Angy.BackEnd.Kharonte.Data.csproj" />
+    </ItemGroup>
+</Project>
