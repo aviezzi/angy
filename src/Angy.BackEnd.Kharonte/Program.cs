@@ -1,20 +1,22 @@
-using System;
 using Angy.BackEnd.Kharonte.Data;
 using Angy.BackEnd.Kharonte.Invocables;
+using Angy.BackEnd.Kharonte.IoC;
+using Angy.BackEnd.Kharonte.Options;
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
 using Coravel;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
-using Serilog.Events;
 
 namespace Angy.BackEnd.Kharonte
 {
     public class Program
     {
-        public static IConfiguration Configuration { get; set; }
-        
+        static IConfiguration Configuration { get; set; }
+
         public static void Main(string[] args)
         {
             var host = CreateHostBuilder(args).Build();
@@ -24,39 +26,38 @@ namespace Angy.BackEnd.Kharonte
                     .Schedule<PendingPhotosInvocable>()
                     .EverySecond()
                     .PreventOverlapping("PendingPhotos"));
-            
+
             host.Run();
         }
 
         static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .UseServiceProviderFactory(new AutofacServiceProviderFactory())
+                .ConfigureContainer<ContainerBuilder>(builder =>
+                {
+                    builder.RegisterModule(new KharonteModule());
+                })
                 .ConfigureServices((hostContext, services) =>
                 {
                     var env = hostContext.HostingEnvironment.EnvironmentName;
-                    
+
                     Configuration = new ConfigurationBuilder()
                         .SetBasePath(hostContext.HostingEnvironment.ContentRootPath)
                         .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                         .AddJsonFile($"appsettings.{env}.json", optional: false, reloadOnChange: true)
                         .AddEnvironmentVariables()
                         .Build();
-                    
-                    // services.AddHostedService<Worker>();
-                    services.AddScheduler();
-                    services.AddSingleton<PendingPhotosInvocable>();
 
-                    services.AddDbContext<KharonteContext>(options =>
-                        options.UseNpgsql(Configuration.GetConnectionString("Kharonte")), ServiceLifetime.Transient);
+                    services.Configure<KharonteOptions>(Configuration.GetSection("KharonteOptions"));
+
+                    services.AddScheduler();
+
+                    services.AddDbContext<KharonteContext>(options => options.UseNpgsql(Configuration.GetConnectionString("Kharonte")), ServiceLifetime.Transient);
                 })
                 .ConfigureLogging(loggingBuilder =>
                 {
-                    var level = Enum.TryParse("Error", out LogEventLevel parsed) ? parsed : LogEventLevel.Error;
-
                     var logger = new LoggerConfiguration()
-                        .Enrich.FromLogContext()
-                        .WriteTo.Console()
-                        .WriteTo.Seq("http://localhost:5341", level)
-                        .WriteTo.File("C:/PhotoManager/test.log", level)
+                        .ReadFrom.Configuration(Configuration)
                         .CreateLogger();
 
                     loggingBuilder.AddSerilog(logger, dispose: true);

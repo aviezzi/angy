@@ -5,21 +5,21 @@ namespace Angy.Model
 {
     public class Result<TSuccess, TError>
     {
-        public bool IsValid { get; }
-
         public TSuccess Success { get; }
         public TError Error { get; }
 
-        public Result(TSuccess success)
+        public Result(TSuccess success, TError error)
         {
             Success = success;
-            IsValid = true;
+            Error = error;
         }
 
-        public Result(TError error)
+        public Result(TSuccess success) : this(success, error: default)
         {
-            Error = error;
-            IsValid = false;
+        }
+
+        public Result(TError error) : this(success: default, error)
+        {
         }
     }
 
@@ -32,26 +32,65 @@ namespace Angy.Model
 
     public static class Result
     {
-        public static async Task<Result<TResult, Error.ExceptionalError>> Try<TResult>(Func<Task<TResult>> selector)
+        public static bool HasError<TValue, TError>(this Result<TValue, TError> source) => source.Error != null;
+
+        public static Result<TResult, TError> Cast<TValue, TError, TResult>(this Result<TValue, TError> source, Func<TValue, TResult> selector) =>
+            source.Success != null
+                ? new Result<TResult, TError>(selector(source.Success), source.Error)
+                : new Result<TResult, TError>(success: default, source.Error);
+
+        public static Task<Result<Unit, Error.Exceptional>> Try(Func<Task> func, Action<Exception> logger)
+        {
+            return Try(async () =>
+            {
+                await func();
+                return Unit.Value;
+            }, logger);
+        }
+
+        public static Result<T, Error.Exceptional> Try<T>(Func<T> func, Action<Exception> logger)
         {
             try
             {
-                return Result<Error.ExceptionalError>.Success(await selector());
+                return Result<Error.Exceptional>.Success(func());
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                return Result<TResult>.Error(new Error.ExceptionalError(ex));
+                logger(e);
+                return Result<T>.Error(new Error.Exceptional(e));
+            }
+        }
+
+        public static Result<Unit, Error.Exceptional> Try(Action func, Action<Exception> logger)
+        {
+            return Try(() =>
+            {
+                func();
+                return Unit.Value;
+            }, logger);
+        }
+
+        public static async Task<Result<T, Error.Exceptional>> Try<T>(Func<Task<T>> func, Action<Exception> logger)
+        {
+            try
+            {
+                return Result<Error.Exceptional>.Success(await func());
+            }
+            catch (Exception e)
+            {
+                logger(e);
+                return Result<T>.Error(new Error.Exceptional(e));
             }
         }
     }
 
     public abstract class Error
     {
-        public sealed class ExceptionalError : Error
+        public sealed class Exceptional : Error
         {
             public Exception Exception { get; }
 
-            public ExceptionalError(Exception exception)
+            public Exceptional(Exception exception)
             {
                 Exception = exception;
             }

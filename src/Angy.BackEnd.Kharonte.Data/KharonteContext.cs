@@ -9,11 +9,11 @@ namespace Angy.BackEnd.Kharonte.Data
         {
         }
 
-        public virtual DbSet<PendingPhoto> PendingPhotos { get; set; }
+        public virtual DbSet<Photo> PendingPhotos { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            var historicBuilder = modelBuilder.Entity<PendingPhoto>();
+            var historicBuilder = modelBuilder.Entity<Photo>();
 
             historicBuilder
                 .HasKey(product => product.Id);

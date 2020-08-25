@@ -1,0 +1,14 @@
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Angy.BackEnd.Kharonte.Data.Model;
+using Angy.BackEnd.Kharonte.Model;
+
+namespace Angy.BackEnd.Kharonte.Abstract
+{
+    public interface IFtpGateway
+    {
+        Angy.Model.Result<IEnumerable<Photo>, IEnumerable<Error>> RetrievePendingPhotos(IEnumerable<string> accumulatedPaths, int chunk);
+
+        public Task<Angy.Model.Result<IEnumerable<Photo>, IEnumerable<Error>>> SavePhotos(IEnumerable<Photo> photos);
+    }
+}
