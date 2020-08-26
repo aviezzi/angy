@@ -23,7 +23,7 @@ namespace Angy.BackEnd.Kharonte.Clients
             _config = new ProducerConfig { BootstrapServers = _options.BootServers };
         }
 
-        public Task<Result<Unit, Angy.Model.Error.Exceptional>> ProduceAsync<T>(T entity)
+        public Task<Result<Unit, Angy.Model.Error.Exceptional>> ProduceAsync<T>(T entity) where T : EntityBase
         {
             return Result.Try(async () =>
                 {
@@ -32,7 +32,7 @@ namespace Angy.BackEnd.Kharonte.Clients
                 },
                 ex =>
                 {
-                    _logger.LogError(ex, "Sending failed!");
+                    _logger.LogError(ex, $"Sending failed! {entity.Id}");
                 });
         }
     }

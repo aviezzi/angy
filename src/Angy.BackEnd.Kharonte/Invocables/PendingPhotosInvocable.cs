@@ -38,26 +38,29 @@ namespace Angy.BackEnd.Kharonte.Invocables
 
         public async Task Invoke()
         {
-            await DeleteOlderThanAsync();
+            await DeleteOlderPhotoAsync();
 
-            var accumulated = (await GetAccumulatedAsync()).Select(acc => acc.Path);
+            var accumulated = (await GetAccumulatedPhotosAsync()).Select(acc => acc.Path);
 
-            var pending = RetrievePending(accumulated).ToImmutableArray();
+            var pending = GetPendingPhotos(accumulated).ToImmutableArray();
             if (!pending.Any()) return;
 
-            var validated = Validate(pending);
+            var validated = Validate(pending).ToImmutableArray();
+            if (!validated.Any()) return;
 
-            var acquired = await AcquirePhotos(validated);
+            var acquired = (await SavePendingPhotos(validated)).ToImmutableArray();
+            if (!acquired.Any()) return;
 
-            var copied = (await CopyAsync(acquired)).ToArray();
+            var copied = (await CopyAsync(acquired)).ToImmutableArray();
             if (!copied.Any()) return;
 
-            var sent = await SendAsync(copied);
+            var sent = (await SendAsync(copied)).ToImmutableArray();
+            if (!sent.Any()) return;
 
-            var deleted = DeletePhotos(sent);
+            var deleted = Delete(sent);
         }
 
-        async Task DeleteOlderThanAsync()
+        async Task DeleteOlderPhotoAsync()
         {
             var utc = DateTime.Now.AddHours(-_options.OlderThan).ToUniversalTime();
             var interval = Instant.FromDateTimeUtc(utc);
@@ -65,7 +68,7 @@ namespace Angy.BackEnd.Kharonte.Invocables
             await _writingGateway.DeleteOlderThan(interval);
         }
 
-        async Task<IEnumerable<Photo>> GetAccumulatedAsync()
+        async Task<IEnumerable<Photo>> GetAccumulatedPhotosAsync()
         {
             var result = await _readingGateway.GetAccumulated();
 
@@ -74,7 +77,7 @@ namespace Angy.BackEnd.Kharonte.Invocables
             return result.Success;
         }
 
-        IEnumerable<Photo> RetrievePending(IEnumerable<string> accumulated)
+        IEnumerable<Photo> GetPendingPhotos(IEnumerable<string> accumulated)
         {
             var pendingPhotos = _ftpGateway.RetrievePendingPhotos(accumulated, _options.PhotoChunk);
 
@@ -92,7 +95,7 @@ namespace Angy.BackEnd.Kharonte.Invocables
             return result.Success;
         }
 
-        async Task<IEnumerable<Photo>> AcquirePhotos(IEnumerable<Photo> photos) => await _writingGateway.SavePhotos(photos);
+        async Task<IEnumerable<Photo>> SavePendingPhotos(IEnumerable<Photo> photos) => await _writingGateway.SavePhotos(photos);
 
         async Task<IEnumerable<Photo>> CopyAsync(IEnumerable<Photo> photos)
         {
@@ -112,7 +115,7 @@ namespace Angy.BackEnd.Kharonte.Invocables
             return result.Success;
         }
 
-        IEnumerable<Photo> DeletePhotos(IEnumerable<Photo> photos)
+        IEnumerable<Photo> Delete(IEnumerable<Photo> photos)
         {
             var result = _ftpGateway.DeletePhotos(photos);
             if (result.HasError()) ; // TODO: Handle

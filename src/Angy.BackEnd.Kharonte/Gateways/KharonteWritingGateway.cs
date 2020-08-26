@@ -5,7 +5,6 @@ using Angy.BackEnd.Kharonte.Abstract;
 using Angy.BackEnd.Kharonte.Data;
 using Angy.BackEnd.Kharonte.Data.Model;
 using Angy.Model;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using NodaTime;
 
@@ -45,7 +44,7 @@ namespace Angy.BackEnd.Kharonte.Gateways
 
         public async Task DeleteOlderThan(Instant instant)
         {
-            var toBeDelete = await _kharonte.PendingPhotos.Where(photo => photo.Inserted < instant).ToListAsync();
+            var toBeDelete = _kharonte.PendingPhotos.Where(photo => photo.Inserted < instant);
             _kharonte.PendingPhotos.RemoveRange(toBeDelete);
 
             await Result.Try(
