@@ -9,6 +9,8 @@ namespace Angy.BackEnd.Kharonte.Abstract
     {
         Angy.Model.Result<IEnumerable<Photo>, IEnumerable<Error>> RetrievePendingPhotos(IEnumerable<string> accumulatedPaths, int chunk);
 
-        public Task<Angy.Model.Result<IEnumerable<Photo>, IEnumerable<Error>>> SavePhotos(IEnumerable<Photo> photos);
+        Task<Angy.Model.Result<IEnumerable<Photo>, IEnumerable<Error>>> CopyPhotosAsync(IEnumerable<Photo> photos);
+
+        Angy.Model.Result<IEnumerable<Photo>, IEnumerable<Error>> DeletePhotos(IEnumerable<Photo> photos);
     }
 }

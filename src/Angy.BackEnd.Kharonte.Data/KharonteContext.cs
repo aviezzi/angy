@@ -13,10 +13,22 @@ namespace Angy.BackEnd.Kharonte.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            var historicBuilder = modelBuilder.Entity<Photo>();
+            var photoBuilder = modelBuilder.Entity<Photo>();
 
-            historicBuilder
+            photoBuilder
                 .HasKey(product => product.Id);
+
+            photoBuilder
+                .Property(t => t.Filename)
+                .IsRequired();
+
+            photoBuilder
+                .Property(t => t.Extension)
+                .IsRequired();
+
+            photoBuilder
+                .Property(t => t.Inserted)
+                .IsRequired();
         }
     }
 }

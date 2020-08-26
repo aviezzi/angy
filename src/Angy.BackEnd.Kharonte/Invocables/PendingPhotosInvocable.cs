@@ -9,6 +9,7 @@ using Angy.BackEnd.Kharonte.Options;
 using Angy.Model;
 using Coravel.Invocable;
 using Microsoft.Extensions.Options;
+using NodaTime;
 
 namespace Angy.BackEnd.Kharonte.Invocables
 {
@@ -52,9 +53,17 @@ namespace Angy.BackEnd.Kharonte.Invocables
             if (!copied.Any()) return;
 
             var sent = await SendAsync(copied);
+
+            var deleted = DeletePhotos(sent);
         }
 
-        async Task DeleteOlderThanAsync() => await _writingGateway.DeleteOlderThan(DateTimeOffset.Now.AddHours(_options.OlderThan));
+        async Task DeleteOlderThanAsync()
+        {
+            var utc = DateTime.Now.AddHours(-_options.OlderThan).ToUniversalTime();
+            var interval = Instant.FromDateTimeUtc(utc);
+
+            await _writingGateway.DeleteOlderThan(interval);
+        }
 
         async Task<IEnumerable<Photo>> GetAccumulatedAsync()
         {
@@ -83,21 +92,29 @@ namespace Angy.BackEnd.Kharonte.Invocables
             return result.Success;
         }
 
-        async Task<IEnumerable<Photo>> AcquirePhotos(IEnumerable<Photo> photos) => await _writingGateway.SavePendingPhotos(photos);
+        async Task<IEnumerable<Photo>> AcquirePhotos(IEnumerable<Photo> photos) => await _writingGateway.SavePhotos(photos);
 
-        async Task<IEnumerable<Photo>> CopyAsync(IEnumerable<Photo> persistedPhotos)
+        async Task<IEnumerable<Photo>> CopyAsync(IEnumerable<Photo> photos)
         {
-            var result = await _ftpGateway.SavePhotos(persistedPhotos);
+            var result = await _ftpGateway.CopyPhotosAsync(photos);
 
             if (result.HasError()) ; // TODO: Handle
 
             return result.Success;
         }
 
-        async Task<IEnumerable<Photo>> SendAsync(IEnumerable<Photo> copied)
+        async Task<IEnumerable<Photo>> SendAsync(IEnumerable<Photo> photos)
         {
-            var result = await _acheronGateway.SendAsync(copied);
+            var result = await _acheronGateway.SendAsync(photos);
 
+            if (result.HasError()) ; // TODO: Handle
+
+            return result.Success;
+        }
+
+        IEnumerable<Photo> DeletePhotos(IEnumerable<Photo> photos)
+        {
+            var result = _ftpGateway.DeletePhotos(photos);
             if (result.HasError()) ; // TODO: Handle
 
             return result.Success;

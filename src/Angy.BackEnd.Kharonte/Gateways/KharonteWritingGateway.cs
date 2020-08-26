@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,6 +7,7 @@ using Angy.BackEnd.Kharonte.Data.Model;
 using Angy.Model;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using NodaTime;
 
 namespace Angy.BackEnd.Kharonte.Gateways
 {
@@ -22,7 +22,7 @@ namespace Angy.BackEnd.Kharonte.Gateways
             _logger = logger;
         }
 
-        public async Task<IEnumerable<Photo>> SavePendingPhotos(IEnumerable<Photo> pendingPhotos)
+        public async Task<IEnumerable<Photo>> SavePhotos(IEnumerable<Photo> pendingPhotos)
         {
             var photos = pendingPhotos as Photo[] ?? pendingPhotos.ToArray();
 
@@ -43,9 +43,9 @@ namespace Angy.BackEnd.Kharonte.Gateways
             return photos;
         }
 
-        public async Task DeleteOlderThan(DateTimeOffset dateTime)
+        public async Task DeleteOlderThan(Instant instant)
         {
-            var toBeDelete = await _kharonte.PendingPhotos.ToListAsync();
+            var toBeDelete = await _kharonte.PendingPhotos.Where(photo => photo.Inserted < instant).ToListAsync();
             _kharonte.PendingPhotos.RemoveRange(toBeDelete);
 
             await Result.Try(

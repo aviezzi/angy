@@ -52,7 +52,9 @@ namespace Angy.BackEnd.Kharonte
 
                     services.AddScheduler();
 
-                    services.AddDbContext<KharonteContext>(options => options.UseNpgsql(Configuration.GetConnectionString("Kharonte")), ServiceLifetime.Transient);
+                    services.AddDbContext<KharonteContext>(
+                        options => options.UseNpgsql(Configuration.GetConnectionString("Kharonte"),
+                            npgsqlOptions => npgsqlOptions.UseNodaTime()));
                 })
                 .ConfigureLogging(loggingBuilder =>
                 {

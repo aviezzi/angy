@@ -3,6 +3,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using NodaTime;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Angy.BackEnd.Kharonte.Data.Migrations
@@ -25,10 +26,15 @@ namespace Angy.BackEnd.Kharonte.Data.Migrations
                     .HasColumnType("uuid");
 
                 b.Property<string>("Extension")
+                    .IsRequired()
                     .HasColumnType("text");
 
                 b.Property<string>("Filename")
+                    .IsRequired()
                     .HasColumnType("text");
+
+                b.Property<Instant>("Inserted")
+                    .HasColumnType("timestamp");
 
                 b.Property<string>("Path")
                     .HasColumnType("text");

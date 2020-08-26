@@ -66,7 +66,7 @@ namespace Angy.BackEnd.Kharonte.Gateways
             return new Result<IEnumerable<Photo>, IEnumerable<Model.Error>>(photos, errors);
         }
 
-        public async Task<Result<IEnumerable<Photo>, IEnumerable<Model.Error>>> SavePhotos(IEnumerable<Photo> photos)
+        public async Task<Result<IEnumerable<Photo>, IEnumerable<Model.Error>>> CopyPhotosAsync(IEnumerable<Photo> photos)
         {
             var success = new List<Photo>();
             var errors = new List<Model.Error>();
@@ -76,11 +76,31 @@ namespace Angy.BackEnd.Kharonte.Gateways
                 var result = await Result.Try(async () =>
                     {
                         await using var sourceStream = new FileStream(photo.Path, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize: 4096, FileOptions.Asynchronous | FileOptions.SequentialScan);
-                        await using var destinationStream = new FileStream(Path.Combine(_options.OriginalFolder, $"{photo.Filename}{photo.Extension}"), FileMode.CreateNew, FileAccess.Write, FileShare.None, bufferSize: 4096, FileOptions.Asynchronous | FileOptions.SequentialScan);
+                        await using var destinationStream = new FileStream(Path.Combine(_options.OriginalFolder, $"{photo.Filename}{photo.Extension}"), FileMode.Create, FileAccess.Write, FileShare.None, bufferSize: 4096, FileOptions.Asynchronous | FileOptions.SequentialScan);
 
                         await sourceStream.CopyToAsync(destinationStream);
                     },
-                    ex => _logger.LogError(ex, $"Cannot copy photo. Id: {photo.Id}, Path: {photo.Path}"));
+                    ex => _logger.LogError(ex, $"Copy Failed! Id: {photo.Id}, Path: {photo.Path}"));
+
+                if (result.HasError())
+                    errors.Add(new Model.Error.CopyFailed());
+                else
+                    success.Add(photo);
+            }
+
+            return new Result<IEnumerable<Photo>, IEnumerable<Model.Error>>(success, errors);
+        }
+
+        public Result<IEnumerable<Photo>, IEnumerable<Model.Error>> DeletePhotos(IEnumerable<Photo> photos)
+        {
+            var success = new List<Photo>();
+            var errors = new List<Model.Error>();
+
+            foreach (var photo in photos)
+            {
+                var result = Result.Try(
+                    () => File.Delete(photo.Path),
+                    ex => _logger.LogError(ex, $"Delete Failed! {photo.Path}"));
 
                 if (result.HasError())
                     errors.Add(new Model.Error.CopyFailed());
