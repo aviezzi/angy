@@ -5,6 +5,6 @@ namespace Angy.BackEnd.Kharonte.Abstract
 {
     public interface IKafkaClient
     {
-        Task<Result<Unit, Error.Exceptional>> ProduceAsync<T>(T entity) where T : EntityBase;
+        Task<Result<Unit, Error.Exceptional>> ProduceAsync<T>(T entity);
     }
 }

@@ -21,9 +21,9 @@ namespace Angy.BackEnd.Kharonte.Gateways
             _logger = logger;
         }
 
-        public async Task<IEnumerable<Photo>> SavePhotos(IEnumerable<Photo> pendingPhotos)
+        public async Task<IEnumerable<Photo>> SavePhotosAsync(IEnumerable<Photo> pendingPhotos)
         {
-            var photos = pendingPhotos as Photo[] ?? pendingPhotos.ToArray();
+            var photos = pendingPhotos.ToList();
 
             foreach (var photo in photos)
             {
@@ -37,12 +37,12 @@ namespace Angy.BackEnd.Kharonte.Gateways
                 ex => _logger.LogError(ex, $"Cannot persist photos to database. ${string.Join(separator: ';', photos.Select(p => p.Path))}")
             );
 
-            if (result.HasError()) return new List<Photo>();
-
-            return photos;
+            return result.HasError()
+                ? new List<Photo>()
+                : photos;
         }
 
-        public async Task DeleteOlderThan(Instant instant)
+        public async Task DeleteOlderThanAsync(Instant instant)
         {
             var toBeDelete = _kharonte.PendingPhotos.Where(photo => photo.Inserted < instant);
             _kharonte.PendingPhotos.RemoveRange(toBeDelete);
@@ -50,6 +50,32 @@ namespace Angy.BackEnd.Kharonte.Gateways
             await Result.Try(
                 async () => await _kharonte.SaveChangesAsync(),
                 ex => _logger.LogError(ex, $"Cannot delete older photos! {string.Join(separator: ';', toBeDelete.Select(p => p.Id))}"));
+        }
+
+        public async Task<IEnumerable<Photo>> DeletePhotosAsync(IEnumerable<Photo> photos)
+        {
+            var entities = photos.ToList();
+
+            _kharonte.PendingPhotos.RemoveRange(entities);
+
+            var result = await Result.Try(
+                async () => await _kharonte.SaveChangesAsync(),
+                ex => _logger.LogError(ex, $"Cannot delete older photos! {string.Join(separator: ';', entities.Select(p => p.Id))}"));
+
+            return result.HasError()
+                ? new List<Photo>()
+                : entities;
+        }
+
+        public async Task LogErrorAsync(IEnumerable<PhotoError> photos)
+        {
+            var entities = photos.ToList();
+
+            await _kharonte.PhotoErrors.AddRangeAsync(entities);
+
+            await Result.Try(
+                async () => await _kharonte.SaveChangesAsync(),
+                ex => _logger.LogError(ex, $"Cannot delete older photos! {string.Join(separator: ';', entities.Select(p => p.Id))}"));
         }
     }
 }

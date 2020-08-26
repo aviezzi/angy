@@ -7,8 +7,12 @@ namespace Angy.BackEnd.Kharonte.Abstract
 {
     public interface IKharonteWritingGateway
     {
-        Task<IEnumerable<Photo>> SavePhotos(IEnumerable<Photo> pendingPhotos);
+        Task<IEnumerable<Photo>> SavePhotosAsync(IEnumerable<Photo> pendingPhotos);
 
-        Task DeleteOlderThan(Instant instant);
+        Task DeleteOlderThanAsync(Instant instant);
+
+        Task<IEnumerable<Photo>> DeletePhotosAsync(IEnumerable<Photo> photos);
+
+        Task LogErrorAsync(IEnumerable<PhotoError> photos);
     }
 }

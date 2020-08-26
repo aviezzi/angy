@@ -58,9 +58,9 @@ namespace Angy.BackEnd.Kharonte.Gateways
                         Extension = extensionResult.Success
                     });
 
-                if (extensionResult.HasError()) errors.Add(new Model.Error.InvalidExtension());
+                if (extensionResult.HasError()) errors.Add(new Model.Error.GetExtensionFailed());
 
-                if (filenameResult.HasError()) errors.Add(new Model.Error.InvalidFileName());
+                if (filenameResult.HasError()) errors.Add(new Model.Error.GetFilenameFailed());
             }
 
             return new Result<IEnumerable<Photo>, IEnumerable<Model.Error>>(photos, errors);
@@ -83,7 +83,7 @@ namespace Angy.BackEnd.Kharonte.Gateways
                     ex => _logger.LogError(ex, $"Copy Failed! Id: {photo.Id}, Path: {photo.Path}"));
 
                 if (result.HasError())
-                    errors.Add(new Model.Error.CopyFailed());
+                    errors.Add(new Model.Error.CopyFailed(photo.Filename, photo.Extension));
                 else
                     success.Add(photo);
             }
@@ -103,7 +103,7 @@ namespace Angy.BackEnd.Kharonte.Gateways
                     ex => _logger.LogError(ex, $"Delete Failed! {photo.Path}"));
 
                 if (result.HasError())
-                    errors.Add(new Model.Error.CopyFailed());
+                    errors.Add(new Model.Error.DeleteFailed(photo.Filename, photo.Extension));
                 else
                     success.Add(photo);
             }

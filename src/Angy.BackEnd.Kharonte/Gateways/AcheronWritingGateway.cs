@@ -25,7 +25,7 @@ namespace Angy.BackEnd.Kharonte.Gateways
                 var result = await _client.ProduceAsync(photo);
 
                 if (result.HasError())
-                    errors.Add(new Model.Error.SendFailed());
+                    errors.Add(new Model.Error.SendFailed(photo.Filename, photo.Extension));
                 else
                     success.Add(photo);
             }

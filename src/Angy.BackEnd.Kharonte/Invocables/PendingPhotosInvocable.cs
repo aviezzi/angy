@@ -48,7 +48,7 @@ namespace Angy.BackEnd.Kharonte.Invocables
             var validated = Validate(pending).ToImmutableArray();
             if (!validated.Any()) return;
 
-            var acquired = (await SavePendingPhotos(validated)).ToImmutableArray();
+            var acquired = (await SavePendingPhotosAsync(validated)).ToImmutableArray();
             if (!acquired.Any()) return;
 
             var copied = (await CopyAsync(acquired)).ToImmutableArray();
@@ -57,7 +57,10 @@ namespace Angy.BackEnd.Kharonte.Invocables
             var sent = (await SendAsync(copied)).ToImmutableArray();
             if (!sent.Any()) return;
 
-            var deleted = Delete(sent);
+            var deleted = await DeletePhotosAsync(sent);
+            if (!deleted.Any()) return;
+
+            Delete(sent);
         }
 
         async Task DeleteOlderPhotoAsync()
@@ -65,14 +68,14 @@ namespace Angy.BackEnd.Kharonte.Invocables
             var utc = DateTime.Now.AddHours(-_options.OlderThan).ToUniversalTime();
             var interval = Instant.FromDateTimeUtc(utc);
 
-            await _writingGateway.DeleteOlderThan(interval);
+            await _writingGateway.DeleteOlderThanAsync(interval);
         }
 
         async Task<IEnumerable<Photo>> GetAccumulatedPhotosAsync()
         {
             var result = await _readingGateway.GetAccumulated();
 
-            if (result.HasError()) ; // TODO: Handle
+            if (result.HasError()) ; // Silent error, nothing to do caller return immediately.
 
             return result.Success;
         }
@@ -81,7 +84,7 @@ namespace Angy.BackEnd.Kharonte.Invocables
         {
             var pendingPhotos = _ftpGateway.RetrievePendingPhotos(accumulated, _options.PhotoChunk);
 
-            if (pendingPhotos.HasError()) ; // TODO: Handle, report to user.
+            if (pendingPhotos.HasError()) ; // Silent error, nothing to do! Photos will reprocess next schedule.
 
             return pendingPhotos.Success;
         }
@@ -90,18 +93,31 @@ namespace Angy.BackEnd.Kharonte.Invocables
         {
             var result = _validator.Validate(photos);
 
-            if (result.HasError()) ; // TODO: Handle, report to user.
+            var errors = result.Error.ToImmutableArray();
+
+            var invalidExtensions = errors
+                .OfType<Model.Error.InvalidExtension>()
+                .Select(error => new PhotoError { Extension = error.Extension, Filename = error.Filename, Message = "Invalid Extension!" })
+                .ToList();
+
+            var invalidFilenames = errors
+                .OfType<Model.Error.InvalidFileName>()
+                .Select(error => new PhotoError { Extension = error.Extension, Filename = error.Filename, Message = "Invalid Filename!" })
+                .ToList();
+
+            _writingGateway.LogErrorAsync(invalidExtensions.Concat(invalidFilenames));
 
             return result.Success;
         }
 
-        async Task<IEnumerable<Photo>> SavePendingPhotos(IEnumerable<Photo> photos) => await _writingGateway.SavePhotos(photos);
+        Task<IEnumerable<Photo>> SavePendingPhotosAsync(IEnumerable<Photo> photos) => _writingGateway.SavePhotosAsync(photos);
+        // Silent error, nothing to do! Photos will reprocess next time.
 
         async Task<IEnumerable<Photo>> CopyAsync(IEnumerable<Photo> photos)
         {
             var result = await _ftpGateway.CopyPhotosAsync(photos);
 
-            if (result.HasError()) ; // TODO: Handle
+            if (result.HasError()) ; // Silent error, nothing to do! No copied photos will reprocess next schedule.
 
             return result.Success;
         }
@@ -110,16 +126,18 @@ namespace Angy.BackEnd.Kharonte.Invocables
         {
             var result = await _acheronGateway.SendAsync(photos);
 
-            if (result.HasError()) ; // TODO: Handle
+            if (result.HasError()) ; // Silent error, nothing to do! No sent photos will reprocess next schedule.
 
             return result.Success;
         }
 
+        Task<IEnumerable<Photo>> DeletePhotosAsync(ImmutableArray<Photo> sent) => _writingGateway.DeletePhotosAsync(sent);
+        // Silent error, nothing to do! Photos locked for 24h.
+
         IEnumerable<Photo> Delete(IEnumerable<Photo> photos)
         {
             var result = _ftpGateway.DeletePhotos(photos);
-            if (result.HasError()) ; // TODO: Handle
-
+            if (result.HasError()) ; // Silent error, nothing to do! No deleted photos will reprocess next schedule.
             return result.Success;
         }
     }

@@ -15,7 +15,7 @@ namespace Angy.BackEnd.Kharonte.Validators
         {
             public override Result<Unit, Model.Error> Validate(Photo photo) => new Regex(@"^[A-Za-z0-9]+$").IsMatch(photo.Filename)
                 ? Result<Model.Error>.Success(Unit.Value)
-                : Result<Unit>.Error(new Model.Error.InvalidFileName() as Model.Error);
+                : Result<Unit>.Error(new Model.Error.InvalidFileName(photo.Filename, photo.Extension) as Model.Error);
         }
 
         public sealed class Extension : PhotoValidator
@@ -29,7 +29,7 @@ namespace Angy.BackEnd.Kharonte.Validators
 
             public override Result<Unit, Model.Error> Validate(Photo photo) => _options.SupportedExtensions.Contains(photo.Extension)
                 ? Result<Model.Error>.Success(Unit.Value)
-                : Result<Unit>.Error(new Model.Error.InvalidExtension() as Model.Error);
+                : Result<Unit>.Error(new Model.Error.InvalidExtension(photo.Filename, photo.Extension) as Model.Error);
         }
     }
 }

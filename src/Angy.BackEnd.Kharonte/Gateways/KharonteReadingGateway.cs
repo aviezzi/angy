@@ -21,9 +21,11 @@ namespace Angy.BackEnd.Kharonte.Gateways
             _logger = logger;
         }
 
-        public Task<Result<IEnumerable<Photo>, Error.Exceptional>> GetAccumulated() =>
-            Result.Try(
+        public Task<Result<IEnumerable<Photo>, Error.Exceptional>> GetAccumulated()
+        {
+            return Result.Try(
                 async () => (await _kharonte.PendingPhotos.ToListAsync()).AsEnumerable(),
                 ex => _logger.LogError(ex, "Cannot get pending photos from database."));
+        }
     }
 }
