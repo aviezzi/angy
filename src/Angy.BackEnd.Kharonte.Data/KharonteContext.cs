@@ -14,6 +14,7 @@ namespace Angy.BackEnd.Kharonte.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            // PhotoBuilder
             var photoBuilder = modelBuilder.Entity<Photo>();
 
             photoBuilder
@@ -31,6 +32,7 @@ namespace Angy.BackEnd.Kharonte.Data
                 .Property(photo => photo.Inserted)
                 .IsRequired();
 
+            // ErrorBuilder
             var errorBuilder = modelBuilder.Entity<PhotoError>();
 
             errorBuilder

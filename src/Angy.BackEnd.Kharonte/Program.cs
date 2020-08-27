@@ -21,11 +21,13 @@ namespace Angy.BackEnd.Kharonte
         {
             var host = CreateHostBuilder(args).Build();
 
-            host.Services.UseScheduler(scheduler =>
-                scheduler
-                    .Schedule<PendingPhotosInvocable>()
-                    .EverySecond()
-                    .PreventOverlapping("PendingPhotos"));
+            host.Services
+                .UseScheduler(scheduler =>
+                    scheduler
+                        .Schedule<PendingPhotosInvocable>()
+                        .Cron(Configuration.GetValue<string>("KharonteOptions:SchedulerCron").Trim())
+                        .PreventOverlapping("PendingPhotos"))
+                .OnError(exception => Log.Fatal(exception, "PendingPhotosInvocable FAILED!"));
 
             host.Run();
         }
@@ -39,14 +41,7 @@ namespace Angy.BackEnd.Kharonte
                 })
                 .ConfigureServices((hostContext, services) =>
                 {
-                    var env = hostContext.HostingEnvironment.EnvironmentName;
-
-                    Configuration = new ConfigurationBuilder()
-                        .SetBasePath(hostContext.HostingEnvironment.ContentRootPath)
-                        .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                        .AddJsonFile($"appsettings.{env}.json", optional: false, reloadOnChange: true)
-                        .AddEnvironmentVariables()
-                        .Build();
+                    Configure(hostContext);
 
                     services.Configure<KharonteOptions>(Configuration.GetSection("KharonteOptions"));
 
@@ -64,5 +59,17 @@ namespace Angy.BackEnd.Kharonte
 
                     loggingBuilder.AddSerilog(logger, dispose: true);
                 });
+
+        static void Configure(HostBuilderContext hostContext)
+        {
+            var env = hostContext.HostingEnvironment.EnvironmentName;
+
+            Configuration = new ConfigurationBuilder()
+                .SetBasePath(hostContext.HostingEnvironment.ContentRootPath)
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{env}.json", optional: false, reloadOnChange: true)
+                .AddEnvironmentVariables()
+                .Build();
+        }
     }
 }

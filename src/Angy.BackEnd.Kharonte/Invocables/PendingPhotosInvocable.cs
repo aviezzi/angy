@@ -111,7 +111,7 @@ namespace Angy.BackEnd.Kharonte.Invocables
         }
 
         Task<IEnumerable<Photo>> SavePendingPhotosAsync(IEnumerable<Photo> photos) => _writingGateway.SavePhotosAsync(photos);
-        // Silent error, nothing to do! Photos will reprocess next time.
+        // Silent error, nothing to do! Photos will reprocess next schedule.
 
         async Task<IEnumerable<Photo>> CopyAsync(IEnumerable<Photo> photos)
         {
