@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
-using Angy.BackEnd.Kharonte.Abstract;
+using Angy.BackEnd.Kharonte.Core.Abstract;
 using Angy.BackEnd.Kharonte.Data.Model;
 using Angy.Model;
 
-namespace Angy.BackEnd.Kharonte.Validators
+namespace Angy.BackEnd.Kharonte.Core.Validators
 {
     public class AggregatePhotoValidator : IAggregateValidator
     {
@@ -15,10 +15,10 @@ namespace Angy.BackEnd.Kharonte.Validators
             _validators = validators;
         }
 
-        public Result<IEnumerable<Photo>, IEnumerable<Model.Error>> Validate(IEnumerable<Photo> photos)
+        public Result<IEnumerable<Photo>, IEnumerable<Error>> Validate(IEnumerable<Photo> photos)
         {
             var success = new List<Photo>();
-            var errors = new List<Model.Error>();
+            var errors = new List<Error>();
 
             foreach (var photo in photos)
             {
@@ -33,10 +33,10 @@ namespace Angy.BackEnd.Kharonte.Validators
                 }
             }
 
-            return new Result<IEnumerable<Photo>, IEnumerable<Model.Error>>(success, errors);
+            return new Result<IEnumerable<Photo>, IEnumerable<Error>>(success, errors);
         }
 
-        IEnumerable<Model.Error> Validate(Photo photo) =>
+        IEnumerable<Error> Validate(Photo photo) =>
             from validator in _validators
             select validator.Validate(photo)
             into result

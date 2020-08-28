@@ -2,37 +2,33 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Angy.BackEnd.Kharonte.Abstract;
+using Angy.BackEnd.Kharonte.Core.Abstract;
 using Angy.BackEnd.Kharonte.Data.Model;
-using Angy.BackEnd.Kharonte.Options;
 using Angy.Model;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 
-namespace Angy.BackEnd.Kharonte.Gateways
+namespace Angy.BackEnd.Kharonte.Core.Gateways
 {
     public class FtpGateway : IFtpGateway
     {
-        readonly KharonteOptions _options;
         readonly ILogger<KharonteReadingGateway> _logger;
 
-        public FtpGateway(IOptions<KharonteOptions> options, ILogger<KharonteReadingGateway> logger)
+        public FtpGateway(ILogger<KharonteReadingGateway> logger)
         {
-            _options = options.Value;
             _logger = logger;
         }
 
-        public Result<IEnumerable<Photo>, IEnumerable<Model.Error>> RetrievePendingPhotos(IEnumerable<string> accumulatedPaths, int chunk)
+        public Result<IEnumerable<Photo>, IEnumerable<Error>> RetrievePendingPhotos(IEnumerable<string> accumulatedPaths, string source, int chunk)
         {
             var pathsResult = Result.Try(
-                () => Directory.GetFiles(_options.SourceFolder),
-                ex => _logger.LogError(ex, $"Cannot get photos from: {_options.SourceFolder} ")
+                () => Directory.GetFiles(source),
+                ex => _logger.LogError(ex, $"Cannot get photos from: {source}.")
             );
 
-            if (pathsResult.HasError()) return Result<IEnumerable<Model.Error>>.Success(new List<Photo>().AsEnumerable());
+            if (pathsResult.HasError()) return Result<IEnumerable<Error>>.Success(new List<Photo>().AsEnumerable());
 
             var photos = new List<Photo>();
-            var errors = new List<Model.Error>();
+            var errors = new List<Error>();
 
             var paths = pathsResult.Success
                 .Where(path => !accumulatedPaths.Contains(path))
@@ -42,12 +38,12 @@ namespace Angy.BackEnd.Kharonte.Gateways
             {
                 var filenameResult = Result.Try(
                     () => Path.GetFileNameWithoutExtension(path).Trim(),
-                    ex => _logger.LogError(ex, $"Cannot retrieve filename for path: {path}")
+                    ex => _logger.LogError(ex, $"Cannot retrieve filename for path: {path}.")
                 );
 
                 var extensionResult = Result.Try(
                     () => Path.GetExtension(path).Trim(),
-                    ex => _logger.LogError(ex, $"Cannot retrieve extension for path: {path}")
+                    ex => _logger.LogError(ex, $"Cannot retrieve extension for path: {path}.")
                 );
 
                 if (!extensionResult.HasError() && !filenameResult.HasError())
@@ -58,43 +54,43 @@ namespace Angy.BackEnd.Kharonte.Gateways
                         Extension = extensionResult.Success
                     });
 
-                if (extensionResult.HasError()) errors.Add(new Model.Error.GetExtensionFailed());
+                if (extensionResult.HasError()) errors.Add(new Error.GetExtensionFailed());
 
-                if (filenameResult.HasError()) errors.Add(new Model.Error.GetFilenameFailed());
+                if (filenameResult.HasError()) errors.Add(new Error.GetFilenameFailed());
             }
 
-            return new Result<IEnumerable<Photo>, IEnumerable<Model.Error>>(photos, errors);
+            return new Result<IEnumerable<Photo>, IEnumerable<Error>>(photos, errors);
         }
 
-        public async Task<Result<IEnumerable<Photo>, IEnumerable<Model.Error>>> CopyPhotosAsync(IEnumerable<Photo> photos)
+        public async Task<Result<IEnumerable<Photo>, IEnumerable<Error>>> CopyPhotosAsync(IEnumerable<Photo> photos, string destination)
         {
             var success = new List<Photo>();
-            var errors = new List<Model.Error>();
+            var errors = new List<Error>();
 
             foreach (var photo in photos)
             {
                 var result = await Result.Try(async () =>
                     {
                         await using var sourceStream = new FileStream(photo.Path, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize: 4096, FileOptions.Asynchronous | FileOptions.SequentialScan);
-                        await using var destinationStream = new FileStream(Path.Combine(_options.OriginalFolder, $"{photo.Filename}{photo.Extension}"), FileMode.Create, FileAccess.Write, FileShare.None, bufferSize: 4096, FileOptions.Asynchronous | FileOptions.SequentialScan);
+                        await using var destinationStream = new FileStream(Path.Combine(destination, $"{photo.Filename}{photo.Extension}"), FileMode.Create, FileAccess.Write, FileShare.None, bufferSize: 4096, FileOptions.Asynchronous | FileOptions.SequentialScan);
 
                         await sourceStream.CopyToAsync(destinationStream);
                     },
                     ex => _logger.LogError(ex, $"Copy Failed! Id: {photo.Id}, Path: {photo.Path}"));
 
                 if (result.HasError())
-                    errors.Add(new Model.Error.CopyFailed(photo.Filename, photo.Extension));
+                    errors.Add(new Error.CopyFailed(photo));
                 else
                     success.Add(photo);
             }
 
-            return new Result<IEnumerable<Photo>, IEnumerable<Model.Error>>(success, errors);
+            return new Result<IEnumerable<Photo>, IEnumerable<Error>>(success, errors);
         }
 
-        public Result<IEnumerable<Photo>, IEnumerable<Model.Error>> DeletePhotos(IEnumerable<Photo> photos)
+        public Result<IEnumerable<Photo>, IEnumerable<Error>> DeletePhotos(IEnumerable<Photo> photos)
         {
             var success = new List<Photo>();
-            var errors = new List<Model.Error>();
+            var errors = new List<Error>();
 
             foreach (var photo in photos)
             {
@@ -103,12 +99,12 @@ namespace Angy.BackEnd.Kharonte.Gateways
                     ex => _logger.LogError(ex, $"Delete Failed! {photo.Path}"));
 
                 if (result.HasError())
-                    errors.Add(new Model.Error.DeleteFailed(photo.Filename, photo.Extension));
+                    errors.Add(new Error.DeleteFailed(photo));
                 else
                     success.Add(photo);
             }
 
-            return new Result<IEnumerable<Photo>, IEnumerable<Model.Error>>(success, errors);
+            return new Result<IEnumerable<Photo>, IEnumerable<Error>>(success, errors);
         }
     }
 }

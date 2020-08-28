@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Threading.Tasks;
-using Angy.BackEnd.Kharonte.Abstract;
+using Angy.BackEnd.Kharonte.Core.Abstract;
 using Angy.BackEnd.Kharonte.Data.Model;
 using Angy.BackEnd.Kharonte.Options;
 using Angy.Model;
@@ -82,7 +82,7 @@ namespace Angy.BackEnd.Kharonte.Invocables
 
         IEnumerable<Photo> GetPendingPhotos(IEnumerable<string> accumulated)
         {
-            var pendingPhotos = _ftpGateway.RetrievePendingPhotos(accumulated, _options.PhotoChunk);
+            var pendingPhotos = _ftpGateway.RetrievePendingPhotos(accumulated, _options.SourceDirectory, _options.PhotoChunk);
 
             if (pendingPhotos.HasError()) ; // Silent error, nothing to do! Photos will reprocess next schedule.
 
@@ -96,16 +96,17 @@ namespace Angy.BackEnd.Kharonte.Invocables
             var errors = result.Error.ToImmutableArray();
 
             var invalidExtensions = errors
-                .OfType<Model.Error.InvalidExtension>()
-                .Select(error => new PhotoError { Extension = error.Extension, Filename = error.Filename, Message = "Invalid Extension!" })
+                .OfType<Core.Error.InvalidExtension>()
+                .Select(error => new PhotoError { Extension = error.Photo.Extension, Filename = error.Photo.Filename, Message = "Invalid Extension!" })
                 .ToList();
 
             var invalidFilenames = errors
-                .OfType<Model.Error.InvalidFileName>()
-                .Select(error => new PhotoError { Extension = error.Extension, Filename = error.Filename, Message = "Invalid Filename!" })
+                .OfType<Core.Error.InvalidFileName>()
+                .Select(error => new PhotoError { Extension = error.Photo.Extension, Filename = error.Photo.Filename, Message = "Invalid Filename!" })
                 .ToList();
 
             _writingGateway.LogErrorAsync(invalidExtensions.Concat(invalidFilenames));
+            _ftpGateway.CopyPhotosAsync(errors.Select(error => error.Photo), _options.ErrorsDirectory);
 
             return result.Success;
         }
@@ -115,7 +116,7 @@ namespace Angy.BackEnd.Kharonte.Invocables
 
         async Task<IEnumerable<Photo>> CopyAsync(IEnumerable<Photo> photos)
         {
-            var result = await _ftpGateway.CopyPhotosAsync(photos);
+            var result = await _ftpGateway.CopyPhotosAsync(photos, _options.OriginalDirectory);
 
             if (result.HasError()) ; // Silent error, nothing to do! No copied photos will reprocess next schedule.
 

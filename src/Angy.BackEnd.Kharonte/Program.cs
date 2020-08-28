@@ -25,7 +25,7 @@ namespace Angy.BackEnd.Kharonte
                 .UseScheduler(scheduler =>
                     scheduler
                         .Schedule<PendingPhotosInvocable>()
-                        .Cron(Configuration.GetValue<string>("KharonteOptions:SchedulerCron").Trim())
+                        .Cron(Configuration.GetValue<string>("Coravel:PendingPhotosCron").Trim())
                         .PreventOverlapping("PendingPhotos"))
                 .OnError(exception => Log.Fatal(exception, "PendingPhotosInvocable FAILED!"));
 
@@ -37,7 +37,7 @@ namespace Angy.BackEnd.Kharonte
                 .UseServiceProviderFactory(new AutofacServiceProviderFactory())
                 .ConfigureContainer<ContainerBuilder>(builder =>
                 {
-                    builder.RegisterModule(new KharonteModule());
+                    builder.RegisterModule(new KharonteModule(Configuration));
                 })
                 .ConfigureServices((hostContext, services) =>
                 {

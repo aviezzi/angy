@@ -8,7 +8,6 @@
     <ItemGroup>
         <PackageReference Include="Autofac" Version="5.0.0" />
         <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="6.0.0" />
-        <PackageReference Include="Confluent.Kafka" Version="1.5.1" />
         <PackageReference Include="Coravel" Version="4.0.1" />
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0-preview.7.20364.11" />
         <PackageReference Include="Serilog" Version="2.10.0-dev-01240" />
@@ -24,6 +23,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Angy.BackEnd.Kharonte.Core\Angy.BackEnd.Kharonte.Core.csproj" />
       <ProjectReference Include="..\Angy.BackEnd.Kharonte.Data\Angy.BackEnd.Kharonte.Data.csproj" />
     </ItemGroup>
 </Project>

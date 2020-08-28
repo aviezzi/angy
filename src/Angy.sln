@@ -1,5 +1,4 @@
-﻿﻿
-Microsoft Visual Studio Solution File, Format Version 12.00
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
 #
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Angy.Server.Product", "Angy.Server.Product\Angy.Server.Product.csproj", "{DC0E0306-B826-41AC-8A38-FA1AF1C8B1C9}"
 EndProject
@@ -18,6 +17,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Angy.BackEnd.Kharonte", "Angy.BackEnd.Kharonte\Angy.BackEnd.Kharonte.csproj", "{E255977C-23C0-4FDF-8961-E0E68B2696BC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Angy.BackEnd.Kharonte.Data", "Angy.BackEnd.Kharonte.Data\Angy.BackEnd.Kharonte.Data.csproj", "{5C42C422-DD0E-457C-B1A8-FDE63CC24D78}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Angy.BackEnd.Kharonte.Core", "Angy.BackEnd.Kharonte.Core\Angy.BackEnd.Kharonte.Core.csproj", "{1AA224A5-42ED-4933-A95E-9930C150237F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -61,5 +62,9 @@ Global
 		{5C42C422-DD0E-457C-B1A8-FDE63CC24D78}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5C42C422-DD0E-457C-B1A8-FDE63CC24D78}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5C42C422-DD0E-457C-B1A8-FDE63CC24D78}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1AA224A5-42ED-4933-A95E-9930C150237F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1AA224A5-42ED-4933-A95E-9930C150237F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1AA224A5-42ED-4933-A95E-9930C150237F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1AA224A5-42ED-4933-A95E-9930C150237F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

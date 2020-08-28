@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Angy.BackEnd.Kharonte.Data.Model;
 using NodaTime;
 
-namespace Angy.BackEnd.Kharonte.Abstract
+namespace Angy.BackEnd.Kharonte.Core.Abstract
 {
     public interface IKharonteWritingGateway
     {

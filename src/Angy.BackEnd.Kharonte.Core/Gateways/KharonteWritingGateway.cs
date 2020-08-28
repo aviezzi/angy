@@ -1,14 +1,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Angy.BackEnd.Kharonte.Abstract;
+using Angy.BackEnd.Kharonte.Core.Abstract;
 using Angy.BackEnd.Kharonte.Data;
 using Angy.BackEnd.Kharonte.Data.Model;
 using Angy.Model;
 using Microsoft.Extensions.Logging;
 using NodaTime;
 
-namespace Angy.BackEnd.Kharonte.Gateways
+namespace Angy.BackEnd.Kharonte.Core.Gateways
 {
     public class KharonteWritingGateway : IKharonteWritingGateway
     {
