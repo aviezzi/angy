@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Angy.BackEnd.Minos.Data\Angy.BackEnd.Minos.Data.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Confluent.Kafka" Version="1.5.1" />
+      <PackageReference Include="MediatR" Version="8.1.0" />
+      <PackageReference Include="Polly" Version="7.2.1" />
+      <PackageReference Include="System.Drawing.Common" Version="5.0.0-preview.8.20407.11" />
+    </ItemGroup>
+
+</Project>
