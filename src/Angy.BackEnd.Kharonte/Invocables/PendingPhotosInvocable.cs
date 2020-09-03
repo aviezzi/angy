@@ -96,12 +96,12 @@ namespace Angy.BackEnd.Kharonte.Invocables
             var errors = result.Error.ToImmutableArray();
 
             var invalidExtensions = errors
-                .OfType<Core.Error.InvalidExtension>()
+                .OfType<Core.Errors.Error.InvalidExtension>()
                 .Select(error => new PhotoError { Extension = error.Photo.Extension, Filename = error.Photo.Filename, Message = "Invalid Extension!" })
                 .ToList();
 
             var invalidFilenames = errors
-                .OfType<Core.Error.InvalidFileName>()
+                .OfType<Core.Errors.Error.InvalidFileName>()
                 .Select(error => new PhotoError { Extension = error.Photo.Extension, Filename = error.Photo.Filename, Message = "Invalid Filename!" })
                 .ToList();
 

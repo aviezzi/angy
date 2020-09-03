@@ -1,5 +1,6 @@
 using System;
 using Angy.Model;
+using Angy.Model.Abstract;
 using NodaTime;
 
 namespace Angy.BackEnd.Kharonte.Data.Model

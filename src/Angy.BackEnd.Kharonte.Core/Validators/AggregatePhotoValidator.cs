@@ -15,10 +15,10 @@ namespace Angy.BackEnd.Kharonte.Core.Validators
             _validators = validators;
         }
 
-        public Result<IEnumerable<Photo>, IEnumerable<Error>> Validate(IEnumerable<Photo> photos)
+        public Result<IEnumerable<Photo>, IEnumerable<Errors.Error>> Validate(IEnumerable<Photo> photos)
         {
             var success = new List<Photo>();
-            var errors = new List<Error>();
+            var errors = new List<Errors.Error>();
 
             foreach (var photo in photos)
             {
@@ -33,10 +33,10 @@ namespace Angy.BackEnd.Kharonte.Core.Validators
                 }
             }
 
-            return new Result<IEnumerable<Photo>, IEnumerable<Error>>(success, errors);
+            return new Result<IEnumerable<Photo>, IEnumerable<Errors.Error>>(success, errors);
         }
 
-        IEnumerable<Error> Validate(Photo photo) =>
+        IEnumerable<Errors.Error> Validate(Photo photo) =>
             from validator in _validators
             select validator.Validate(photo)
             into result

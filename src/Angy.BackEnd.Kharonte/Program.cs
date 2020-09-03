@@ -15,6 +15,9 @@ namespace Angy.BackEnd.Kharonte
 {
     public class Program
     {
+        // TODO 1: Fai partire kafka  
+        // TODO 2: gestire env correttamente  
+        
         static IConfiguration Configuration { get; set; }
 
         public static void Main(string[] args)

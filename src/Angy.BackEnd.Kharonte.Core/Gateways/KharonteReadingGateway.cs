@@ -5,6 +5,7 @@ using Angy.BackEnd.Kharonte.Core.Abstract;
 using Angy.BackEnd.Kharonte.Data;
 using Angy.BackEnd.Kharonte.Data.Model;
 using Angy.Model;
+using Angy.Model.Abstract;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -21,7 +22,7 @@ namespace Angy.BackEnd.Kharonte.Core.Gateways
             _logger = logger;
         }
 
-        public Task<Result<IEnumerable<Photo>, Model.Error.Exceptional>> GetAccumulated()
+        public Task<IResult<IEnumerable<Photo>, Error.Exceptional>> GetAccumulated()
         {
             return Result.Try(
                 async () => (await _kharonte.PendingPhotos.ToListAsync()).AsEnumerable(),

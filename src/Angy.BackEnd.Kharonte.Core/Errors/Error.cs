@@ -1,6 +1,6 @@
 using Angy.BackEnd.Kharonte.Data.Model;
 
-namespace Angy.BackEnd.Kharonte.Core
+namespace Angy.BackEnd.Kharonte.Core.Errors
 {
     public abstract class Error
     {

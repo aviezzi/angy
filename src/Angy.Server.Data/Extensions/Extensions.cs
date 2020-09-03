@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
 using Angy.Model;
+using Angy.Model.Abstract;
 using Angy.Server.Data.Abstract;
 using Microsoft.EntityFrameworkCore;
 

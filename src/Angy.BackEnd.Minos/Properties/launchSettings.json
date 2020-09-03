@@ -1,0 +1,10 @@
+﻿{
+  "profiles": {
+    "Angy.BeckEnd.Minos": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}

@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Angy.BackEnd.Kharonte.Core.Abstract;
 using Angy.Model;
+using Angy.Model.Abstract;
 using Confluent.Kafka;
 using Microsoft.Extensions.Logging;
 
@@ -21,7 +22,7 @@ namespace Angy.BackEnd.Kharonte.Core.Clients
             _config = new ProducerConfig { BootstrapServers = bootServers };
         }
 
-        public Task<Result<Unit, Model.Error.Exceptional>> ProduceAsync<T>(T entity)
+        public Task<IResult<Unit, Model.Error.Exceptional>> ProduceAsync<T>(T entity)
         {
             return Result.Try(async () =>
                 {

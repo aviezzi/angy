@@ -15,22 +15,22 @@ namespace Angy.BackEnd.Kharonte.Core.Gateways
             _client = client;
         }
 
-        public async Task<Result<IEnumerable<Photo>, IEnumerable<Error>>> SendAsync(IEnumerable<Photo> photos)
+        public async Task<Result<IEnumerable<Photo>, IEnumerable<Errors.Error>>> SendAsync(IEnumerable<Photo> photos)
         {
             var success = new List<Photo>();
-            var errors = new List<Error>();
+            var errors = new List<Errors.Error>();
 
             foreach (var photo in photos)
             {
                 var result = await _client.ProduceAsync(photo);
 
                 if (result.HasError())
-                    errors.Add(new Error.SendFailed(photo));
+                    errors.Add(new Errors.Error.SendFailed(photo));
                 else
                     success.Add(photo);
             }
 
-            return new Result<IEnumerable<Photo>, IEnumerable<Error>>(success, errors);
+            return new Result<IEnumerable<Photo>, IEnumerable<Errors.Error>>(success, errors);
         }
     }
 }

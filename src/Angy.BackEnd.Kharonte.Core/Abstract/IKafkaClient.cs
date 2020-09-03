@@ -1,10 +1,11 @@
 using System.Threading.Tasks;
 using Angy.Model;
+using Angy.Model.Abstract;
 
 namespace Angy.BackEnd.Kharonte.Core.Abstract
 {
     public interface IKafkaClient
     {
-        Task<Result<Unit, Model.Error.Exceptional>> ProduceAsync<T>(T entity);
+        Task<IResult<Unit, Model.Error.Exceptional>> ProduceAsync<T>(T entity);
     }
 }

@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Angy.Model.Abstract;
 
 namespace Angy.Model
 {
-    public class Result<TSuccess, TError>
+    public class Result<TSuccess, TError> : IResult<TSuccess, TError>
     {
         public TSuccess Success { get; }
         public TError Error { get; }
@@ -25,21 +26,16 @@ namespace Angy.Model
 
     public static class Result<T>
     {
-        public static Result<TSuccess, T> Success<TSuccess>(TSuccess success) => new Result<TSuccess, T>(success);
+        public static IResult<TSuccess, T> Success<TSuccess>(TSuccess success) => new Result<TSuccess, T>(success);
 
-        public static Result<T, TError> Error<TError>(TError error) => new Result<T, TError>(error);
+        public static IResult<T, TError> Error<TError>(TError error) => new Result<T, TError>(error);
     }
 
     public static class Result
     {
-        public static bool HasError<TValue, TError>(this Result<TValue, TError> source) => source.Error != null;
+        public static bool HasError<TValue, TError>(this IResult<TValue, TError> source) => source.Error != null;
 
-        public static Result<TResult, TError> Cast<TValue, TError, TResult>(this Result<TValue, TError> source, Func<TValue, TResult> selector) =>
-            source.Success != null
-                ? new Result<TResult, TError>(selector(source.Success), source.Error)
-                : new Result<TResult, TError>(success: default, source.Error);
-
-        public static Task<Result<Unit, Error.Exceptional>> Try(Func<Task> func, Action<Exception> logger)
+        public static Task<IResult<Unit, Error.Exceptional>> Try(Func<Task> func, Action<Exception> logger)
         {
             return Try(async () =>
             {
@@ -48,7 +44,7 @@ namespace Angy.Model
             }, logger);
         }
 
-        public static Result<T, Error.Exceptional> Try<T>(Func<T> func, Action<Exception> logger)
+        public static IResult<T, Error.Exceptional> Try<T>(Func<T> func, Action<Exception> logger)
         {
             try
             {
@@ -61,7 +57,7 @@ namespace Angy.Model
             }
         }
 
-        public static Result<Unit, Error.Exceptional> Try(Action func, Action<Exception> logger)
+        public static IResult<Unit, Error.Exceptional> Try(Action func, Action<Exception> logger)
         {
             return Try(() =>
             {
@@ -70,7 +66,7 @@ namespace Angy.Model
             }, logger);
         }
 
-        public static async Task<Result<T, Error.Exceptional>> Try<T>(Func<Task<T>> func, Action<Exception> logger)
+        public static async Task<IResult<T, Error.Exceptional>> Try<T>(Func<Task<T>> func, Action<Exception> logger)
         {
             try
             {

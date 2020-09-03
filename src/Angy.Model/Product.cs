@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Angy.Model.Abstract;
 
 namespace Angy.Model
 {

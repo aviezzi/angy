@@ -7,6 +7,6 @@ namespace Angy.BackEnd.Kharonte.Core.Abstract
 {
     public interface IAcheronWritingGateway
     {
-        Task<Result<IEnumerable<Photo>, IEnumerable<Error>>> SendAsync(IEnumerable<Photo> photos);
+        Task<Result<IEnumerable<Photo>, IEnumerable<Errors.Error>>> SendAsync(IEnumerable<Photo> photos);
     }
 }

@@ -6,6 +6,6 @@ namespace Angy.BackEnd.Kharonte.Core.Abstract
 {
     public interface IAggregateValidator
     {
-        Result<IEnumerable<Photo>, IEnumerable<Error>> Validate(IEnumerable<Photo> photo);
+        Result<IEnumerable<Photo>, IEnumerable<Errors.Error>> Validate(IEnumerable<Photo> photo);
     }
 }

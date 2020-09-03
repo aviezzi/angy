@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Angy.Model
+namespace Angy.Model.Abstract
 {
     public abstract class EntityBase : IEquatable<EntityBase>
     {

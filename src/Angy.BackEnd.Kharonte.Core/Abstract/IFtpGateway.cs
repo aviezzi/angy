@@ -1,16 +1,17 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Angy.BackEnd.Kharonte.Core.Errors;
 using Angy.BackEnd.Kharonte.Data.Model;
-using Angy.Model;
+using Angy.Model.Abstract;
 
 namespace Angy.BackEnd.Kharonte.Core.Abstract
 {
     public interface IFtpGateway
     {
-        Result<IEnumerable<Photo>, IEnumerable<Error>> RetrievePendingPhotos(IEnumerable<string> accumulatedPaths, string source, int chunk);
+        IResult<IEnumerable<Photo>, IEnumerable<Error>> RetrievePendingPhotos(IEnumerable<string> accumulatedPaths, string source, int chunk);
 
-        Task<Result<IEnumerable<Photo>, IEnumerable<Error>>> CopyPhotosAsync(IEnumerable<Photo> source, string destination);
+        Task<IResult<IEnumerable<Photo>, IEnumerable<Error>>> CopyPhotosAsync(IEnumerable<Photo> source, string destination);
 
-        Result<IEnumerable<Photo>, IEnumerable<Error>> DeletePhotos(IEnumerable<Photo> photos);
+        IResult<IEnumerable<Photo>, IEnumerable<Error>> DeletePhotos(IEnumerable<Photo> photos);
     }
 }

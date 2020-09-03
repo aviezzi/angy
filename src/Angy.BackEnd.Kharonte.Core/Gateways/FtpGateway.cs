@@ -5,30 +5,31 @@ using System.Threading.Tasks;
 using Angy.BackEnd.Kharonte.Core.Abstract;
 using Angy.BackEnd.Kharonte.Data.Model;
 using Angy.Model;
+using Angy.Model.Abstract;
 using Microsoft.Extensions.Logging;
 
 namespace Angy.BackEnd.Kharonte.Core.Gateways
 {
     public class FtpGateway : IFtpGateway
     {
-        readonly ILogger<KharonteReadingGateway> _logger;
+        readonly ILogger<FtpGateway> _logger;
 
-        public FtpGateway(ILogger<KharonteReadingGateway> logger)
+        public FtpGateway(ILogger<FtpGateway> logger)
         {
             _logger = logger;
         }
 
-        public Result<IEnumerable<Photo>, IEnumerable<Error>> RetrievePendingPhotos(IEnumerable<string> accumulatedPaths, string source, int chunk)
+        public IResult<IEnumerable<Photo>, IEnumerable<Errors.Error>> RetrievePendingPhotos(IEnumerable<string> accumulatedPaths, string source, int chunk)
         {
             var pathsResult = Result.Try(
                 () => Directory.GetFiles(source),
                 ex => _logger.LogError(ex, $"Cannot get photos from: {source}.")
             );
 
-            if (pathsResult.HasError()) return Result<IEnumerable<Error>>.Success(new List<Photo>().AsEnumerable());
+            if (pathsResult.HasError()) return Result<IEnumerable<Errors.Error>>.Success(new List<Photo>().AsEnumerable());
 
             var photos = new List<Photo>();
-            var errors = new List<Error>();
+            var errors = new List<Errors.Error>();
 
             var paths = pathsResult.Success
                 .Where(path => !accumulatedPaths.Contains(path))
@@ -54,18 +55,18 @@ namespace Angy.BackEnd.Kharonte.Core.Gateways
                         Extension = extensionResult.Success
                     });
 
-                if (extensionResult.HasError()) errors.Add(new Error.GetExtensionFailed());
+                if (extensionResult.HasError()) errors.Add(new Errors.Error.GetExtensionFailed());
 
-                if (filenameResult.HasError()) errors.Add(new Error.GetFilenameFailed());
+                if (filenameResult.HasError()) errors.Add(new Errors.Error.GetFilenameFailed());
             }
 
-            return new Result<IEnumerable<Photo>, IEnumerable<Error>>(photos, errors);
+            return new Result<IEnumerable<Photo>, IEnumerable<Errors.Error>>(photos, errors);
         }
 
-        public async Task<Result<IEnumerable<Photo>, IEnumerable<Error>>> CopyPhotosAsync(IEnumerable<Photo> photos, string destination)
+        public async Task<IResult<IEnumerable<Photo>, IEnumerable<Errors.Error>>> CopyPhotosAsync(IEnumerable<Photo> photos, string destination)
         {
             var success = new List<Photo>();
-            var errors = new List<Error>();
+            var errors = new List<Errors.Error>();
 
             foreach (var photo in photos)
             {
@@ -79,18 +80,18 @@ namespace Angy.BackEnd.Kharonte.Core.Gateways
                     ex => _logger.LogError(ex, $"Copy Failed! Id: {photo.Id}, Path: {photo.Path}"));
 
                 if (result.HasError())
-                    errors.Add(new Error.CopyFailed(photo));
+                    errors.Add(new Errors.Error.CopyFailed(photo));
                 else
                     success.Add(photo);
             }
 
-            return new Result<IEnumerable<Photo>, IEnumerable<Error>>(success, errors);
+            return new Result<IEnumerable<Photo>, IEnumerable<Errors.Error>>(success, errors);
         }
 
-        public Result<IEnumerable<Photo>, IEnumerable<Error>> DeletePhotos(IEnumerable<Photo> photos)
+        public IResult<IEnumerable<Photo>, IEnumerable<Errors.Error>> DeletePhotos(IEnumerable<Photo> photos)
         {
             var success = new List<Photo>();
-            var errors = new List<Error>();
+            var errors = new List<Errors.Error>();
 
             foreach (var photo in photos)
             {
@@ -99,12 +100,12 @@ namespace Angy.BackEnd.Kharonte.Core.Gateways
                     ex => _logger.LogError(ex, $"Delete Failed! {photo.Path}"));
 
                 if (result.HasError())
-                    errors.Add(new Error.DeleteFailed(photo));
+                    errors.Add(new Errors.Error.DeleteFailed(photo));
                 else
                     success.Add(photo);
             }
 
-            return new Result<IEnumerable<Photo>, IEnumerable<Error>>(success, errors);
+            return new Result<IEnumerable<Photo>, IEnumerable<Errors.Error>>(success, errors);
         }
     }
 }
