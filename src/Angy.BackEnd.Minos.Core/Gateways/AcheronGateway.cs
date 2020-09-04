@@ -2,19 +2,27 @@ using System;
 using System.Threading.Tasks;
 using Angy.BackEnd.Minos.Core.Abstract;
 using Angy.BackEnd.Minos.Data.Model;
+using Confluent.Kafka;
+using Microsoft.Extensions.Logging;
 using Polly;
 
 namespace Angy.BackEnd.Minos.Core.Gateways
 {
     public class AcheronGateway : IAcheronGateway
     {
-        readonly IKafkaClient _client;
         readonly int _retryCount;
         readonly int _retryAttempt;
+        readonly string _topic;
+        readonly ILogger<AcheronGateway> _logger;
 
-        public AcheronGateway(IKafkaClient client, int retryCount, int retryAttempt)
+        readonly ProducerConfig _config;
+
+        public AcheronGateway(string bootServers, string topic, int retryCount, int retryAttempt, ILogger<AcheronGateway> logger)
         {
-            _client = client;
+            _config = new ProducerConfig { BootstrapServers = bootServers };
+            _topic = topic;
+
+            _logger = logger;
             _retryCount = retryCount;
             _retryAttempt = retryAttempt;
         }
@@ -23,6 +31,10 @@ namespace Angy.BackEnd.Minos.Core.Gateways
             await Policy
                 .Handle<Exception>()
                 .WaitAndRetryAsync(_retryCount, retryAttempt => TimeSpan.FromSeconds(_retryAttempt))
-                .ExecuteAsync(async () => await _client.ProduceAsync(photo));
+                .ExecuteAsync(async () =>
+                {
+                    using var producer = new ProducerBuilder<Null, string>(_config).Build();
+                    await producer.ProduceAsync(_topic, new Message<Null, string> { Value = $"Hi Alberto. It is {DateTime.Now.ToUniversalTime()}" });
+                });
     }
 }

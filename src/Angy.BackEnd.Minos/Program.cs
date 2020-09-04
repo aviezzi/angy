@@ -14,6 +14,8 @@ namespace Angy.BackEnd.Minos
 {
     public class Program
     {
+        static IConfigurationRoot Configuration { get; set; } = null!;
+
         public static void Main(string[] args)
         {
             CreateHostBuilder(args).Build().Run();
@@ -59,7 +61,5 @@ namespace Angy.BackEnd.Minos
                 .AddEnvironmentVariables()
                 .Build();
         }
-
-        static IConfigurationRoot Configuration { get; set; }
     }
 }

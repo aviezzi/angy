@@ -12,12 +12,15 @@ namespace Angy.BackEnd.Minos.Core.Handlers
 {
     public class NewPhotoHandler : INotificationHandler<NewPhotoRequest>
     {
+        readonly ICopyScaledPhotoProcessor _processor;
+
         readonly IMinosReadingGateway _readingGateway;
         readonly IMinosWritingGateway _writingGateway;
         readonly IAcheronGateway _acheronGateway;
 
-        public NewPhotoHandler(IMinosReadingGateway readingGateway, IMinosWritingGateway writingGateway, IAcheronGateway acheronGateway)
+        public NewPhotoHandler(ICopyScaledPhotoProcessor processor, IMinosReadingGateway readingGateway, IMinosWritingGateway writingGateway, IAcheronGateway acheronGateway)
         {
+            _processor = processor;
             _readingGateway = readingGateway;
             _writingGateway = writingGateway;
 
@@ -36,7 +39,7 @@ namespace Angy.BackEnd.Minos.Core.Handlers
 
             foreach (var story in stories)
             {
-                story.Imported = await Selector(story, photo);
+                story.Imported = await _processor.ScaleAsync(story);
 
                 if (story.Imported)
                     success.Add(story);

@@ -26,15 +26,15 @@ namespace Angy.BackEnd.Minos.Consumers
                 AutoOffsetReset = AutoOffsetReset.Earliest
             };
 
-            using var consumer = new ConsumerBuilder<Ignore, Photo>(config).Build();
+            using var consumer = new ConsumerBuilder<Ignore, string>(config).Build();
 
             consumer.Subscribe("topic");
 
             while (!stoppingToken.IsCancellationRequested)
             {
-                var result = consumer.Consume(stoppingToken);
+                // var result = consumer.Consume(stoppingToken);
 
-                var message = new NewPhotoRequest(result.Message.Value);
+                var message = new NewPhotoRequest(new Photo { Filename = "prova", Extension = ".jpg", Shot = ' ' });
                 await _mediator.Publish(message, stoppingToken);
             }
 

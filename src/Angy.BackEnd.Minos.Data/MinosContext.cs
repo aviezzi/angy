@@ -1,4 +1,4 @@
-﻿﻿using Angy.BackEnd.Minos.Data.Model;
+﻿using Angy.BackEnd.Minos.Data.Model;
 using Microsoft.EntityFrameworkCore;
 
 namespace Angy.BackEnd.Minos.Data
@@ -7,7 +7,10 @@ namespace Angy.BackEnd.Minos.Data
     {
         public DbSet<Setting> Settings { get; set; }
         public DbSet<Story> Stories { get; set; }
-        public DbSet<Photo> Photos { get; set; }
+
+        public MinosContext(DbContextOptions<MinosContext> options) : base(options)
+        {
+        }
 
         public void Upsert(object entity) => ChangeTracker.TrackGraph(entity, e => e.Entry.State = e.Entry.IsKeySet ? EntityState.Modified : EntityState.Added);
 
@@ -18,12 +21,6 @@ namespace Angy.BackEnd.Minos.Data
 
             settingBuilder
                 .HasKey(setting => setting.Id);
-
-            // PhotoBuilder
-            var photoBuilder = modelBuilder.Entity<Photo>();
-
-            settingBuilder
-                .HasKey(photo => photo.Id);
 
             // StoryBuilder
             var storyBuilder = modelBuilder.Entity<Story>();

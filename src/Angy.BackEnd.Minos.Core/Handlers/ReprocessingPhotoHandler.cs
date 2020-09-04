@@ -9,12 +9,15 @@ namespace Angy.BackEnd.Minos.Core.Handlers
 {
     public class ReprocessingPhotoHandler : INotificationHandler<ReprocessingPhotoRequest>
     {
+        readonly ICopyScaledPhotoProcessor _processor;
+
         readonly IMinosReadingGateway _readingGateway;
         readonly IMinosWritingGateway _writingGateway;
         readonly IAcheronGateway _acheronGateway;
 
-        public ReprocessingPhotoHandler(IMinosReadingGateway readingGateway, IMinosWritingGateway writingGateway, IAcheronGateway acheronGateway)
+        public ReprocessingPhotoHandler(ICopyScaledPhotoProcessor processor, IMinosReadingGateway readingGateway, IMinosWritingGateway writingGateway, IAcheronGateway acheronGateway)
         {
+            _processor = processor;
             _readingGateway = readingGateway;
             _writingGateway = writingGateway;
 
@@ -27,7 +30,7 @@ namespace Angy.BackEnd.Minos.Core.Handlers
 
             var story = await _readingGateway.GetStoryAsync(photo.Id);
 
-            story.Imported = await Selector(story, photo);
+            story.Imported = await _processor.ScaleAsync(story);
             story.Retrieves++;
 
             if (!story.Imported && story.Retrieves < notification.Retrieves) await OnErrorAsync(photo);
