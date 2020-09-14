@@ -18,7 +18,7 @@ namespace Angy.Client.Shared.Gateways
             _client = client;
         }
 
-        public Task<Result<IEnumerable<Product>, Error.ExceptionalError>> GetProductsWithIdNameDescriptionAndMicroName()
+        public Task<Result<IEnumerable<Product>, Error.Exceptional>> GetProductsWithIdNameDescriptionAndMicroName()
         {
             var request = RequestAdapter<ResponsesAdapter.ProductsResponse, IEnumerable<Product>>.Build(
                 "{ products { id, name, category { name } } }",
@@ -28,7 +28,7 @@ namespace Angy.Client.Shared.Gateways
             return _client.SendQueryAsync(request);
         }
 
-        public Task<Result<(Product, IEnumerable<Category>, IEnumerable<Model.Attribute>), Error.ExceptionalError>> GetProductByIdWithCategoriesAndAttributes(Guid id)
+        public Task<Result<(Product, IEnumerable<Category>, IEnumerable<Model.Attribute>), Error.Exceptional>> GetProductByIdWithCategoriesAndAttributes(Guid id)
         {
             var request = RequestAdapter<ResponsesAdapter.ProductResponse, (Product, IEnumerable<Category>, IEnumerable<Model.Attribute>)>.Build(
                 "query GetProductById($id: String) { product(id: $id) {id, name, categoryId, descriptions { id, description, attributeId, attribute { id, name } } } categories { id, name } attributes { id, name } }",
@@ -40,7 +40,7 @@ namespace Angy.Client.Shared.Gateways
             return _client.SendQueryAsync(request);
         }
 
-        public Task<Result<(IEnumerable<Category>, IEnumerable<Model.Attribute>), Error.ExceptionalError>> GetCategoriesAndAttributes()
+        public Task<Result<(IEnumerable<Category>, IEnumerable<Model.Attribute>), Error.Exceptional>> GetCategoriesAndAttributes()
         {
             var query = RequestAdapter<ResponsesAdapter.CategoriesAttributesResponse, (IEnumerable<Category>, IEnumerable<Model.Attribute>)>.Build(
                 "{ categories { id, name } attributes { id, name} }",
@@ -49,7 +49,7 @@ namespace Angy.Client.Shared.Gateways
             return _client.SendQueryAsync(query);
         }
 
-        public Task<Result<Product, Error.ExceptionalError>> CreateProduct(Product product)
+        public Task<Result<Product, Error.Exceptional>> CreateProduct(Product product)
         {
             var query = RequestAdapter<ResponsesAdapter.ProductResponse, Product>.Build(
                 "mutation CreateProduct($product: ProductInput!) { createProduct(product: $product) { id } }",
@@ -61,7 +61,7 @@ namespace Angy.Client.Shared.Gateways
             return _client.SendQueryAsync(query);
         }
 
-        public Task<Result<Product, Error.ExceptionalError>> UpdateProduct(Product product, Guid productId)
+        public Task<Result<Product, Error.Exceptional>> UpdateProduct(Product product, Guid productId)
         {
             var query = RequestAdapter<ResponsesAdapter.ProductResponse, Product>.Build(
                 "mutation UpdateProduct($product: ProductInput!) { updateProduct(product: $product) { id } }",

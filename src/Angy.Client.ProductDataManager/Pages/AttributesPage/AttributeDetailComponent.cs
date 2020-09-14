@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Angy.Client.Shared.Gateways;
+using Angy.Model;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
-using Attribute = Angy.Model.Attribute; 
 
 namespace Angy.Client.ProductDataManager.Pages.AttributesPage
 {
@@ -15,14 +15,14 @@ namespace Angy.Client.ProductDataManager.Pages.AttributesPage
         [Inject] public NavigationManager NavigationManager { get; set; } = null!;
 
         protected EditContext EditContext { get; private set; } = null!;
-        protected Attribute Attribute { get; private set; } = null!;
+        protected Model.Attribute Attribute { get; private set; } = null!;
         protected bool? IsValid { get; private set; }
 
         protected override async Task OnInitializedAsync()
         {
             if (AttributeId == Guid.Empty)
             {
-                Attribute = new Attribute();
+                Attribute = new Model.Attribute();
                 EditContext = new EditContext(Attribute);
                 IsValid = true;
 
@@ -30,14 +30,14 @@ namespace Angy.Client.ProductDataManager.Pages.AttributesPage
             }
 
             var result = await AttributeGateway.GetAttribute(AttributeId);
-            
-            if (result.IsValid)
+
+            if (!result.HasError())
             {
                 Attribute = result.Success;
                 EditContext = new EditContext(Attribute);
             }
-            
-            IsValid = result.IsValid;
+
+            IsValid = !result.HasError();
         }
 
         protected async Task HandleSubmit()

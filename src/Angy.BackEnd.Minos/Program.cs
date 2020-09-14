@@ -1,7 +1,5 @@
 using Angy.BackEnd.Minos.Consumers;
 using Angy.BackEnd.Minos.Data;
-using Angy.BackEnd.Minos.IoC;
-using Angy.BackEnd.Minos.Options;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;

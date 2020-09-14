@@ -17,7 +17,7 @@ namespace Angy.Client.Shared.Gateways
             _client = client;
         }
 
-        public Task<Result<IEnumerable<Category>, Error.ExceptionalError>> GetCategoriesWithIdNameAndDescription()
+        public Task<Result<IEnumerable<Category>, Error.Exceptional>> GetCategoriesWithIdNameAndDescription()
         {
             var query = RequestAdapter<ResponsesAdapter.CategoriesResponse, IEnumerable<Category>>.Build(
                 "{ categories { id, name, description } }",
@@ -26,14 +26,14 @@ namespace Angy.Client.Shared.Gateways
             return _client.SendQueryAsync(query);
         }
 
-        public Task<Result<IEnumerable<Category>, Error.ExceptionalError>> GetCategoriesWithIdAndName()
+        public Task<Result<IEnumerable<Category>, Error.Exceptional>> GetCategoriesWithIdAndName()
         {
             var query = RequestAdapter<ResponsesAdapter.CategoriesResponse, IEnumerable<Category>>.Build("{ categories { id, name } }", response => response.Categories);
 
             return _client.SendQueryAsync(query);
         }
 
-        public Task<Result<Category, Error.ExceptionalError>> GetCategoryById(Guid id)
+        public Task<Result<Category, Error.Exceptional>> GetCategoryById(Guid id)
         {
             var query = RequestAdapter<ResponsesAdapter.CategoryResponse, Category>.Build(
                 "query GetCategoryById($id: String) { category(id: $id) {id, name, description } }",
@@ -45,7 +45,7 @@ namespace Angy.Client.Shared.Gateways
             return _client.SendQueryAsync(query);
         }
 
-        public Task<Result<Category, Error.ExceptionalError>> CreateCategory(Category category)
+        public Task<Result<Category, Error.Exceptional>> CreateCategory(Category category)
         {
             var query = RequestAdapter<ResponsesAdapter.CategoryResponse, Category>.Build(
                 "mutation CreateCategory($category: CategoryInput!) { createCategory(category: $category) { id } }",
@@ -57,7 +57,7 @@ namespace Angy.Client.Shared.Gateways
             return _client.SendQueryAsync(query);
         }
 
-        public Task<Result<Category, Error.ExceptionalError>> UpdateCategory(Guid id, Category category)
+        public Task<Result<Category, Error.Exceptional>> UpdateCategory(Guid id, Category category)
         {
             var query = RequestAdapter<ResponsesAdapter.CategoryResponse, Category>.Build(
                 "mutation UpdateCategory($category: CategoryInput!) { updateCategory(category: $category) { id } }",

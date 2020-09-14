@@ -17,9 +17,9 @@ namespace Angy.Client.ProductDataManager.Pages.CategoriesPage
         {
             var result = await CategoryGateway.GetCategoriesWithIdNameAndDescription();
 
-            if (result.IsValid) Categories = result.Success;
+            if (!result.HasError()) Categories = result.Success;
 
-            IsValid = result.IsValid;
+            IsValid = !result.HasError();
         }
     }
 }

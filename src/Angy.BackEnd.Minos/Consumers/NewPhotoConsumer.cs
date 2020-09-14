@@ -5,30 +5,32 @@ using Angy.BackEnd.Minos.Data.Model;
 using Confluent.Kafka;
 using MediatR;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 
 namespace Angy.BackEnd.Minos.Consumers
 {
     public class NewPhotoConsumer : BackgroundService
     {
         readonly IMediator _mediator;
+        readonly MinosOptions _options;
 
-        public NewPhotoConsumer(IMediator mediator)
+        public NewPhotoConsumer(IMediator mediator, IOptions<MinosOptions> options)
         {
             _mediator = mediator;
+            _options = options.Value;
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             var config = new ConsumerConfig
             {
-                BootstrapServers = "host1:9092,host2:9092",
-                GroupId = "foo",
+                BootstrapServers = _options.KafkaOptions.BootServers,
                 AutoOffsetReset = AutoOffsetReset.Earliest
             };
 
             using var consumer = new ConsumerBuilder<Ignore, string>(config).Build();
 
-            consumer.Subscribe("topic");
+            consumer.Subscribe(_options.KafkaOptions.TopicNew);
 
             while (!stoppingToken.IsCancellationRequested)
             {

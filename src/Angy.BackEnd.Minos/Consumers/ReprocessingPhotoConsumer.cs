@@ -2,7 +2,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Angy.BackEnd.Minos.Core.Requests;
 using Angy.BackEnd.Minos.Data.Model;
-using Angy.BackEnd.Minos.Options;
 using Confluent.Kafka;
 using MediatR;
 using Microsoft.Extensions.Hosting;
@@ -25,14 +24,13 @@ namespace Angy.BackEnd.Minos.Consumers
         {
             var config = new ConsumerConfig
             {
-                BootstrapServers = "host1:9092,host2:9092",
-                GroupId = "foo",
+                BootstrapServers = _options.KafkaOptions.BootServers,
                 AutoOffsetReset = AutoOffsetReset.Earliest
             };
 
             using var consumer = new ConsumerBuilder<Ignore, Photo>(config).Build();
 
-            consumer.Subscribe("reprocessing");
+            consumer.Subscribe(_options.KafkaOptions.TopicReprocessing);
 
             while (!stoppingToken.IsCancellationRequested)
             {

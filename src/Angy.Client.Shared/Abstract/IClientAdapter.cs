@@ -6,6 +6,6 @@ namespace Angy.Client.Shared.Abstract
 {
     public interface IClientAdapter
     {
-        Task<Result<TCast, Error.ExceptionalError>> SendQueryAsync<TResponse, TCast>(RequestAdapter<TResponse, TCast> adapter);
+        Task<Result<TCast, Error.Exceptional>> SendQueryAsync<TResponse, TCast>(RequestAdapter<TResponse, TCast> adapter);
     }
 }

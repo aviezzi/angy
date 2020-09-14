@@ -31,13 +31,13 @@ namespace Angy.Client.ProductDataManager.Pages.CategoriesPage
 
             var result = await CategoryGateway.GetCategoryById(MicroId);
 
-            if (result.IsValid)
+            if (!result.HasError())
             {
                 Category = result.Success;
                 EditContext = new EditContext(Category);
             }
 
-            IsValid = result.IsValid;
+            IsValid = !result.HasError();
         }
 
         protected async Task HandleSubmit()

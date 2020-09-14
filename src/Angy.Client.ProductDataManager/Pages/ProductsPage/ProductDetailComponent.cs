@@ -63,7 +63,7 @@ namespace Angy.Client.ProductDataManager.Pages.ProductsPage
         {
             var result = await ProductGateway.GetProductByIdWithCategoriesAndAttributes(ProductId);
 
-            if (result.IsValid)
+            if (!result.HasError())
             {
                 var (product, categories, attributes) = result.Success;
 
@@ -74,14 +74,14 @@ namespace Angy.Client.ProductDataManager.Pages.ProductsPage
                 EditContext = new EditContext(Product);
             }
 
-            IsValid = result.IsValid;
+            IsValid = !result.HasError();
         }
 
         async Task InitializeCreateAsync()
         {
             var result = await ProductGateway.GetCategoriesAndAttributes();
 
-            if (result.IsValid)
+            if (!result.HasError())
             {
                 var (categories, attributes) = result.Success;
 
@@ -92,7 +92,7 @@ namespace Angy.Client.ProductDataManager.Pages.ProductsPage
                 EditContext = new EditContext(Product);
             }
 
-            IsValid = result.IsValid;
+            IsValid = !result.HasError();
         }
     }
 }

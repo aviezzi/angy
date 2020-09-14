@@ -4,12 +4,11 @@ using Angy.BackEnd.Minos.Core.Gateways;
 using Angy.BackEnd.Minos.Core.Handlers;
 using Angy.BackEnd.Minos.Core.Processors;
 using Autofac;
-using Autofac.Core;
 using Autofac.Features.Variance;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 
-namespace Angy.BackEnd.Minos.IoC
+namespace Angy.BackEnd.Minos
 {
     public class MinosModule : Autofac.Module
     {
@@ -22,17 +21,24 @@ namespace Angy.BackEnd.Minos.IoC
 
         protected override void Load(ContainerBuilder builder)
         {
-            builder.RegisterType<AcheronGateway>().As<IAcheronGateway>().InstancePerLifetimeScope();
             builder.RegisterType<MinosReadingGateway>().As<IMinosReadingGateway>().InstancePerLifetimeScope();
             builder.RegisterType<MinosWritingGateway>().As<IMinosWritingGateway>().InstancePerLifetimeScope();
+            builder.RegisterType<AcheronGateway>().WithParameters(new[]
+            {
+                new NamedParameter("bootServers", _configuration.GetValue<string>("MinosOptions:KafkaOptions:BootServers")),
+                new NamedParameter("topic", _configuration.GetValue<string>("MinosOptions:KafkaOptions:TopicReprocessing")),
+                new NamedParameter("retryCount", _configuration.GetValue<string>("MinosOptions:KafkaOptions:MessageRetryCount")),
+                new NamedParameter("retryAttempt", _configuration.GetValue<string>("MinosOptions:KafkaOptions:MessageRetryAttempt"))
+            });
 
             builder.RegisterType<CopyScaledPhotoProcessor>().WithParameters(
-                new Parameter[]
-                {
-                    new NamedParameter("source", _configuration.GetValue<string>("MinosOptions:SourceDirectory")),
-                    new NamedParameter("destination", _configuration.GetValue<string>("MinosOptions:RetouchedDirectory")),
-                    new NamedParameter("quality", _configuration.GetValue<string>("MinosOptions:Quality"))
-                });
+                    new[]
+                    {
+                        new NamedParameter("source", _configuration.GetValue<string>("MinosOptions:SourceDirectory")),
+                        new NamedParameter("destination", _configuration.GetValue<string>("MinosOptions:RetouchedDirectory")),
+                        new NamedParameter("quality", _configuration.GetValue<string>("MinosOptions:Quality"))
+                    })
+                .SingleInstance();
 
             builder.RegisterType<NewPhotoHandler>();
             builder.RegisterType<ReprocessingPhotoHandler>();

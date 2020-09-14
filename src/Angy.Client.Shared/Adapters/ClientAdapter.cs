@@ -14,7 +14,7 @@ namespace Angy.Client.Shared.Adapters
             _client = client;
         }
 
-        public Task<Result<TCast, Error.ExceptionalError>> SendQueryAsync<TResponse, TCast>(RequestAdapter<TResponse, TCast> adapter) =>
+        public Task<Result<TCast, Error.Exceptional>> SendQueryAsync<TResponse, TCast>(RequestAdapter<TResponse, TCast> adapter) =>
             Result.Try(async () =>
             {
                 var response = (await _client.SendQueryAsync<TResponse>(adapter.Request)).Data;

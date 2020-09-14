@@ -17,7 +17,7 @@ namespace Angy.Client.Shared.Gateways
             _client = client;
         }
 
-        public Task<Result<IEnumerable<Model.Attribute>, Error.ExceptionalError>> GetAttributes()
+        public Task<Result<IEnumerable<Model.Attribute>, Error.Exceptional>> GetAttributes()
         {
             var request = RequestAdapter<ResponsesAdapter.AttributesResponse, IEnumerable<Model.Attribute>>.Build(
                 "{ attributes { id, name } }",
@@ -27,7 +27,7 @@ namespace Angy.Client.Shared.Gateways
             return _client.SendQueryAsync(request);
         }
 
-        public Task<Result<Model.Attribute, Error.ExceptionalError>> GetAttribute(Guid id)
+        public Task<Result<Model.Attribute, Error.Exceptional>> GetAttribute(Guid id)
         {
             var request = RequestAdapter<ResponsesAdapter.AttributeResponse, Model.Attribute>.Build(
                 "query GetAttributeById($id: String) { attribute(id: $id) { id, name } }",
@@ -39,7 +39,7 @@ namespace Angy.Client.Shared.Gateways
             return _client.SendQueryAsync(request);
         }
 
-        public Task<Result<Model.Attribute, Error.ExceptionalError>> CreateAttribute(Model.Attribute attribute)
+        public Task<Result<Model.Attribute, Error.Exceptional>> CreateAttribute(Model.Attribute attribute)
         {
             var request = RequestAdapter<ResponsesAdapter.AttributeResponse, Model.Attribute>.Build(
                 "mutation CreateAttribute($attribute: AttributeInput!) { createAttribute(attribute: $attribute) { id } }",
@@ -51,7 +51,7 @@ namespace Angy.Client.Shared.Gateways
             return _client.SendQueryAsync(request);
         }
 
-        public Task<Result<Model.Attribute, Error.ExceptionalError>> UpdateAttribute(Guid id, Model.Attribute attribute)
+        public Task<Result<Model.Attribute, Error.Exceptional>> UpdateAttribute(Guid id, Model.Attribute attribute)
         {
             var request = RequestAdapter<ResponsesAdapter.AttributeResponse, Model.Attribute>.Build(
                 "mutation UpdateAttribute($attribute: AttributeInput!) { updateAttribute(attribute: $attribute) { id } }",
